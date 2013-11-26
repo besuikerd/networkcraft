@@ -26,7 +26,7 @@ public class BlockCable extends BlockConnecting{
 	
 	@Override
 	public boolean connectsTo(TileEntity other) {
-		return false;
+		return true;
 	}
 
 	@Override

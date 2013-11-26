@@ -1,5 +1,7 @@
 package nl.besuikerd.networkcraft.core;
 
+import java.util.Arrays;
+
 public enum BlockSide {
 	BOTTOM,
 	TOP,

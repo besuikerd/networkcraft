@@ -9,26 +9,19 @@ import org.lwjgl.opengl.GL11;
 
 public class TileEntitySpecialRendererBlockCable extends TileEntitySpecialRendererConnecting{
 
-	private static final SimpleModelBase rendererBase = new SimpleModelBase();
-	private static final SimpleModelBase rendererConnection = new SimpleModelBase();
+	private static final SimpleModelBase rendererBase = new SimpleModelBase(64, 64, 
+		new SimpleModelBase.ShapeBuilder()
+		.dimension(6, 6, 6)
+		.offset(5, 5, 5)
+	);
+	private static final SimpleModelBase rendererConnection = new SimpleModelBase(64, 64, 
+			new SimpleModelBase.ShapeBuilder()
+			.dimension(2, 5, 2)
+			.offset(7, 11, 7)
+	);
 	
-	static{
-		ModelRenderer renderer = rendererBase.attach();
-		renderer.addBox(0f, 0f, 0f, 10, 10, 10);
-		renderer.setRotationPoint(0f, -6f, 0f);
-		renderer.setTextureSize(64, 64);
-		renderer.mirror = true;
-		renderer.rotateAngleX = 0f;
-		renderer.rotateAngleY = 0f;
-		renderer.rotateAngleZ = 0f;
-		
-		renderer = rendererConnection.attach();
-		renderer.addBox(0f, 0f, 0f, 2, 6, 2);
-		renderer.setRotationPoint(7f, -12f, 7f);
-		renderer.setTextureSize(64, 64);
-		renderer.mirror = true;
-	}
 	
+	/*
 	@Override
 	public void renderTileEntityAt(TileEntity entity, double x, double y,
 			double z, float f) {
@@ -53,6 +46,7 @@ public class TileEntitySpecialRendererBlockCable extends TileEntitySpecialRender
         GL11.glPopMatrix();
 
 	}
+	*/
 	
 	@Override
 	public void renderBase(TileEntity entity, double x, double y, double z,
@@ -63,12 +57,15 @@ public class TileEntitySpecialRendererBlockCable extends TileEntitySpecialRender
 		GL11.glPopMatrix();
 	}
 
+	private static boolean isLogged = false;
+	
 	@Override
 	public void renderConnection(TileEntityConnecting entity, int side,
 			double x, double y, double z, float f) {
-		
 		GL11.glPushMatrix();
-		translateForSide(side);
+		GL11.glLoadIdentity();
+		translateForSide(rendererConnection, side);
+		
 		rendererConnection.render(null, 0f, 0f, 0f, 0f, 0f, 0.0625f);
 		GL11.glPopMatrix();
 	}

@@ -1,10 +1,11 @@
 package nl.besuikerd.networkcraft.generic;
 
-import org.lwjgl.opengl.GL11;
-
+import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.tileentity.TileEntity;
 import nl.besuikerd.networkcraft.core.BlockSide;
+
+import org.lwjgl.opengl.GL11;
 
 public abstract class TileEntitySpecialRendererConnecting extends TileEntitySpecialRenderer{
 
@@ -13,7 +14,7 @@ public abstract class TileEntitySpecialRendererConnecting extends TileEntitySpec
 			double z, float f) {
 		GL11.glPushMatrix();
 		GL11.glTranslated(x, y, z);
-		/*
+		
 		if(entity instanceof TileEntityConnecting){
 			TileEntityConnecting entityConnecting = (TileEntityConnecting) entity;
 			boolean[] connectingSides = entityConnecting.getConnectedSides();
@@ -23,18 +24,20 @@ public abstract class TileEntitySpecialRendererConnecting extends TileEntitySpec
 				}
 			}
 		}
-		*/
+		
 		renderBase(entity, x, y, z, f);
 		GL11.glPopMatrix();
 	}
 
 	
-	public void translateForSide(int side){
+	public void translateForSide(SimpleModelBase b, int side){
 		switch(BlockSide.lookup(side)){
 		case TOP:
 			break;
 		case BOTTOM:
+			
 			GL11.glRotated(Math.PI, 1d, 0, 0);
+			//GL11.glTranslated(16 - m., y, z);
 			break;
 		case NORTH:
 			GL11.glRotated(-0.5 * Math.PI, 0, 0, 1d);

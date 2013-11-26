@@ -59,8 +59,6 @@ public abstract class BlockConnecting extends BlockNetworkContainer {
 		return meta;
 	}
 	
-	
-	
 	private void updateNeighborConnections(World world, int x, int y, int z){
 		for(BlockSide b : BlockSide.values()){
 			int[] rel = b.getRelativeCoordinates(x, y, z);
