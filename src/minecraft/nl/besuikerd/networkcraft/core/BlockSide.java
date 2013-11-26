@@ -29,4 +29,12 @@ public enum BlockSide {
 	public int[] getRelativeCoordinates(int x, int y, int z){
 		return getRelativeCoordinates(x, y, z, 1);
 	}
+	
+	/**
+	 * returns Blockside opposite of this BlockSide
+	 * @return
+	 */
+	public BlockSide opposite(){
+		return values()[ordinal() + (ordinal() % 2 == 0 ? 1 : -1)];
+	}
 }

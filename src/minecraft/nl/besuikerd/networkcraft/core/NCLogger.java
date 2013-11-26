@@ -4,6 +4,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import nl.besuikerd.networkcraft.generic.NetworkCraft;
+import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.FMLLog;
 
 public class NCLogger {
@@ -19,11 +20,11 @@ public class NCLogger {
 	}
 	
 	public static void log(Level level, String msg, Object... params){
-		logger.log(level, String.format(msg, params));
+		logger.log(level, String.format("%s|%s", FMLCommonHandler.instance().getEffectiveSide(), String.format(msg, params)));
 	}
 	
 	public static void log(Level level, String msg){
-		logger.log(level, msg);
+		logger.log(level, String.format("%s|%s", FMLCommonHandler.instance().getEffectiveSide(), msg));
 	}
 	
 	public static void warn(String msg, Object... params){

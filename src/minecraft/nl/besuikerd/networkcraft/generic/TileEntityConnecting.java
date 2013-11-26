@@ -2,7 +2,11 @@ package nl.besuikerd.networkcraft.generic;
 
 import java.util.Arrays;
 
+import cpw.mods.fml.common.FMLCommonHandler;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.INetworkManager;
+import net.minecraft.network.packet.Packet;
+import net.minecraft.network.packet.Packet132TileEntityData;
 import net.minecraft.tileentity.TileEntity;
 import nl.besuikerd.networkcraft.core.NCLogger;
 
@@ -23,6 +27,21 @@ public class TileEntityConnecting extends TileEntity{
 		for(int i = 0 ; i < connectedSides.length ; i++){
 			connectedSides[i] = ((val >> i) & 1) == 1;
 		}
+		NCLogger.debug("%s| nbt read, sides: %d %s",FMLCommonHandler.instance().getEffectiveSide(), val, Arrays.toString(connectedSides));
+	}
+	
+	@Override
+	public Packet getDescriptionPacket() {
+		NBTTagCompound tag = new NBTTagCompound();
+		writeToNBT(tag);
+		return new Packet132TileEntityData(xCoord, yCoord, zCoord, 1, tag);
+	}
+	
+	@Override
+	public void onDataPacket(INetworkManager net, Packet132TileEntityData pkt) {
+		super.onDataPacket(net, pkt);
+		NCLogger.debug("%s", net.getClass());
+		readFromNBT(pkt.data);
 	}
 	
 	@Override

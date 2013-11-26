@@ -51,29 +51,54 @@ public abstract class BlockConnecting extends BlockNetworkContainer {
 	@Override
 	public void onNeighborBlockChange(World world, int x, int y, int z, int blockId) {
 		super.onNeighborBlockChange(world, x, y, z, blockId);
+		NCLogger.debug("neighbour change! %b", world.isRemote);
 		updateNeighborConnections(world, x, y, z);
-		NCLogger.debug("neighbour change! %b", ""+world.isRemote);
-	}	
+	}
 	
 	@Override
 	public void onBlockPlacedBy(World world, int x, int y, int z,
 			EntityLivingBase entity, ItemStack stack) {
 		super.onBlockPlacedBy(world, x, y, z, entity, stack);
-		NCLogger.debug("block added! %b", ""+world.isRemote);
+		NCLogger.debug("block added! %b", world.isRemote);
 		updateNeighborConnections(world, x, y, z);
+		world.markBlockForUpdate(x, y, z);
+		for(BlockSide side : BlockSide.values()){
+			updateNeighbor(world, side, x, y, z);
+		}
+	}
+	
+	@Override
+	public void breakBlock(World world, int x, int y, int z, int id, int meta) {
+		super.breakBlock(world, x, y, z, id, meta);
+		NCLogger.debug("block broken! %b", world.isRemote);
+		//update neighbor blocks
+		for(BlockSide side : BlockSide.values()){
+			updateNeighbor(world, side, x, y, z);
+		}
+	}
+	
+	
+	private void updateNeighbor(World world, BlockSide side, int x, int y, int z){
+		int[] rel = side.getRelativeCoordinates(x, y, z);
+		TileEntity neigh = (TileEntity) world.getBlockTileEntity(rel[0], rel[1], rel[2]);
+		if(neigh != null && neigh instanceof TileEntityConnecting){
+			TileEntityConnecting entity = (TileEntityConnecting) neigh;
+			TileEntity self = world.getBlockTileEntity(x, y, z);
+			entity.getConnectedSides()[side.opposite().ordinal()] = connectsTo(self);
+		}
+		world.markBlockForUpdate(rel[0], rel[1], rel[2]);
 	}
 	
 	private void updateNeighborConnections(World world, int x, int y, int z){
 		TileEntity e = (TileEntity) world.getBlockTileEntity(x, y, z);
-		NCLogger.debug("entity: %s (%s)", e, e == null ? null : e.getClass());
 		if(e != null && e instanceof TileEntityConnecting){
 			TileEntityConnecting entity = (TileEntityConnecting) e;
 			for(BlockSide b : BlockSide.values()){
 				int[] rel = b.getRelativeCoordinates(x, y, z);
 				TileEntity neigh = world.getBlockTileEntity(rel[0], rel[1], rel[2]);
 				entity.getConnectedSides()[b.ordinal()] = neigh != null && connectsTo(neigh);
+				world.markBlockForUpdate(rel[0], rel[1], rel[2]);
 			}
 		}
 	}
-	
 }
