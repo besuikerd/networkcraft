@@ -9,6 +9,7 @@ public abstract class BlockNetworkContainer extends BlockNetwork implements ITil
 	
 	public BlockNetworkContainer(int par1, Material par2Material) {
 		super(par1, par2Material);
+		this.isBlockContainer = true;
 	}
 
 	@Override

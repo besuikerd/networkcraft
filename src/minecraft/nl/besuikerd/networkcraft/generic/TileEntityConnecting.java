@@ -18,22 +18,22 @@ public class TileEntityConnecting extends TileEntity{
 
 	@Override
 	public void readFromNBT(NBTTagCompound tag) {
+		super.readFromNBT(tag);
 		byte val = tag.getByte(TAG_CONNECTED_SIDES);
-		NCLogger.debug("reading nbt...");
-		this.connectedSides = new boolean[6];
 		for(int i = 0 ; i < connectedSides.length ; i++){
 			connectedSides[i] = ((val >> i) & 1) == 1;
 		}
 	}
 	
 	@Override
-	public void writeToNBT(NBTTagCompound par1nbtTagCompound) {
-		super.writeToNBT(par1nbtTagCompound);
-		NCLogger.debug("writing nbt...");
+	public void writeToNBT(NBTTagCompound tag) {
+		super.writeToNBT(tag);
+		
 		byte val = 0;
 		for(int i = 0 ; i < connectedSides.length ; i++){
 			val |= ((connectedSides[i] ? 1 : 0) << i) &0xff;
 		}
+		tag.setByte(TAG_CONNECTED_SIDES, val);
 	}
 	
 	public boolean[] getConnectedSides() {

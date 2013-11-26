@@ -4,6 +4,7 @@ import java.util.Arrays;
 
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.IBlockAccess;
@@ -52,13 +53,14 @@ public abstract class BlockConnecting extends BlockNetworkContainer {
 		super.onNeighborBlockChange(world, x, y, z, blockId);
 		updateNeighborConnections(world, x, y, z);
 		NCLogger.debug("neighbour change! %b", ""+world.isRemote);
-	}
+	}	
 	
 	@Override
-	public void onBlockAdded(World world, int x, int y, int z) {
-		super.onBlockAdded(world, x, y, z);
-		updateNeighborConnections(world, x, y, z);
+	public void onBlockPlacedBy(World world, int x, int y, int z,
+			EntityLivingBase entity, ItemStack stack) {
+		super.onBlockPlacedBy(world, x, y, z, entity, stack);
 		NCLogger.debug("block added! %b", ""+world.isRemote);
+		updateNeighborConnections(world, x, y, z);
 	}
 	
 	private void updateNeighborConnections(World world, int x, int y, int z){
@@ -69,7 +71,7 @@ public abstract class BlockConnecting extends BlockNetworkContainer {
 			for(BlockSide b : BlockSide.values()){
 				int[] rel = b.getRelativeCoordinates(x, y, z);
 				TileEntity neigh = world.getBlockTileEntity(rel[0], rel[1], rel[2]);
-				entity.getConnectedSides()[b.ordinal()] = connectsTo(neigh);
+				entity.getConnectedSides()[b.ordinal()] = neigh != null && connectsTo(neigh);
 			}
 		}
 	}

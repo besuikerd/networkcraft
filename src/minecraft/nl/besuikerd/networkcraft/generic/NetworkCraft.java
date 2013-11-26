@@ -50,13 +50,13 @@ public class NetworkCraft{
 		instantiateBlocks();
 		
 		//register blocks
-		NCLogger.debug("router: %d, cable: %d", blockRouter.blockID, cable.blockID);
 		GameRegistry.registerBlock(blockRouter, blockRouter.getUnlocalizedName());
 		GameRegistry.registerBlock(cable, cable.getUnlocalizedName());
 		//register items
 		
 		//register tile entities
 		GameRegistry.registerTileEntity(TileEntityBlockCable.class, "cable");
+		GameRegistry.registerTileEntity(TileEntityConnecting.class, "connecting");
 	}
 	
 	@EventHandler
@@ -71,9 +71,7 @@ public class NetworkCraft{
 	}
 	
 	private void instantiateBlocks(){
-		NCLogger.debug("%d, %d", NCConfig.block_router, NCConfig.block_cable);
 		blockRouter = new BlockRouter(NCConfig.block_router);
-		NCLogger.debug("blockid: "+blockRouter.blockID);
 		cable = new BlockCable(NCConfig.block_cable);
 	}
 }
