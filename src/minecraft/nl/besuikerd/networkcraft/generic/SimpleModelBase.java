@@ -1,6 +1,7 @@
 package nl.besuikerd.networkcraft.generic;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import net.minecraft.client.model.ModelBase;
@@ -63,26 +64,23 @@ public class SimpleModelBase extends ModelBase{
 		new SimpleModelBase(64, 64, new ShapeBuilder().dimension(1, 2, 3).offset(7, 1, 2), new ShapeBuilder().dimension(4, 5, 6).offset(1, 2, 3));
 	}
 	
-	public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5)
-	  {
-	    super.render(entity, f, f1, f2, f3, f4, f5);
-	    setRotationAngles(f, f1, f2, f3, f4, f5);
-	    for(ModelRenderer m : renderers){
-	    	m.render(f5);
-	    }
-	  }
+	public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5) {
+		super.render(entity, f, f1, f2, f3, f4, f5);
+		setRotationAngles(f, f1, f2, f3, f4, f5);
+		for(ModelRenderer m : renderers){
+			m.render(f5);
+		}
+	}
 	  
-	  private void setRotation(ModelRenderer model, float x, float y, float z)
-	  {
-	    model.rotateAngleX = x;
-	    model.rotateAngleY = y;
-	    model.rotateAngleZ = z;
-	  }
-	  
-	  public void setRotationAngles(float f, float f1, float f2, float f3, float f4, float f5)
-	  {
-	    super.setRotationAngles(f, f1, f2, f3, f4, f5, null);
-	  }
+  private void setRotation(ModelRenderer model, float x, float y, float z) {
+	  model.rotateAngleX = x;
+	  model.rotateAngleY = y;
+	  model.rotateAngleZ = z;
+  }
+  
+  public void setRotationAngles(float f, float f1, float f2, float f3, float f4, float f5) {
+	  super.setRotationAngles(f, f1, f2, f3, f4, f5, null);
+  }
 	
 	public static class ShapeBuilder{
 		private float offX, offY, offZ;

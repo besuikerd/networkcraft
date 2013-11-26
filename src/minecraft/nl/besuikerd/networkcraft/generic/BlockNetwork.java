@@ -54,6 +54,6 @@ public class BlockNetwork extends Block{
 	}
 	
 	public void onBlockPlacedPositioned(World world, int x, int y, int z, BlockSide side, BlockSide direction, ItemStack stack){
-		NCLogger.debug("block placed with side: %s and direction: %s", side, direction);
+		if(world.isRemote) NCLogger.debug("block placed with side: %s and direction: %s", side, direction);
 	}
 }

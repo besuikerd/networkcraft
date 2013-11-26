@@ -17,7 +17,7 @@ public class TileEntitySpecialRendererBlockCable extends TileEntitySpecialRender
 	private static final SimpleModelBase rendererConnection = new SimpleModelBase(64, 64, 
 			new SimpleModelBase.ShapeBuilder()
 			.dimension(2, 5, 2)
-			.offset(7, 11, 7)
+			.offset(-1, 3, -1)
 	);
 	
 	
@@ -52,20 +52,17 @@ public class TileEntitySpecialRendererBlockCable extends TileEntitySpecialRender
 	public void renderBase(TileEntity entity, double x, double y, double z,
 			float f) {
 		bindTexture(new ResourceLocation("networkcraft", "textures/blocks/cable.png"));
-		GL11.glPushMatrix();
 		rendererBase.render(null, 0f, 0f, 0f, 0f, 0f, 0.0625f);
-		GL11.glPopMatrix();
 	}
 
 	private static boolean isLogged = false;
 	
 	@Override
 	public void renderConnection(TileEntityConnecting entity, int side,
-			double x, double y, double z, float f) {
-		GL11.glPushMatrix();
-		GL11.glLoadIdentity();
-		translateForSide(rendererConnection, side);
+			double x, double y, double z, float f) {		
 		
+		GL11.glPushMatrix();
+		translateForSide(rendererConnection, side);
 		rendererConnection.render(null, 0f, 0f, 0f, 0f, 0f, 0.0625f);
 		GL11.glPopMatrix();
 	}

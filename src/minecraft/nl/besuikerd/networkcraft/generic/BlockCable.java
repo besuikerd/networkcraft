@@ -13,6 +13,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.client.IItemRenderer;
 import nl.besuikerd.networkcraft.core.BlockSide;
 import nl.besuikerd.networkcraft.core.NCIconRegister;
+import nl.besuikerd.networkcraft.core.NCLogger;
 
 public class BlockCable extends BlockConnecting{
 
@@ -31,7 +32,7 @@ public class BlockCable extends BlockConnecting{
 
 	@Override
 	public TileEntity createNewTileEntity(World world) {
-		return new TileEntityBlockCable(connectedSides);
+		return new TileEntityBlockCable();
 	}
 	
 	@Override
