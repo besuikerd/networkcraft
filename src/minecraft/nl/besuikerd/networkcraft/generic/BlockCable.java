@@ -1,4 +1,4 @@
-package nl.besuikerd.inetcraft.generic;
+package nl.besuikerd.networkcraft.generic;
 
 import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.block.Block;
@@ -11,11 +11,13 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.client.IItemRenderer;
+import nl.besuikerd.networkcraft.core.BlockSide;
+import nl.besuikerd.networkcraft.core.NCIconRegister;
 
-public class Cable extends BlockContainer{
+public class BlockCable extends BlockConnecting{
 
-	public Cable(int par1, Material par2Material) {
-		super(par1, par2Material);
+	public BlockCable(int id) {
+		super(id, Material.rock);
 		setHardness(2f);
 		setUnlocalizedName("cable");
 		setCreativeTab(CreativeTabs.tabMisc);
@@ -23,24 +25,23 @@ public class Cable extends BlockContainer{
 	}
 	
 	@Override
-	public boolean shouldSideBeRendered(IBlockAccess par1iBlockAccess,
-			int par2, int par3, int par4, int par5) {
-		return false;
-	}
-	
-	@Override
-	public boolean isOpaqueCube() {
+	public boolean connectsTo(TileEntity other) {
 		return false;
 	}
 
 	@Override
 	public TileEntity createNewTileEntity(World world) {
-		return new CableTileEntity();
+		return new TileEntityBlockCable(connectedSides);
 	}
 	
 	@Override
-	public void registerIcons(IconRegister reg) {
-		reg.registerIcon("generic:cable");
+	public void registerIcons(NCIconRegister reg) {
+		this.blockIcon = reg.registerIcon("cable");
 	}
-	
+
+	@Override
+	public void renderConnection(World world, TileEntity other, int x, int y,
+			int z, BlockSide side) {
+		
+	}
 }

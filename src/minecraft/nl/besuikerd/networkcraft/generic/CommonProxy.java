@@ -1,4 +1,4 @@
-package nl.besuikerd.inetcraft.generic;
+package nl.besuikerd.networkcraft.generic;
 
 public class CommonProxy {
 	public void registerRenderers(){

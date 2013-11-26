@@ -1,4 +1,4 @@
-package nl.besuikerd.inetcraft.generic;
+package nl.besuikerd.networkcraft.generic;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -6,8 +6,10 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.FurnaceRecipes;
+import net.minecraftforge.common.Configuration;
 import net.minecraftforge.common.MinecraftForge;
-import nl.besuikerd.inetcraft.core.INCLogger;
+import nl.besuikerd.networkcraft.core.NCConfig;
+import nl.besuikerd.networkcraft.core.NCLogger;
 import cpw.mods.fml.client.registry.ClientRegistry;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
@@ -20,14 +22,14 @@ import cpw.mods.fml.common.network.NetworkMod;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.LanguageRegistry;
 
-@Mod(modid="inetcraft", name="INetCraft", version="0.0.0")
+@Mod(modid="networkcraft", name="NetworkCraft", version="0.0.0")
 @NetworkMod(clientSideRequired=true)
 public class NetworkCraft{
 	
 	public static boolean DEBUG_MODE = true;
 	
-	public static final Block blockRouter = new BlockRouter(1024);
-	public static final Block cable = new Cable(999, Material.rock);
+	public static Block blockRouter;
+	public static Block cable;
 	
 	@Instance(value="networkcraft")
 	public static NetworkCraft instance;
@@ -38,27 +40,40 @@ public class NetworkCraft{
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent e){
 		//initialize logger
-		INCLogger.init();
+		NCLogger.init();
+		
+		//setup configuration
+		Configuration cfg = new Configuration(e.getSuggestedConfigurationFile());
+		NCConfig.init(cfg);
+		cfg.save();
+		
+		instantiateBlocks();
 		
 		//register blocks
-		GameRegistry.registerBlock(cable, "cable");
+		NCLogger.debug("router: %d, cable: %d", blockRouter.blockID, cable.blockID);
 		GameRegistry.registerBlock(blockRouter, blockRouter.getUnlocalizedName());
-		
+		GameRegistry.registerBlock(cable, cable.getUnlocalizedName());
 		//register items
 		
 		//register tile entities
-		GameRegistry.registerTileEntity(CableTileEntity.class, "cable");
+		GameRegistry.registerTileEntity(TileEntityBlockCable.class, "cable");
 	}
 	
 	@EventHandler
 	public void load(FMLInitializationEvent e){
 		proxy.registerRenderers();
-		
 	}
 	
 	@EventHandler
 	public void postInit(FMLPostInitializationEvent e){
 		
 		
+	}
+	
+	private void instantiateBlocks(){
+		NCLogger.debug("%d, %d", NCConfig.block_router, NCConfig.block_cable);
+		blockRouter = new BlockRouter(NCConfig.block_router);
+		NCLogger.debug("blockid: "+blockRouter.blockID);
+		cable = new BlockCable(NCConfig.block_cable);
 	}
 }

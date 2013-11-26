@@ -1,13 +1,14 @@
-package nl.besuikerd.inetcraft.core;
+package nl.besuikerd.networkcraft.core;
 
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.util.Icon;
 
-public class NetworkCraftIconRegister implements IconRegister{
+public class NCIconRegister implements IconRegister{
 
 	private IconRegister parent;
 	
-	public NetworkCraftIconRegister(IconRegister parent) {
+	
+	public NCIconRegister(IconRegister parent) {
 		this.parent = parent;
 	}
 

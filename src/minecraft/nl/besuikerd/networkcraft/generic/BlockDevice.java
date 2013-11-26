@@ -1,20 +1,20 @@
-package nl.besuikerd.inetcraft.generic;
+package nl.besuikerd.networkcraft.generic;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockHopper;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.util.Icon;
-import nl.besuikerd.inetcraft.core.NetworkCraftIconRegister;
+import nl.besuikerd.networkcraft.core.NCIconRegister;
 
-public class BlockDevice extends BlockINC{
+public class BlockDevice extends BlockNetwork{
 
 	protected Icon icon_device;
 	
 	public BlockDevice(int id) {
 		super(id, Material.iron);
 		setStepSound(Block.soundMetalFootstep);
-		setUnlocalizedName("device");
+		appendUnlocalizedName("device");
 	}
 	
 	@Override
@@ -23,7 +23,7 @@ public class BlockDevice extends BlockINC{
 	}
 	
 	@Override
-	public void registerIcons(NetworkCraftIconRegister reg) {
+	public void registerIcons(NCIconRegister reg) {
 		icon_device = reg.registerIcon("device");
 	}
 }

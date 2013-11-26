@@ -1,12 +1,12 @@
-package nl.besuikerd.inetcraft.core;
+package nl.besuikerd.networkcraft.core;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import nl.besuikerd.inetcraft.generic.NetworkCraft;
+import nl.besuikerd.networkcraft.generic.NetworkCraft;
 import cpw.mods.fml.common.FMLLog;
 
-public class INCLogger {
+public class NCLogger {
 	
 	private static final Logger logger = Logger.getLogger("NetworkCraft");
 	

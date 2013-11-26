@@ -1,4 +1,4 @@
-package nl.besuikerd.inetcraft.generic;
+package nl.besuikerd.networkcraft.generic;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockPistonBase;
@@ -9,26 +9,27 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.Icon;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
-import nl.besuikerd.inetcraft.core.BlockSide;
-import nl.besuikerd.inetcraft.core.INCLogger;
-import nl.besuikerd.inetcraft.core.NetworkCraftIconRegister;
+import nl.besuikerd.networkcraft.core.BlockSide;
+import nl.besuikerd.networkcraft.core.NCLogger;
+import nl.besuikerd.networkcraft.core.NCIconRegister;
 
-public class BlockINC extends Block{
+public class BlockNetwork extends Block{
 	
-	public BlockINC(int par1, Material par2Material) {
+	public BlockNetwork(int par1, Material par2Material) {
 		super(par1, par2Material);
+		setUnlocalizedName("nc");
 	}
 	
 	@Override
 	public final void registerIcons(IconRegister reg) {
-		registerIcons(new NetworkCraftIconRegister(reg));
+		registerIcons(new NCIconRegister(reg));
 	}
 	
-	public void registerIcons(NetworkCraftIconRegister reg){
+	public void registerIcons(NCIconRegister reg){
 	}
 	
 	public String appendUnlocalizedName(String toAppend){
-		String newName = String.format("%s.%s", getUnlocalizedName(), toAppend);
+		String newName = String.format("%s.%s", getUnlocalizedName().substring("tile.".length()), toAppend);
 		setUnlocalizedName(newName);
 		return newName;
 	}
@@ -53,6 +54,6 @@ public class BlockINC extends Block{
 	}
 	
 	public void onBlockPlacedPositioned(World world, int x, int y, int z, BlockSide side, BlockSide direction, ItemStack stack){
-		INCLogger.debug("block placed with side: %s and direction: %s", side, direction);
+		NCLogger.debug("block placed with side: %s and direction: %s", side, direction);
 	}
 }
