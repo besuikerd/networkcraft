@@ -1,0 +1,23 @@
+#ignore everything, but include /src/minecraft
+/*
+!/src
+/src/*
+!/src/minecraft/
+/src/minecraft/*
+
+!README.md
+!.gitignore
+
+#assets
+!/src/minecraft/assets
+/src/minecraft/assets/*
+!/src/minecraft/assets/networkcraft
+
+
+#source files
+!/src/minecraft/nl
+/src/minecraft/nl/*
+!/src/minecraft/nl/besuikerd
+/src/minecraft/nl/besuikerd/*
+!/src/minecraft/nl/besuikerd/networkcraft
+

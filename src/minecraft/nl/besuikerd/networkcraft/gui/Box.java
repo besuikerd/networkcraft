@@ -3,6 +3,8 @@ package nl.besuikerd.networkcraft.gui;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.lwjgl.input.Mouse;
+
 import net.minecraft.block.BlockHopper;
 import net.minecraft.client.Minecraft;
 import nl.besuikerd.networkcraft.core.utils.MathUtils;
@@ -37,37 +39,45 @@ public class Box extends Element{
 			e.draw(this, e.dx + dx, e.dy + dy, mouseX, mouseY);
 		}
 	}
-	
-	protected List<Element> elementsAt(int x, int y){
-		List<Element> result = new ArrayList<Element>();
-		for(Element e : elements){
-			if(MathUtils.inRange(x, e.absX(), e.absX() + e.width) && MathUtils.inRange(y, e.absY(), e.absY() + e.height)) {
-				result.add(e);
-			}
-		}
-		return result;
+
+	public void handleMouseInput(){
+		int x = Mouse.getEventX() * this.width / this.mc.displayWidth;
+        int y = this.height - Mouse.getEventY() * this.height / this.mc.displayHeight - 1;
+        handleMouseInput(x, y);
 	}
 	
 	@Override
 	protected void handleMouseInput(int x, int y) {
 		super.handleMouseInput(x, y);
 		
-	}
-	
-	@Override
-	protected void mouseClicked(int x, int y, int eventButton) {
-		super.mouseClicked(x, y, eventButton);
-		for(Element e : elementsAt(x, y)){
-			e.mouseClicked(x, y, eventButton);
-		}
-	}
-	
-	@Override
-	protected void mouseMovedOrUp(int x, int y, int eventButton) {
-		super.mouseMovedOrUp(x, y, eventButton);
-		super.mouseClicked(x, y, eventButton);
-		for(Element e : elementsAt(x, y)){
-			e.mouseMovedOrUp(x, y, eventButton);
+		for(Element e : elements){
+			if(MathUtils.inRange2D(x, y, e.absX(), e.absX() + e.width, e.absY(), e.absY() + e.height)){ //element is within range
+				
+				if(!e.isHovering()){
+					e.toggleOn(Element.HOVERING);
+					e.onHover(x, y);
+				}
+				
+				for(int buttonFlag : Element.BUTTONS){
+					if(Mouse.isButtonDown(Element.mouseMap(buttonFlag)) &&  !e.is(buttonFlag)){
+						e.toggleOn(buttonFlag);
+						e.onPressed(x, y, buttonFlag);
+					} else{
+						
+					}
+				}
+				
+				if(!e.() && Mouse.isButtonDown(Element.BUTTON_LEFT)){
+					e.toggleOn(Element.);
+					e.onPressed(x, y);
+				} else if(e.isActivated()){
+					e.toggleOff(Element.ACTIVATED);
+				}
+				
+				
+			}
+			e.handleMouseInput(x, y);
+			
 		}
 	}
 }

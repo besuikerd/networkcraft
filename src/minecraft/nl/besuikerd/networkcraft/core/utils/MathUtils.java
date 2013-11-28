@@ -1,6 +1,7 @@
 package nl.besuikerd.networkcraft.core.utils;
 
 public class MathUtils {
+	
 	public static <E extends Comparable<E>> boolean inRange(E element, E min, E max){
 		int toMin = element.compareTo(min);
 		int toMax = element.compareTo(max);

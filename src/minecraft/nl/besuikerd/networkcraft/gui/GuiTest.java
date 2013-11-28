@@ -71,17 +71,13 @@ public class GuiTest extends GuiScreen implements INCGui<TileEntity>{
 	public void handleMouseInput()
     {
 		
-        int i = Mouse.getEventX() * this.width / this.mc.displayWidth;
-        int j = this.height - Mouse.getEventY() * this.height / this.mc.displayHeight - 1;
-        int k = Mouse.getEventButton();
+        int x = Mouse.getEventX() * this.width / this.mc.displayWidth;
+        int y = this.height - Mouse.getEventY() * this.height / this.mc.displayHeight - 1;
         
-        leftMouseButtonDown = Mouse.isButtonDown(0);
-        rightMouseButtonDown = Mouse.isButtonDown(1);
-        middleMouseButtonDown = Mouse.isButtonDown(2);
+        //delegate mouse input to root Box
+        root.handleMouseInput(x, y);
         
-        
-        
-        NCLogger.debug("handling mouse input... (%d, %d, %d, %b, %b, %b)", i, j, k, leftMouseButtonDown, rightMouseButtonDown, middleMouseButtonDown);
+        NCLogger.debug("handling mouse input... (%d, %d)", x, y);
         if (Minecraft.isRunningOnMac && k == 0 && (Keyboard.isKeyDown(29) || Keyboard.isKeyDown(157))) {
             k = 1;
         }
