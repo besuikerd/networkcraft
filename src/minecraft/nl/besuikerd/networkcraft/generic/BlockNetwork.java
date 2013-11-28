@@ -5,6 +5,7 @@ import net.minecraft.block.BlockPistonBase;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Icon;
 import net.minecraft.util.MathHelper;
@@ -15,8 +16,8 @@ import nl.besuikerd.networkcraft.core.NCIconRegister;
 
 public class BlockNetwork extends Block{
 	
-	public BlockNetwork(int par1, Material par2Material) {
-		super(par1, par2Material);
+	public BlockNetwork(int id, Material material) {
+		super(id, material);
 		setUnlocalizedName("nc");
 	}
 	
@@ -55,5 +56,15 @@ public class BlockNetwork extends Block{
 	
 	public void onBlockPlacedPositioned(World world, int x, int y, int z, BlockSide side, BlockSide direction, ItemStack stack){
 		if(world.isRemote) NCLogger.debug("block placed with side: %s and direction: %s", side, direction);
+	}
+	
+
+	//Overridden methods here to have more verbose arguments
+	
+	@Override
+	public boolean onBlockActivated(World world, int x, int y,
+			int z, EntityPlayer player, int unknown, float aX,
+			float aY, float aZ) {
+		return super.onBlockActivated(world, x, y, z, player, unknown, aX, aY, aZ);
 	}
 }

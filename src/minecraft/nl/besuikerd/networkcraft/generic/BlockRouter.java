@@ -1,16 +1,22 @@
 package nl.besuikerd.networkcraft.generic;
 
+import net.minecraft.block.BlockChest;
 import net.minecraft.block.BlockEndPortal;
 import net.minecraft.block.BlockEndPortalFrame;
 import net.minecraft.block.BlockFurnace;
 import net.minecraft.block.BlockRedstoneLogic;
 import net.minecraft.block.BlockRedstoneWire;
+import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.client.renderer.tileentity.TileEntityMobSpawnerRenderer;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.inventory.Container;
 import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.tileentity.TileEntityChest;
 import net.minecraft.tileentity.TileEntityEndPortal;
+import net.minecraft.tileentity.TileEntityFurnace;
 import net.minecraft.util.Icon;
 import net.minecraft.world.World;
 import nl.besuikerd.networkcraft.core.BlockSide;
@@ -54,5 +60,10 @@ public class BlockRouter extends BlockDevice{
 		default:
 			return side == meta ? icon_router_front : super.getIcon(side, meta);
 		}
+	}
+	
+	@Override
+	public TileEntity createNewTileEntity(World world) {
+		return new TileEntity();
 	}
 }

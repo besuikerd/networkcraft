@@ -10,6 +10,9 @@ import net.minecraftforge.common.Configuration;
 import net.minecraftforge.common.MinecraftForge;
 import nl.besuikerd.networkcraft.core.NCConfig;
 import nl.besuikerd.networkcraft.core.NCLogger;
+import nl.besuikerd.networkcraft.gui.GuiTest;
+import nl.besuikerd.networkcraft.gui.NCGuiHandler;
+import nl.besuikerd.networkcraft.gui.NCGuiId;
 import cpw.mods.fml.client.registry.ClientRegistry;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
@@ -19,6 +22,7 @@ import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.network.NetworkMod;
+import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.LanguageRegistry;
 
@@ -30,6 +34,8 @@ public class NetworkCraft{
 	
 	public static Block blockRouter;
 	public static Block cable;
+	
+	public static Block blockGui;
 	
 	@Instance(value="networkcraft")
 	public static NetworkCraft instance;
@@ -52,11 +58,22 @@ public class NetworkCraft{
 		//register blocks
 		GameRegistry.registerBlock(blockRouter, blockRouter.getUnlocalizedName());
 		GameRegistry.registerBlock(cable, cable.getUnlocalizedName());
+		
+		
+		GameRegistry.registerBlock(blockGui, blockGui.getUnlocalizedName());
+		
 		//register items
 		
 		//register tile entities
 		GameRegistry.registerTileEntity(TileEntityBlockCable.class, "cable");
 		GameRegistry.registerTileEntity(TileEntityConnecting.class, "connecting");
+		
+		//register gui handlers
+		NetworkRegistry.instance().registerGuiHandler(this, NCGuiHandler.getInstance());
+		
+		//register guis
+		NCGuiHandler guiHandler = NCGuiHandler.getInstance();
+		guiHandler.registerGui(NCGuiId.TEST, new GuiTest());
 	}
 	
 	@EventHandler
@@ -66,12 +83,11 @@ public class NetworkCraft{
 	
 	@EventHandler
 	public void postInit(FMLPostInitializationEvent e){
-		
-		
 	}
 	
 	private void instantiateBlocks(){
 		blockRouter = new BlockRouter(NCConfig.block_router);
 		cable = new BlockCable(NCConfig.block_cable);
+		blockGui = new BlockGui(450);
 	}
 }

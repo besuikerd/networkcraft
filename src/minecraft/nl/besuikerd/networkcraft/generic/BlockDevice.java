@@ -1,13 +1,14 @@
 package nl.besuikerd.networkcraft.generic;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockHopper;
+import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
-import net.minecraft.client.renderer.texture.IconRegister;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Icon;
+import net.minecraft.world.World;
 import nl.besuikerd.networkcraft.core.NCIconRegister;
 
-public class BlockDevice extends BlockNetwork{
+public abstract class BlockDevice extends BlockNetworkContainer{
 
 	protected Icon icon_device;
 	
