@@ -10,7 +10,7 @@ public class ElementLabel extends Element{
 	}
 
 	@Override
-	public void draw(Box parent, int absX, int absY, int mouseX, int mouseY) {
+	public void draw(Box parent, int mouseX, int mouseY) {
 		// TODO Auto-generated method stub
 		
 	}

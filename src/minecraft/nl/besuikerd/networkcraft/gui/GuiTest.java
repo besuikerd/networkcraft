@@ -29,7 +29,7 @@ public class GuiTest extends GuiScreen implements INCGui<TileEntity>{
 
 	public GuiTest() {
 		
-		root = new Box(200, 200, 200, 200);
+		root = new Box(50, 50, 200, 120);
 		root.add(new ElementButton(20, 20, 120, 20, "TestButton"));
 		this.width = root.width;
 		this.height = root.height;
@@ -46,7 +46,7 @@ public class GuiTest extends GuiScreen implements INCGui<TileEntity>{
 	@Override
 	public void drawScreen(int mouseX, int mouseY, float par3) {
 		drawDefaultBackground();
-		root.draw(null, root.x, root.y, mouseX, mouseY);
+		root.draw(null, mouseX, mouseY);
 	}
 	
 	@Override
@@ -54,18 +54,6 @@ public class GuiTest extends GuiScreen implements INCGui<TileEntity>{
 		if(code == mc.gameSettings.keyBindInventory.keyCode){
 			mc.thePlayer.closeScreen();
 		}
-	}
-	
-	@Override
-	protected void mouseClicked(int x, int y, int eventButton) {
-		NCLogger.debug("mouse clicked! (%d, %d, %d)", x, y, eventButton);
-		root.mouseClicked(x, y, eventButton);
-	}
-	
-	@Override
-	protected void mouseMovedOrUp(int x, int y, int eventButton) {
-		NCLogger.debug("mouse moved or up! (%d, %d, %d)", x, y, eventButton);
-		root.mouseMovedOrUp(x, y, eventButton);
 	}
 	
 	public void handleMouseInput()
@@ -76,40 +64,5 @@ public class GuiTest extends GuiScreen implements INCGui<TileEntity>{
         
         //delegate mouse input to root Box
         root.handleMouseInput(x, y);
-        
-        NCLogger.debug("handling mouse input... (%d, %d)", x, y);
-        if (Minecraft.isRunningOnMac && k == 0 && (Keyboard.isKeyDown(29) || Keyboard.isKeyDown(157))) {
-            k = 1;
-        }
-
-        
-        
-        
-        if (Mouse.getEventButtonState())
-        {
-            if (this.mc.gameSettings.touchscreen && this.unknown_field_from_GuiScreen++ > 0)
-            {
-                return;
-            }
-
-            this.eventButton = k;
-            this.lastMouseEvent = Minecraft.getSystemTime();
-            this.mouseClicked(i, j, this.eventButton);
-        }
-        else if (k != -1)
-        {
-            if (this.mc.gameSettings.touchscreen && --this.unknown_field_from_GuiScreen > 0)
-            {
-                return;
-            }
-
-            this.eventButton = -1;
-            this.mouseMovedOrUp(i, j, k);
-        }
-        else if (this.eventButton != -1 && this.lastMouseEvent > 0L)
-        {
-            long l = Minecraft.getSystemTime() - this.lastMouseEvent;
-            mouseClickMove(i, j, this.eventButton, l);
-        }
     }
 }

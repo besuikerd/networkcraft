@@ -1,5 +1,6 @@
 package nl.besuikerd.networkcraft.gui;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -23,13 +24,13 @@ public abstract class Element extends Gui{
 	public static final int BUTTON_LEFT = 0;
 	public static final int BUTTON_RIGHT = 1;
 	public static final int BUTTON_MIDDLE = 2;
-	public static final int[] BUTTONS = new int[]{BUTTON_LEFT, BUTTON_RIGHT, BUTTON_MIDDLE};
+	public static final int[] BUTTONS = new int[]{LEFT_CLICKED, RIGHT_CLICKED, MIDDLE_CLICKED};
 	
-	public static final Map<Integer, Integer> mouseMap = new HashMap<Integer, Integer>(){{
-		put(BUTTON_LEFT, 0);
-		put(BUTTON_LEFT, 1);
-		put(BUTTON_LEFT, 2);
-	}};
+	public static final Map<Integer, Integer> mouseMap = Collections.unmodifiableMap(new HashMap<Integer, Integer>(){{
+		put(LEFT_CLICKED, BUTTON_LEFT);
+		put(RIGHT_CLICKED, BUTTON_RIGHT);
+		put(MIDDLE_CLICKED, BUTTON_MIDDLE);
+	}});
 	
 	public static final Map<Integer, Long> lastClicks = new HashMap<Integer, Long>(){{
 		put(BUTTON_LEFT, 0l);
@@ -64,7 +65,7 @@ public abstract class Element extends Gui{
 		dy = 0;
 	}
 	
-	public abstract void draw(Box parent, int absX, int absY, int mouseX, int mouseY);
+	public abstract void draw(Box parent, int mouseX, int mouseY);
 	
 	
 	protected int enabledFlag(){
@@ -93,7 +94,7 @@ public abstract class Element extends Gui{
 	 * @param x
 	 * @param y
 	 */
-	protected void onRelease(int x, int y, int which){
+	protected void onReleased(int x, int y, int which){
 		toggleOff(which);
 	}
 	
