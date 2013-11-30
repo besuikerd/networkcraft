@@ -14,6 +14,7 @@ public class TileEntityConnecting extends TileEntity{
 	
 	public static final String TAG_CONNECTED_SIDES = "sides";
 	
+	//zullen we dit naar physical layer klasse gooien voor netheid, of is dat te moeilijk gedacht?
 	private boolean[] connectedSides;
 	
 	public TileEntityConnecting() {
