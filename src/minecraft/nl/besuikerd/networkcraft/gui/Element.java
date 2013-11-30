@@ -4,9 +4,13 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.lwjgl.opengl.GL11;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.util.ResourceLocation;
+import nl.besuikerd.networkcraft.core.NCLogger;
+import nl.besuikerd.networkcraft.core.utils.BitUtils;
 import nl.besuikerd.networkcraft.core.utils.MathUtils;
 
 public abstract class Element extends Gui{
@@ -24,7 +28,12 @@ public abstract class Element extends Gui{
 	public static final int BUTTON_LEFT = 0;
 	public static final int BUTTON_RIGHT = 1;
 	public static final int BUTTON_MIDDLE = 2;
-	public static final int[] BUTTONS = new int[]{LEFT_CLICKED, RIGHT_CLICKED, MIDDLE_CLICKED};
+	public static final Integer[] BUTTONS = new Integer[]{LEFT_CLICKED, RIGHT_CLICKED, MIDDLE_CLICKED};
+	
+	/**
+	 * 200 ms delay for double presses
+	 */
+	public static final long THRESHOLD_DOUBLE_PRESS = 200l;
 	
 	public static final Map<Integer, Integer> mouseMap = Collections.unmodifiableMap(new HashMap<Integer, Integer>(){{
 		put(LEFT_CLICKED, BUTTON_LEFT);
@@ -32,10 +41,10 @@ public abstract class Element extends Gui{
 		put(MIDDLE_CLICKED, BUTTON_MIDDLE);
 	}});
 	
-	public static final Map<Integer, Long> lastClicks = new HashMap<Integer, Long>(){{
-		put(BUTTON_LEFT, 0l);
-		put(BUTTON_RIGHT, 0l);
-		put(BUTTON_MIDDLE, 0l);
+	protected Map<Integer, Long> lastClicks = new HashMap<Integer, Long>(){{
+		put(LEFT_CLICKED, 0l);
+		put(RIGHT_CLICKED, 0l);
+		put(MIDDLE_CLICKED, 0l);
 	}};
 	
 	public static final int FLAG_ENABLED = -6250336;
@@ -49,6 +58,7 @@ public abstract class Element extends Gui{
 	
 	protected int dx;
 	protected int dy;
+	
 	
 	protected int state;
 	
@@ -65,7 +75,7 @@ public abstract class Element extends Gui{
 		dy = 0;
 	}
 	
-	public abstract void draw(Box parent, int mouseX, int mouseY);
+	public abstract void draw(ElementContainer parent, int mouseX, int mouseY);
 	
 	
 	protected int enabledFlag(){
@@ -84,9 +94,10 @@ public abstract class Element extends Gui{
 	/**
 	 * callback when the element is clicked on
 	 */
-	protected void onPressed(int x, int y, int which){
-		
-		toggleOn(which);
+	protected boolean onPressed(ElementContainer parent, int x, int y, int which){
+		parent.focus(this);
+		toggleOn(FOCUSED);
+		return false;
 	}
 	
 	/**
@@ -94,24 +105,38 @@ public abstract class Element extends Gui{
 	 * @param x
 	 * @param y
 	 */
-	protected void onReleased(int x, int y, int which){
-		toggleOff(which);
+	protected void onReleased(ElementContainer parent, int x, int y, int which){
 	}
 	
 	/**
 	 * callback when the mouse hovers over this element
 	 */
-	protected void onHover(int x, int y){
-		toggleOn(HOVERING);
+	protected void onHover(ElementContainer parent, int x, int y){
+	}
+	
+	/**
+	 * callback when the mouse clicks twice on this element
+	 */
+	protected boolean onDoublePressed(ElementContainer parent, int x, int y, int which){
+		return false;
+	}
+	
+	/**
+	 * callback when this element has been clicked on and the mouse is moved
+	 */
+	protected boolean onMove(ElementContainer parent, int x, int y, int which){
+		return false;
 	}
 	
 	/**
 	 * callback for custom mouse input handling. is called even when the mouse if not in range of the Element
+	 * @return if the Element should consume the mouse event
 	 */
-	protected void handleMouseInput(int x, int y){
-		if(isHovering() && !inRange()){
-			toggleOff(HOVERING);
+	protected boolean handleMouseInput(ElementContainer parent, int x, int y){
+		if(isFocused() && !parent.isFrontElement(this)){
+			toggleOff(FOCUSED);
 		}
+		return false;
 	}
 	
 	public boolean is(int flag){
@@ -142,6 +167,10 @@ public abstract class Element extends Gui{
 		return is(HOVERING);
 	}
 	
+	public void setEnabled(boolean enabled){
+		toggle(ENABLED, enabled);
+	}
+	
 	protected void toggle(int s, boolean on){
 		this.state = on ? state | s : ((Integer.MAX_VALUE - s) & state);
 	}
@@ -154,13 +183,18 @@ public abstract class Element extends Gui{
 		toggle(s, true);
 	}
 	
-	/**
-	 * callback when this element has been clicked on and the mouse is moved
-	 */
-	protected void onMove(){
+	protected boolean inRange(int x, int y){
+		return MathUtils.inRange2D(x, y, this.x, this.x + this.width, this.y, this.y + this.height);
 	}
 	
-	protected boolean inRange(){
-		return MathUtils.inRange2D(x, y, this.x, this.x + this.width, this.y, this.y + this.height);
+	protected void renderBorder(int thickness, int color){
+		//top border
+		drawRect(absX() + thickness, absY(), absX() + width - thickness, absY() + thickness, color);
+		//bottom border
+		drawRect(absX() + thickness, absY() + height - thickness, absX() + width - thickness, absY() + height, color);
+		//left border
+		drawRect(absX(), absY(), absX() + thickness, absY() + height, color);
+		//right border
+		drawRect(absX() + width - thickness, absY(), absX() + width , absY() + height, color);
 	}
 }

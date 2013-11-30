@@ -20,7 +20,7 @@ public class ElementButton extends ElementLabel{
 	private GuiButton button;
 
 	@Override
-	public void draw(Box b, int mouseX, int mouseY) {
+	public void draw(ElementContainer b, int mouseX, int mouseY) {
 		//NCLogger.debug("rendering: %s", this);
 		FontRenderer fontRenderer = mc.fontRenderer;
         mc.getTextureManager().bindTexture(textures);
@@ -43,6 +43,32 @@ public class ElementButton extends ElementLabel{
         drawTexturedModalRect(absX() + wHalf, absY(), tex.int3() - wHalf, tex.int2(), wHalf, height);
         fontRenderer.drawStringWithShadow(text, absX() + ((width - fontRenderer.getStringWidth(text)) / 2), absY() + ((height - fontRenderer.FONT_HEIGHT) / 2), enabledFlag());
         
+        if(isFocused()){
+        	renderBorder(1, 0xffffffff);
+        }
         //drawCenteredString(fontrenderer, text, absX + wHalf, (absY + (height - 8)) >> 1, enabledFlag());
+	}
+	
+	@Override
+	protected boolean onDoublePressed(ElementContainer parent, int x, int y, int which) {
+		super.onDoublePressed(parent, x, y, which);
+		NCLogger.debug("double pressed at: (%d,%d) by %d", x, y, which);
+		return false;
+	}
+	
+	@Override
+	protected boolean onMove(ElementContainer parent, int x, int y, int which) {
+		super.onMove(parent, x, y, which);
+		if(which == BUTTON_RIGHT){
+			this.x = x;
+			this.y = y;
+		}
+		return true;
+	}
+	
+	@Override
+	protected boolean onPressed(ElementContainer parent, int x, int y, int which) {
+		super.onPressed(parent, x, y, which);
+		return true;
 	}
 }
