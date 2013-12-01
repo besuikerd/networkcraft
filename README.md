@@ -1,3 +1,3 @@
-#InetCraft
+#NetworkCraft
 
 ## A mod about networking
