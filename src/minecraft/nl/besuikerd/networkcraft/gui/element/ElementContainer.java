@@ -1,20 +1,27 @@
-package nl.besuikerd.networkcraft.gui;
+package nl.besuikerd.networkcraft.gui.element;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import nl.besuikerd.networkcraft.core.NCLogger;
+import nl.besuikerd.networkcraft.core.utils.BitUtils;
+import nl.besuikerd.networkcraft.core.utils.MathUtils;
+import nl.besuikerd.networkcraft.core.utils.Tuple;
+import nl.besuikerd.networkcraft.gui.layout.DefaultLayout;
+import nl.besuikerd.networkcraft.gui.layout.Layout;
 
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 
 import com.google.common.base.Function;
 
-import net.minecraft.block.BlockHopper;
-import net.minecraft.client.Minecraft;
-import nl.besuikerd.networkcraft.core.NCLogger;
-import nl.besuikerd.networkcraft.core.utils.FunctionalUtils;
-import nl.besuikerd.networkcraft.core.utils.MathUtils;
-
 public class ElementContainer extends Element{
+	
+	
+	protected int paddingTop;
+	protected int paddingRight;
+	protected int paddingBottom;
+	protected int paddingLeft;
 	
 	//function that checks wheter or not a button is down or not
 	private static final Function<Integer, Boolean> functionIsButtonDown = new Function<Integer, Boolean>() {
@@ -25,9 +32,8 @@ public class ElementContainer extends Element{
 	};
 	
 	protected List<Element> elements;
-	protected Layout layout;
 	
-	protected int bgColor = 0x0;
+	protected Layout layout;
 	
 	//used to determine element movement
 	private int lastOffsetX;
@@ -39,30 +45,43 @@ public class ElementContainer extends Element{
 	
 	public ElementContainer(int x, int y, int width, int height) {
 		super(x, y, width, height);
-		elements = new ArrayList<Element>();
+		this.elements = new ArrayList<Element>();
+		this.layout = new DefaultLayout();
+	}
+	
+	public ElementContainer(int width, int height){
+		this(0, 0, width, height);
 	}
 
 	public void add(Element e){
+		e.index = elements.size();
 		this.elements.add(e);
 		e.dx = e.x + this.dx;
+		
 	}
 	
 	@Override
 	public void draw(ElementContainer parent, int mouseX, int mouseY) {
-		//NCLogger.debug("(%d,%d) abs:(%d,%d), dx:(%d,%d)", x, y, absX(), absY(), dx, dy);
-		drawRect(absX(), absY(), absX() + width, absY() + height, bgColor);
+		super.draw(parent, mouseX, mouseY);
 		
-		for(int i = elements.size() - 1; i >= 0 ; i--){
+		layout.init(this, mouseX, mouseY);
+	
+		int renderLimit = -1;
+		
+		for(int i = 0 ; i < elements.size() ; i++){
 			Element e = elements.get(i);
 			//increment relative coordinates
 			e.dx = absX();
 			e.dy = absY();
 			
 			//let layout move element to it's correct position
-			if(layout != null){
-				layout.layout(parent, e, mouseX, mouseY);
+			if(layout.layout(this, e, i, mouseX, mouseY)){
+				renderLimit++;
 			}
-			
+		}
+		
+		for(int i = renderLimit; i >= 0 ; i--){
+			Element e = elements.get(i);
 			//render element
 			e.draw(this, mouseX, mouseY);
 		}
@@ -81,7 +100,6 @@ public class ElementContainer extends Element{
 		
 		//process last clicked Element first
 		if(lastClicked != null){
-			
 			
 			int moveX = x - (absX() + lastOffsetX);
 			int moveY = y - (absY() + lastOffsetY);
@@ -102,7 +120,7 @@ public class ElementContainer extends Element{
 				
 				//NCLogger.debug("(x,y) = (%d,%d) absX = (%d, %d), absY() = (%d,%d) | (%d, %d, %d, %d)", x,y, e.absX(), e.absX() + e.width, e.absY(), e.absY() + e.height, absX(), absY(), width, height);
 				
-				if(MathUtils.inRange2D(x, y, e.absX(), e.absX() + e.width, e.absY(), e.absY() + e.height)){ //element is within range
+				if(MathUtils.inRange2D(x, y, e.absX(), e.absX() + e.width - 1, e.absY(), e.absY() + e.height - 1)){ //element is within range
 					
 
 					if(lastClicked == null){
@@ -151,11 +169,6 @@ public class ElementContainer extends Element{
 				for(int buttonFlag : Element.BUTTONS){
 					
 					if(Mouse.isButtonDown(Element.mouseMap.get(buttonFlag))){
-						e.toggleOff(Element.HOVERING);
-						
-						if(lastClicked != null && lastClicked.equals(e)){
-							
-						}
 						
 					} else if(e.is(buttonFlag)){ //check if buttons are released
 						e.toggleOff(buttonFlag);
@@ -171,18 +184,6 @@ public class ElementContainer extends Element{
 		return false;
 	}
 	
-	/**
-	 * focus given Element to bring them to the top of the screen
-	 * @param e
-	 */
-	protected void focus(Element e){
-		int index = elements.indexOf(e);
-		if(index != -1){
-			elements.remove(index);
-			elements.add(0, e);
-		}
-	}
-	
 	public boolean isFrontElement(Element e){
 		return elements.size() > 0 && elements.get(0).equals(e); 
 	}
@@ -190,11 +191,29 @@ public class ElementContainer extends Element{
 	@Override
 	protected boolean onMove(ElementContainer parent, int x, int y, int which) {
 		super.onMove(parent, x, y, which);
+		/*
 		if(!movementConsumedByChild){
 			this.x = x;
 			this.y = y;
 			return true;
 		}
+		*/
 		return false;
+	}
+	
+	public int getPaddingTop() {
+		return paddingTop;
+	}
+	
+	public int getPaddingRight() {
+		return paddingRight;
+	}
+	
+	public int getPaddingBottom() {
+		return paddingBottom;
+	}
+	
+	public int getPaddingLeft() {
+		return paddingLeft;
 	}
 }

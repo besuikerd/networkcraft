@@ -10,9 +10,9 @@ import net.minecraftforge.common.Configuration;
 import net.minecraftforge.common.MinecraftForge;
 import nl.besuikerd.networkcraft.core.NCConfig;
 import nl.besuikerd.networkcraft.core.NCLogger;
-import nl.besuikerd.networkcraft.gui.GuiTest;
 import nl.besuikerd.networkcraft.gui.NCGuiHandler;
 import nl.besuikerd.networkcraft.gui.NCGuiId;
+import nl.besuikerd.networkcraft.gui.element.GuiBase;
 import cpw.mods.fml.client.registry.ClientRegistry;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
@@ -73,7 +73,7 @@ public class NetworkCraft{
 		
 		//register guis
 		NCGuiHandler guiHandler = NCGuiHandler.getInstance();
-		guiHandler.registerGui(NCGuiId.TEST, new GuiTest());
+		guiHandler.registerGui(NCGuiId.TEST, new GuiBase());
 	}
 	
 	@EventHandler

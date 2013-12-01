@@ -1,43 +1,44 @@
-package nl.besuikerd.networkcraft.gui;
+package nl.besuikerd.networkcraft.gui.element;
 
-import java.awt.Button;
-import java.sql.NClob;
-
-import org.lwjgl.input.Keyboard;
-import org.lwjgl.input.Mouse;
-import org.lwjgl.opengl.GL11;
-
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
-import nl.besuikerd.networkcraft.core.NCLogger;
+import nl.besuikerd.networkcraft.gui.INCGui;
+import nl.besuikerd.networkcraft.gui.layout.HoritzontalLayout;
+import nl.besuikerd.networkcraft.gui.layout.VerticalLayout;
 
-public class GuiTest extends GuiScreen implements INCGui<TileEntity>{
+import org.lwjgl.input.Mouse;
+
+public class GuiBase extends GuiScreen implements INCGui<TileEntity>{
 	
 	private static final ResourceLocation bg = new ResourceLocation("textures/gui/demo_background.png");
 	
 	protected ElementContainer root;
 	
-	
-	private int unknown_field_from_GuiScreen;
 	private long lastMouseEvent;
 	private int eventButton;
 
-	public GuiTest() {
+	public GuiBase() {
 		
-		root = new ElementContainer(50, 50, 300, 200);
-		root.bgColor = 0xffff0000;
-		ElementContainer container = new ElementContainer(20, 20, 190, 105);
-		container.bgColor = 0xff0000ff;
+		root = new ElementContainer(5, 5, 400, 160);
+		
+		
+		ElementContainer container = new ElementStyledContainer(0, 0, 180, 100);
+		
+		container.layout = new VerticalLayout(5, 5);
+		
+		for(int i = 0 ; i < 5; i++){
+			container.add(new ElementButton(0, 0, 60 + i*5, 20 + i*5, String.format("TstBtn%d", i)));
+		}
+		
+		ElementContainer container2 = new ElementStyledContainer(190, 0, 180, 100);
+		container2.add(new ElementItemContainerArray(25, 5));
+		
 		root.add(container);
+		root.add(container2);
 		
-		
-		container.add(new ElementButton(20, 20, 120, 20, "TestButton"));
-		container.add(new ElementButton(20, 50, 120, 20, "TestButton2"));
 		this.width = root.width;
 		this.height = root.height;
 	}
@@ -45,7 +46,7 @@ public class GuiTest extends GuiScreen implements INCGui<TileEntity>{
 	@Override
 	public Object onOpenend(TileEntity entity, EntityPlayer player, World w,
 			int x, int y, int z) {
-		return new GuiTest();
+		return new GuiBase();
 	}
 	
 	@Override
