@@ -1,33 +1,24 @@
 package nl.besuikerd.networkcraft.generic;
 
-import java.util.Arrays;
-
-import cpw.mods.fml.common.FMLCommonHandler;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.INetworkManager;
 import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.Packet132TileEntityData;
 import net.minecraft.tileentity.TileEntity;
 import nl.besuikerd.networkcraft.core.NCLogger;
+import nl.besuikerd.networkcraft.protocols.DataLink;
+import nl.besuikerd.networkcraft.protocols.Physical;
+import nl.besuikerd.networkcraft.protocols.osiLayerDataModel;
 
 public class TileEntityConnecting extends TileEntity{
 	
-	public static final String TAG_CONNECTED_SIDES = "sides";
+	private osiLayerDataModel osiDataModel;
 	
-	private boolean[] connectedSides;
+	//zullen we dit naar physical layer klasse gooien voor netheid, of is dat te moeilijk gedacht?
+	//private boolean[] connectedSides;
 	
 	public TileEntityConnecting() {
-		this.connectedSides = new boolean[6];
-	}
-
-	@Override
-	public void readFromNBT(NBTTagCompound tag) {
-		super.readFromNBT(tag);
-		byte val = tag.getByte(TAG_CONNECTED_SIDES);
-		for(int i = 0 ; i < connectedSides.length ; i++){
-			connectedSides[i] = ((val >> i) & 1) == 1;
-		}
-		NCLogger.debug("%s| nbt read, sides: %d %s",FMLCommonHandler.instance().getEffectiveSide(), val, Arrays.toString(connectedSides));
+		this.osiDataModel = new DataLink();
 	}
 	
 	@Override
@@ -47,15 +38,16 @@ public class TileEntityConnecting extends TileEntity{
 	@Override
 	public void writeToNBT(NBTTagCompound tag) {
 		super.writeToNBT(tag);
-		
-		byte val = 0;
-		for(int i = 0 ; i < connectedSides.length ; i++){
-			val |= ((connectedSides[i] ? 1 : 0) << i) &0xff;
-		}
-		tag.setByte(TAG_CONNECTED_SIDES, val);
+		osiDataModel.writeToNBT(tag);
+	}
+	
+	@Override
+	public void readFromNBT(NBTTagCompound tag) {
+		super.readFromNBT(tag);
+		osiDataModel.readFromNBT(tag);
 	}
 	
 	public boolean[] getConnectedSides() {
-		return connectedSides;
+		return ((Physical) osiDataModel).getConnectedSides();
 	}
 }
