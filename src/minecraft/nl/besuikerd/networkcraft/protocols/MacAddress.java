@@ -10,6 +10,10 @@ public class MacAddress {
 		mac = new Random().nextInt();
 	}
 	
+	public MacAddress(int mac){
+		this.mac = mac;
+	}
+	
 	public int getMac() {
 		return mac;
 	}
