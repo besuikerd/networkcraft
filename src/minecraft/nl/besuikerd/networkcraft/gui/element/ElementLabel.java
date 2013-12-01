@@ -1,4 +1,4 @@
-package nl.besuikerd.networkcraft.gui;
+package nl.besuikerd.networkcraft.gui.element;
 
 public class ElementLabel extends Element{
 
@@ -11,7 +11,6 @@ public class ElementLabel extends Element{
 
 	@Override
 	public void draw(ElementContainer parent, int mouseX, int mouseY) {
-		// TODO Auto-generated method stub
-		
+		super.draw(parent, mouseX, mouseY);
 	}
 }
