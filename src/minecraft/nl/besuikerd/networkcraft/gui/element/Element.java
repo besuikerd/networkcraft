@@ -1,5 +1,8 @@
 package nl.besuikerd.networkcraft.gui.element;
 
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -9,12 +12,13 @@ import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.util.ResourceLocation;
 import nl.besuikerd.networkcraft.core.NCLogger;
+import nl.besuikerd.networkcraft.core.packet.IDataProvider;
 import nl.besuikerd.networkcraft.core.utils.MathUtils;
 import nl.besuikerd.networkcraft.core.utils.Tuple;
 
 import org.lwjgl.opengl.GL11;
 
-public abstract class Element extends Gui{
+public abstract class Element extends Gui implements IDataProvider{
 	
 	protected ResourceLocation textures = new ResourceLocation("networkcraft", "textures/gui/elements.png");
 	
@@ -32,6 +36,11 @@ public abstract class Element extends Gui{
 	public static final Integer[] BUTTONS = new Integer[]{LEFT_CLICKED, RIGHT_CLICKED, MIDDLE_CLICKED};
 	
 	/**
+	 * should the dimensions of this element be saved?
+	 */
+	protected boolean saveDimensions = false;
+	
+	/**
 	 * 200 ms delay for double presses
 	 */
 	public static final long THRESHOLD_DOUBLE_PRESS = 200l;
@@ -47,9 +56,6 @@ public abstract class Element extends Gui{
 		put(RIGHT_CLICKED, 0l);
 		put(MIDDLE_CLICKED, 0l);
 	}};
-	
-	public static final int FLAG_ENABLED = -6250336;
-	public static final int FLAG_DISABLED = 16777120;
 	
 	protected Minecraft mc;
 	protected FontRenderer fontRenderer;
@@ -93,17 +99,11 @@ public abstract class Element extends Gui{
 		}
 	};
 	
-	
-	protected int enabledFlag(){
-		//TODO review this, this was ripped from the source code, probably something to do with text color
-		return isEnabled() ? FLAG_ENABLED : FLAG_DISABLED;
-	}
-	
-	protected int absX(){
+	public int absX(){
 		return x + dx;
 	}
 	
-	protected int absY(){
+	public int absY(){
 		return y + dy;
 	}
 	
@@ -335,5 +335,25 @@ public abstract class Element extends Gui{
 			toDrawY -= drawHeight; 
 		}
 		drawBorderFromTextures(edgeTop, edgeRight, edgeBottom, edgeLeft, cornerTL, cornerTR, cornerBL, cornerBR);
+	}
+	
+	@Override
+	public void readData(DataInputStream dis) throws IOException {
+		if(saveDimensions){
+			this.x = dis.readInt();
+			this.y = dis.readInt();
+			this.width = dis.readInt();
+			this.height = dis.readInt();
+		}
+	}
+	
+	@Override
+	public void writeData(DataOutputStream dos) throws IOException {
+		if(saveDimensions){
+			dos.writeInt(x);
+			dos.writeInt(y);
+			dos.writeInt(width);
+			dos.writeInt(height);
+		}
 	}
 }

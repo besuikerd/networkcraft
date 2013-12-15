@@ -37,4 +37,37 @@ public enum BlockSide {
 	public BlockSide opposite(){
 		return values()[ordinal() + (ordinal() % 2 == 0 ? 1 : -1)];
 	}
+	
+	/**
+	 * turns an array of blocksides to a byte representation
+	 * @param blockSides
+	 * @return
+	 */
+	public static byte toByte(BlockSide... blockSides){
+		byte result = 0;
+		for(BlockSide b : blockSides){
+			result |= 1 << b.ordinal();
+		}
+		return result;
+	}
+	
+	public static BlockSide[] fromByte(byte sides){
+		BlockSide[] result = new BlockSide[Integer.bitCount(sides & 0xff)];
+		int current = 0;
+		for(int i = 0 ; i < 6 ; i++){
+			 if(((sides >> i) & 1) == 1){
+				 result[current] = BlockSide.values()[i];
+				 current++;
+			 }
+		}
+		return result;
+	}
+	
+	public static boolean isSideSelected(byte selectedSides, int side){
+		return ((selectedSides >> side) & 1) == 1;
+	}
+	
+	public static boolean isSideSelected(byte selectedSides, BlockSide side){
+		return isSideSelected(selectedSides, side.ordinal());
+	}
 }

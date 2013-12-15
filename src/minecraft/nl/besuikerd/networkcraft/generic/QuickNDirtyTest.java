@@ -1,5 +1,7 @@
 package nl.besuikerd.networkcraft.generic;
 
+import java.io.ByteArrayOutputStream;
+import java.io.OutputStream;
 import java.util.Arrays;
 
 import static nl.besuikerd.networkcraft.core.utils.FunctionalUtils.*;
@@ -17,6 +19,7 @@ public class QuickNDirtyTest {
 	public static void main(String[] args) {
 		functionalTest();
 		bitUtilsTest();
+		
 	}
 	
 	private static void functionalTest(){

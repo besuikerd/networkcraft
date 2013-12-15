@@ -1,4 +1,4 @@
-package nl.besuikerd.networkcraft.gui;
+package nl.besuikerd.networkcraft.core.utils;
 
 public interface INumbered {
 	public int getNumber();
