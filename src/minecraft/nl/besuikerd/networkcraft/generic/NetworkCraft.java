@@ -10,9 +10,11 @@ import net.minecraftforge.common.Configuration;
 import net.minecraftforge.common.MinecraftForge;
 import nl.besuikerd.networkcraft.core.NCConfig;
 import nl.besuikerd.networkcraft.core.NCLogger;
+import nl.besuikerd.networkcraft.core.inventory.NCContainer;
+import nl.besuikerd.networkcraft.core.inventory.TileEntityTestInventory;
+import nl.besuikerd.networkcraft.gui.GuiBase;
 import nl.besuikerd.networkcraft.gui.NCGuiHandler;
 import nl.besuikerd.networkcraft.gui.NCGuiId;
-import nl.besuikerd.networkcraft.gui.element.GuiBase;
 import cpw.mods.fml.client.registry.ClientRegistry;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
@@ -36,6 +38,7 @@ public class NetworkCraft{
 	public static Block cable;
 	
 	public static Block blockGui;
+	public static Block blockInventory;
 	
 	@Instance(value="networkcraft")
 	public static NetworkCraft instance;
@@ -61,19 +64,22 @@ public class NetworkCraft{
 		
 		
 		GameRegistry.registerBlock(blockGui, blockGui.getUnlocalizedName());
+		GameRegistry.registerBlock(blockInventory, blockInventory.getUnlocalizedName());
 		
 		//register items
 		
 		//register tile entities
 		GameRegistry.registerTileEntity(TileEntityBlockCable.class, "cable");
 		GameRegistry.registerTileEntity(TileEntityConnecting.class, "connecting");
+		GameRegistry.registerTileEntity(TileEntityTestInventory.class, "testinventory");
 		
 		//register gui handlers
 		NetworkRegistry.instance().registerGuiHandler(this, NCGuiHandler.getInstance());
 		
 		//register guis
 		NCGuiHandler guiHandler = NCGuiHandler.getInstance();
-		guiHandler.registerGui(NCGuiId.TEST, new GuiBase());
+		guiHandler.registerGui(NCGuiId.TEST, GuiBase.class);
+		guiHandler.registerGui(NCGuiId.INVENTORYTEST, TileEntityTestInventory.GuiTileEntityTestInventory.class, NCContainer.class);
 	}
 	
 	@EventHandler
@@ -89,5 +95,6 @@ public class NetworkCraft{
 		blockRouter = new BlockRouter(NCConfig.block_router);
 		cable = new BlockCable(NCConfig.block_cable);
 		blockGui = new BlockGui(450);
+		blockInventory = new BlockTestInventory(451);
 	}
 }

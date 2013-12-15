@@ -27,6 +27,7 @@ public class ElementStyledContainer extends ElementContainer{
 
 	@Override
 	public void draw(ElementContainer parent, int mouseX, int mouseY) {
+		mc.getTextureManager().bindTexture(textures);
 		GL11.glColor4f(1f, 1f, 1f, 1f);
 		drawBackgroundFromTextures(texBg, texEdgeTop, texEdgeRight, texEdgeBottom, texEdgeLeft, texCornerTL, texCornerTR, texCornerBL, texCornerBR);
 		super.draw(parent, mouseX, mouseY);

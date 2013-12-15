@@ -19,39 +19,39 @@ public class NCLogger {
 		}
 	}
 	
-	public static void log(Level level, String msg, Object... params){
-		logger.log(level, String.format("%s|%s", FMLCommonHandler.instance().getEffectiveSide(), String.format(msg, params)));
+	public static void log(Level level, Object msg, Object... params){
+		logger.log(level, String.format("%s|%s", FMLCommonHandler.instance().getEffectiveSide(), String.format(msg.toString(), params)));
 	}
 	
-	public static void log(Level level, String msg){
+	public static void log(Level level, Object msg){
 		logger.log(level, String.format("%s|%s", FMLCommonHandler.instance().getEffectiveSide(), msg));
 	}
 	
-	public static void warn(String msg, Object... params){
+	public static void warn(Object msg, Object... params){
 		log(Level.WARNING, msg, params);
 	}
 	
-	public static void warn(String msg){
+	public static void warn(Object msg){
 		log(Level.WARNING, msg);
 	}
 	
-	public static void error(String msg, Object... params){
+	public static void error(Object msg, Object... params){
 		log(Level.SEVERE, msg, params);
 	}
 	
-	public static void error(String msg){
+	public static void error(Object msg){
 		log(Level.SEVERE, msg);
 	}
 	
-	public static void info(String msg, Object... params){
+	public static void info(Object msg, Object... params){
 		log(Level.INFO, msg, params);
 	}
 	
-	public static void info(String msg){
+	public static void info(Object msg){
 		log(Level.INFO, msg);
 	}
 	
-	public static void debug(String msg, Object... params){
+	public static void debug(Object msg, Object... params){
 		if(NetworkCraft.DEBUG_MODE){
 			info(msg, params);
 		}

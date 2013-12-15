@@ -7,15 +7,20 @@ import nl.besuikerd.networkcraft.core.utils.Tuple;
 
 import org.lwjgl.opengl.GL11;
 
-public class ElementButton extends ElementLabel{
+public class ElementButton extends Element{
 	
 	private static final Tuple TEX_DISABLED = new Tuple(0, 24, 200, 20);
 	private static final Tuple TEX_ENABLED = new Tuple(0, 44, 200, 20);
 	private static final Tuple TEX_HOVER = new Tuple(0, 64, 200, 20);
 	private static final Tuple TEX_ACTIVE = new Tuple(0, 84, 200, 20);
 	
+	public static final int COLOR_ENABLED = 0xffffa0;
+	public static final int COLOR_DISABLED = 0xa0a0a0;
+	
+	protected String text;
+	
 	public ElementButton(int x, int y, int width, int height, String text) {
-		super(x, y, width, height, text);
+		super(x, y, width, height);
 	}
 
 	private GuiButton button;
@@ -37,7 +42,7 @@ public class ElementButton extends ElementLabel{
         } else{
         	drawButtonBackground(ButtonBackground.DISABLED);
         }
-        fontRenderer.drawStringWithShadow(text, absX() + ((width - fontRenderer.getStringWidth(text)) / 2), absY() + ((height - fontRenderer.FONT_HEIGHT) / 2), enabledFlag());
+        fontRenderer.drawStringWithShadow(text, absX() + ((width - fontRenderer.getStringWidth(text)) / 2), absY() + ((height - fontRenderer.FONT_HEIGHT) / 2), isEnabled() ? COLOR_ENABLED : COLOR_DISABLED);
         //drawCenteredString(fontrenderer, text, absX + wHalf, (absY + (height - 8)) >> 1, enabledFlag());
 	}
 	

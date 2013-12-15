@@ -94,7 +94,7 @@ public class ElementContainer extends Element{
 	}
 	
 	@Override
-	protected boolean handleMouseInput(ElementContainer parent, int x, int y) {
+	public boolean handleMouseInput(ElementContainer parent, int x, int y) {
 		super.handleMouseInput(this, x, y);
 		movementConsumedByChild = false;
 		
@@ -215,5 +215,17 @@ public class ElementContainer extends Element{
 	
 	public int getPaddingLeft() {
 		return paddingLeft;
+	}
+	
+	public ElementContainer padding(int padding){
+		this.paddingTop = padding;
+		this.paddingRight = padding;
+		this.paddingBottom = padding;
+		this.paddingLeft = padding;
+		return this;
+	}
+	
+	public void setLayout(Layout layout) {
+		this.layout = layout;
 	}
 }
