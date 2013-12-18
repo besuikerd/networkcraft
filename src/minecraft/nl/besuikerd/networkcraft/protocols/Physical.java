@@ -3,7 +3,7 @@ package nl.besuikerd.networkcraft.protocols;
 import java.util.Arrays;
 
 import net.minecraft.nbt.NBTTagCompound;
-import nl.besuikerd.networkcraft.core.NCLogger;
+import nl.besuikerd.core.BLogger;
 import cpw.mods.fml.common.FMLCommonHandler;
 
 public class Physical extends osiLayerDataModel{
@@ -35,6 +35,6 @@ public class Physical extends osiLayerDataModel{
 		for(int i = 0 ; i < connectedSides.length ; i++){
 			connectedSides[i] = ((val >> i) & 1) == 1;
 		}
-		NCLogger.debug("%s| nbt read, sides: %d %s",FMLCommonHandler.instance().getEffectiveSide(), val, Arrays.toString(connectedSides));
+		BLogger.debug("%s| nbt read, sides: %d %s",FMLCommonHandler.instance().getEffectiveSide(), val, Arrays.toString(connectedSides));
 	}
 }

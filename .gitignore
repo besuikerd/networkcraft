@@ -18,6 +18,6 @@
 !/src/minecraft/nl
 /src/minecraft/nl/*
 !/src/minecraft/nl/besuikerd
-/src/minecraft/nl/besuikerd/*
-!/src/minecraft/nl/besuikerd/networkcraft
+#/src/minecraft/nl/besuikerd/*
+#!/src/minecraft/nl/besuikerd/networkcraft
 
