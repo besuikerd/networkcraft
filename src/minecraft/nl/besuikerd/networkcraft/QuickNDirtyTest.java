@@ -49,6 +49,6 @@ public class QuickNDirtyTest {
 	}
 	
 	private static void bitUtilsTest(){
-		System.out.println( Integer.toBinaryString((BitUtils.getByte(0x01020304, 3) & 0xff) + 0x100) .substring(1));
+		
 	}
 }

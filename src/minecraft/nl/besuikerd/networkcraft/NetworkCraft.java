@@ -10,6 +10,7 @@ import net.minecraftforge.common.Configuration;
 import net.minecraftforge.common.MinecraftForge;
 import nl.besuikerd.core.BLogger;
 import nl.besuikerd.core.inventory.ContainerBesu;
+import nl.besuikerd.core.inventory.ContainerBesuWithPlayerInventory;
 import nl.besuikerd.core.inventory.TileEntityTestInventory;
 import nl.besuikerd.gui.GuiBase;
 import nl.besuikerd.gui.GuiHandlerBesu;
@@ -78,7 +79,7 @@ public class NetworkCraft{
 		//register guis
 		GuiHandlerBesu guiHandler = GuiHandlerBesu.getInstance();
 		guiHandler.registerGui(GuiId.TEST, GuiBase.class);
-		guiHandler.registerGui(GuiId.INVENTORYTEST, TileEntityTestInventory.GuiTileEntityTestInventory.class, ContainerBesu.class);
+		guiHandler.registerGui(GuiId.INVENTORYTEST, TileEntityTestInventory.GuiTileEntityTestInventory.class, ContainerBesuWithPlayerInventory.class);
 	}
 	
 	@EventHandler
