@@ -125,7 +125,7 @@ public class InventoryBesu implements ISidedInventory, IProcessData{
 	public boolean isItemValidForSlot(int i, ItemStack itemstack) {
 		if(i < stacks.size()){
 			InventoryStackBesu invStack = stacks.get(i);
-			return invStack == null || !invStack.isReal ? false : invStack.stack.isItemEqual(itemstack);
+			return invStack.stack == null || invStack.isReal && itemstack.isItemEqual(invStack.stack);
 		}
 		return false;
 	}
@@ -139,7 +139,7 @@ public class InventoryBesu implements ISidedInventory, IProcessData{
 	public boolean canInsertItem(int i, ItemStack itemStack, int side) {
 		if(i < stacks.size()){
 			InventoryStackBesu invStack = stacks.get(i);
-			return invStack == null || !invStack.isReal ? false : itemStack.isItemEqual(invStack.stack) && BlockSide.isSideSelected(invStack.sides, side);
+			return invStack.stack == null || invStack.isReal && itemStack.isItemEqual(invStack.stack) && BlockSide.isSideSelected(invStack.sides, side);
 		}
 		return false;
 	}
@@ -148,7 +148,7 @@ public class InventoryBesu implements ISidedInventory, IProcessData{
 	public boolean canExtractItem(int i, ItemStack itemStack, int side) {
 		if(i < stacks.size()){
 			InventoryStackBesu invStack = stacks.get(i);
-			return invStack == null || !invStack.isReal ? false : itemStack.isItemEqual(invStack.stack) && BlockSide.isSideSelected(invStack.sides, side);
+			return invStack.stack == null || invStack.isReal && itemStack.isItemEqual(invStack.stack) && BlockSide.isSideSelected(invStack.sides, side);
 		}
 		return false;
 	}

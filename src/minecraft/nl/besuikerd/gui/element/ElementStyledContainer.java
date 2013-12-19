@@ -3,6 +3,7 @@ package nl.besuikerd.gui.element;
 import org.lwjgl.opengl.GL11;
 
 import nl.besuikerd.core.utils.Tuple;
+import nl.besuikerd.gui.layout.LayoutDimension;
 
 public class ElementStyledContainer extends ElementContainer{
 
@@ -23,6 +24,12 @@ public class ElementStyledContainer extends ElementContainer{
 		paddingRight = texEdgeRight.int3();
 		paddingBottom = texEdgeBottom.int4();
 		paddingLeft = texEdgeLeft.int3();
+	}
+
+	public ElementStyledContainer(LayoutDimension width, LayoutDimension height) {
+		this(0, 0, 0, 0);
+		this.widthDimension = width;
+		this.heightDimension = height;
 	}
 
 	@Override

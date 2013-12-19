@@ -29,20 +29,31 @@ public class ContainerBesu extends Container{
 	    }
 	    
 	    ItemStack oldStack = stack.copy();
-	    if(!mergeItemStack(stack, 0, inventorySlots.size() - 1, true)){
+	    if(!tryMerge(stack, slotIndex)){
 	    	return null;
 	    }
-	    
 	    if(stack.stackSize == 0){
+	    	
 	    	slot.putStack(null);
-	    	slot.onSlotChanged();
 	    }
+	    
 	    if(oldStack.stackSize != stack.stackSize){
 	    	return null;
 	    }
+	    
 	    slot.onPickupFromSlot(par1EntityPlayer, stack);
 	    
 	    return stack;
+	}
+	
+	/**
+	 * try to merge the given stack somewhere in the inventory
+	 * @param stack
+	 * @param slotIndex
+	 * @return
+	 */
+	protected boolean tryMerge(ItemStack stack, int slotIndex){
+		return mergeItemStack(stack, 0, inventorySlots.size(), false);
 	}
 	
 	@Override

@@ -5,14 +5,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import nl.besuikerd.core.BLogger;
-import nl.besuikerd.core.utils.BitUtils;
 import nl.besuikerd.core.utils.MathUtils;
-import nl.besuikerd.core.utils.Tuple;
 import nl.besuikerd.gui.layout.DefaultLayout;
 import nl.besuikerd.gui.layout.Layout;
+import nl.besuikerd.gui.layout.LayoutDimension;
 
 import org.lwjgl.input.Mouse;
-import org.lwjgl.opengl.GL11;
 
 import com.google.common.base.Function;
 
@@ -53,45 +51,71 @@ public class ElementContainer extends Element{
 	public ElementContainer(int width, int height){
 		this(0, 0, width, height);
 	}
+	
+	public ElementContainer(LayoutDimension width, LayoutDimension height){
+		this(0, 0, 0, 0);
+		this.widthDimension = width;
+		this.heightDimension = height;
+	}
 
 	public void add(Element e){
 		e.index = elements.size();
 		this.elements.add(e);
 		e.dx = e.x + this.dx;
-		
+	}
+	
+	public void clear(){
+		elements.clear();
 	}
 	
 	@Override
 	public void draw(ElementContainer parent, int mouseX, int mouseY) {
 		super.draw(parent, mouseX, mouseY);
 		
-		layout.init(this, mouseX, mouseY);
+		//render last element to first element
+		for(int i = elements.size() - 1;  i >= 0 ; i--){
+			Element e = elements.get(i);
+			//check if element will fit
+			if(true || e.x + e.width <= this.width && e.y + e.height < this.height){
+				//render element
+				e.draw(this, mouseX, mouseY);
+			}
+		}
+	}
 	
-		//amount of Elements that will fit in the layout
-		int renderLimit = -1;
+	@Override
+	public void dimension(ElementContainer parent, int mouseX, int mouseY) {
+		layout.init(this, mouseX, mouseY);
 		
+		//dimension elements
 		for(int i = 0 ; i < elements.size() ; i++){
 			Element e = elements.get(i);
 			//increment relative coordinates
 			e.dx = absX();
 			e.dy = absY();
-			
-			//let layout move element to it's correct position
-			if(layout.layout(this, e, i, mouseX, mouseY)){
-				renderLimit++;
-			}
+			e.dimension(this, mouseX, mouseY);
 		}
 		
-		//TODO fix layouts calculating Dimension
-		//Dimension d = layout.getLaidOutDimension();
-		//NCLogger.debug("laid out dimensions: (%d,%d), actual dimensions: (%d,%d)", d.width, d.height, width, height); 
-		
-		//render last element to first element
-		for(int i = renderLimit; i >= 0 ; i--){
+		//lay out elements
+		for(int i = 0 ; i < elements.size() ; i++){
 			Element e = elements.get(i);
-			//render element
-			e.draw(this, mouseX, mouseY);
+			layout.layout(this, e, i, mouseX, mouseY);
 		}
+		
+		Dimension laidOutDimension = layout.getLaidOutDimension();
+		
+		//if(parent == null) BLogger.debug("post layout, laid out dimensions: (%d,%d), actual dimensions: (%d,%d)", laidOutDimension.width, laidOutDimension.height, width, height); 
+		
+		
+		if(widthDimension == LayoutDimension.WRAP_CONTENT){
+			this.width = laidOutDimension.width + paddingLeft + paddingRight;
+		}
+		
+		if(heightDimension == LayoutDimension.WRAP_CONTENT){
+			this.height = laidOutDimension.height + paddingTop + paddingBottom;
+		}
+		
+		super.dimension(parent, mouseX, mouseY);
 	}
 
 	public void handleMouseInput(){
