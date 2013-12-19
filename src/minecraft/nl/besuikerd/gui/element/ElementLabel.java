@@ -1,5 +1,8 @@
 package nl.besuikerd.gui.element;
 
+import nl.besuikerd.core.BLogger;
+import nl.besuikerd.core.BlockSide;
+
 public class ElementLabel extends Element{
 
 	protected String text;

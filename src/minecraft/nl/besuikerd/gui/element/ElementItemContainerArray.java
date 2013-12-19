@@ -4,6 +4,7 @@ import java.util.Collection;
 
 import net.minecraft.inventory.Slot;
 import nl.besuikerd.gui.layout.HoritzontalLayout;
+import nl.besuikerd.gui.layout.LayoutDimension;
 
 
 public class ElementItemContainerArray extends ElementContainer{
@@ -12,6 +13,7 @@ public class ElementItemContainerArray extends ElementContainer{
 	public ElementItemContainerArray(int x, int y, int columns, Collection<? extends Slot> slots) {
 		super(x, y, columns * 18, (int) (Math.ceil(slots.size() / columns) * 18));
 		this.layout = new HoritzontalLayout();
+		this.heightDimension = LayoutDimension.WRAP_CONTENT;
 		for(Slot slot : slots){
 			add(new ElementItemContainer(slot));
 		}

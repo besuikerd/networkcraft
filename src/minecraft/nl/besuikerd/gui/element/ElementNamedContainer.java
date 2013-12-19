@@ -1,5 +1,7 @@
 package nl.besuikerd.gui.element;
 
+import nl.besuikerd.gui.layout.LayoutDimension;
+
 public class ElementNamedContainer extends ElementContainer{
 
 	protected String name;
@@ -13,7 +15,9 @@ public class ElementNamedContainer extends ElementContainer{
 	public ElementNamedContainer(int x, int y, int width, int height, String name) {
 		super(x, y, width, height);
 		this.name = name;
-		add(new ElementLabel(name));
+		ElementLabel label = new ElementLabel(name);
+		label.widthDimension = LayoutDimension.MATCH_PARENT;
+		add(label);
 	}
 
 

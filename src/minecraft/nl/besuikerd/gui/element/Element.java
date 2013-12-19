@@ -11,6 +11,7 @@ import net.minecraft.util.ResourceLocation;
 import nl.besuikerd.core.packet.IProcessData;
 import nl.besuikerd.core.utils.MathUtils;
 import nl.besuikerd.core.utils.Tuple;
+import nl.besuikerd.gui.layout.LayoutDimension;
 
 import org.lwjgl.opengl.GL11;
 
@@ -63,6 +64,9 @@ public abstract class Element extends Gui implements IProcessData{
 	protected int width;
 	protected int height;
 	
+	protected LayoutDimension widthDimension;
+	protected LayoutDimension heightDimension;
+	
 	protected int dx;
 	protected int dy;
 	
@@ -81,6 +85,9 @@ public abstract class Element extends Gui implements IProcessData{
 		this.width = width;
 		this.height = height;
 		
+		this.widthDimension = LayoutDimension.ABSOLUTE;
+		this.heightDimension = LayoutDimension.ABSOLUTE;
+		
 		this.state = ENABLED;
 		
 		dx = 0;
@@ -98,10 +105,31 @@ public abstract class Element extends Gui implements IProcessData{
 		}
 	};
 	
+	/**
+	 * callback before drawing the Element. Enables the repositioning of elements before actually drawing them
+	 */
+	public void dimension(ElementContainer parent, int mouseX, int mouseY){
+		if(parent != null && widthDimension == LayoutDimension.MATCH_PARENT){
+			this.width = parent.width;
+		}
+		
+		if(parent != null && heightDimension == LayoutDimension.MATCH_PARENT){
+			this.height = parent.height;
+		}
+	}
+	
+	/**
+	 * Absolute x coordinate in the screen
+	 * @return Absolute x coordinate in the screen
+	 */
 	public int absX(){
 		return x + dx;
 	}
 	
+	/**
+	 * Absolute y coordinate in the screen
+	 * @return Absolute y coordinate in the screen
+	 */
 	public int absY(){
 		return y + dy;
 	}
@@ -236,6 +264,14 @@ public abstract class Element extends Gui implements IProcessData{
 	
 	public int getWidth() {
 		return width;
+	}
+	
+	public LayoutDimension getWidthDimension() {
+		return widthDimension;
+	}
+	
+	public LayoutDimension getHeightDimension() {
+		return heightDimension;
 	}
 	
 	protected void renderBorder(int thickness, int color){

@@ -11,6 +11,11 @@ public class VerticalLayout implements Layout{
 	private int xOffset;
 	private int yOffset;
 	
+	/**
+	 * maximum width of the elements in the rightmost column
+	 */
+	private int maxWidth;
+	
 	protected int marginX;
 	protected int marginY;
 	
@@ -39,22 +44,22 @@ public class VerticalLayout implements Layout{
 	public void init(ElementContainer parent, int mouseX, int mouseY) {
 		xOffset = parent.getPaddingLeft();
 		yOffset = parent.getPaddingTop();
+		maxWidth = 0;
 	}
 	
 	@Override
 	public boolean layout(ElementContainer container, Element e, int index, int mouseX,
 			int mouseY) {
 		
-		//check if element would fall out of horizontal bounds
-		if(yOffset + e.getHeight() > container.getHeight() - container.getPaddingBottom()){
+		//check if element would fall out of vertical bounds
+		if(container.getHeightDimension() != LayoutDimension.WRAP_CONTENT && yOffset + e.getHeight() > container.getHeight() - container.getPaddingBottom()){
 			yOffset = container.getPaddingTop();
 			xOffset += e.getWidth() + marginX;
+			maxWidth = e.getWidth();
+		} else if(e.getWidth() > maxWidth){
+			maxWidth = e.getWidth();
 		}
 		
-		//not allowed to render when the container is filled entirely
-		if(xOffset + e.getWidth() > container.getWidth() - container.getPaddingRight()){
-			return false;
-		}
 		e.setX(xOffset);
 		e.setY(yOffset);
 		
@@ -65,6 +70,6 @@ public class VerticalLayout implements Layout{
 	
 	@Override
 	public Dimension getLaidOutDimension() {
-		return new Dimension(xOffset, yOffset);
+		return new Dimension(xOffset + maxWidth, yOffset);
 	}
 }

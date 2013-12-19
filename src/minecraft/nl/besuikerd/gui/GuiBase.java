@@ -10,6 +10,9 @@ import nl.besuikerd.core.BLogger;
 import nl.besuikerd.core.inventory.ContainerBesu;
 import nl.besuikerd.core.inventory.TileEntityInventory;
 import nl.besuikerd.gui.element.ElementContainer;
+import nl.besuikerd.gui.element.ElementStyledContainer;
+import nl.besuikerd.gui.layout.LayoutDimension;
+import nl.besuikerd.gui.layout.VerticalLayout;
 
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
@@ -23,7 +26,9 @@ public class GuiBase extends GuiContainer{
 	
 	public GuiBase(ContainerBesu container) {
 		super(container);
-		root = new ElementContainer(Display.getWidth(), Display.getHeight());
+		root = new ElementStyledContainer(LayoutDimension.WRAP_CONTENT, LayoutDimension.WRAP_CONTENT).padding(5);
+		root.setLayout(new VerticalLayout(0, 5));
+		init();
 	}
 
 	private static final ResourceLocation bg = new ResourceLocation("textures/gui/demo_background.png");
@@ -37,7 +42,7 @@ public class GuiBase extends GuiContainer{
 	@Override
 	public void initGui() {
 		super.initGui();
-		init();
+		
 		guiLeft = root.absX();
 		guiTop = root.absY();
 	}
@@ -75,9 +80,22 @@ public class GuiBase extends GuiContainer{
 	public boolean doesGuiPauseGame() {
 		return false;
 	}
+	
+	@Override
+	public void drawScreen(int mouseX, int mouseY, float par3) {
+
+		super.drawScreen(mouseX, mouseY, par3);
+	}
 
 	@Override
 	protected void drawGuiContainerBackgroundLayer(float f, int mouseX, int mouseY) {
+		
+		root.dimension(null, mouseX, mouseY);
+		root.dimension(null, mouseX, mouseY);
+		//BLogger.debug("root dimensions: (%d,%d) (%d,%d) (%d,%d)", root.getX(), root.getY(), root.absX(), root.absY(), root.getWidth(), root.getHeight());
 		root.draw(null, mouseX, mouseY);
+//		int mouseX = Mouse.getEventX() * this.width / this.mc.displayWidth;
+//      int mouseY = this.height - Mouse.getEventY() * this.height / this.mc.displayHeight - 1;
+		
 	}
 }
