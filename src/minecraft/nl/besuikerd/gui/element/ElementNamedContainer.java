@@ -16,13 +16,13 @@ public class ElementNamedContainer extends ElementContainer{
 		super(x, y, width, height);
 		this.name = name;
 		ElementLabel label = new ElementLabel(name);
-		label.widthDimension = LayoutDimension.MATCH_PARENT;
+//		label.widthDimension = LayoutDimension.MATCH_PARENT;
 		add(label);
 	}
 
 
 	@Override
-	public void draw(ElementContainer parent, int mouseX, int mouseY) {
-		super.draw(parent, mouseX, mouseY);
+	public void draw(ElementContainer parent, int mouseX, int mouseY, ElementContainer root) {
+		super.draw(parent, mouseX, mouseY, root);
 	}
 }

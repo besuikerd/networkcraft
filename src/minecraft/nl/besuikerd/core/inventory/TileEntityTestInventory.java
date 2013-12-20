@@ -4,6 +4,7 @@ import nl.besuikerd.core.BLogger;
 import nl.besuikerd.core.BlockSide;
 import nl.besuikerd.gui.GuiBase;
 import nl.besuikerd.gui.element.ElementItemContainerArray;
+import nl.besuikerd.gui.element.ElementLabel;
 import nl.besuikerd.gui.element.ElementPlayerInventory;
 import nl.besuikerd.gui.element.ElementStyledContainer;
 import nl.besuikerd.gui.layout.LayoutDimension;
@@ -22,7 +23,10 @@ public class TileEntityTestInventory extends TileEntityInventory {
 
 		@Override
 		public void init() {
-			root.add(new ElementItemContainerArray(9, inventorySlots.inventorySlots.subList(36, inventorySlots.inventorySlots.size())));
+			root.add(new ElementLabel("Super TestInventory!"));
+			root.add(new ElementItemContainerArray(9, inventorySlots.inventorySlots.subList(36, inventorySlots.inventorySlots.size()))
+			.paddingBottom(5));
+			root.padding(10);
 			root.add(new ElementPlayerInventory(inventorySlots.inventorySlots));
 		}
 	}

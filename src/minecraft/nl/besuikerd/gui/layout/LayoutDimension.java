@@ -11,14 +11,23 @@ public enum LayoutDimension {
 	 */
 	ABSOLUTE,
 	
+	/* TODO support MATCH_PARENT behaviour (hard to implement efficiently with the current implementation of Elements)
+	/**
+	 * dimension will be as big as the parent
+	
+		
+	MATCH_PARENT
+	 */
+	
+	
 	/**
 	 * dimension will be as small as possible
 	 */
-	WRAP_CONTENT,
+	WRAP_CONTENT
 	
-	/**
-	 * dimension will be as big as the parent
-	 */
-	MATCH_PARENT
+	
+	
+	
 	;
+	
 }

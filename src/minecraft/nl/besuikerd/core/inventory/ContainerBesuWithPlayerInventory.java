@@ -18,6 +18,7 @@ public class ContainerBesuWithPlayerInventory extends ContainerBesu{
 	
 	@Override
 	protected boolean tryMerge(ItemStack stack, int slotIndex) {
+		//if it's a player inventory slot, try to merge it in one of the inventory slots and vice versa
 		return slotIndex < 36 && mergeItemStack(stack, 36, inventorySlots.size(), false) || slotIndex >= 36 && mergeItemStack(stack, 0, 36, false);
 	}
 }

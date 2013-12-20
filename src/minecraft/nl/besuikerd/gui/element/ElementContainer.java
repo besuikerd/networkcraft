@@ -68,54 +68,56 @@ public class ElementContainer extends Element{
 		elements.clear();
 	}
 	
+	public int getElementCount(){
+		return elements.size();
+	}
+	
 	@Override
-	public void draw(ElementContainer parent, int mouseX, int mouseY) {
-		super.draw(parent, mouseX, mouseY);
+	public void draw(ElementContainer parent, int mouseX, int mouseY, ElementContainer root) {
+		super.draw(parent, mouseX, mouseY, root);
 		
 		//render last element to first element
 		for(int i = elements.size() - 1;  i >= 0 ; i--){
 			Element e = elements.get(i);
+			
+			e.dx = absX();
+			e.dy = absY();
 			//check if element will fit
 			if(true || e.x + e.width <= this.width && e.y + e.height < this.height){
 				//render element
-				e.draw(this, mouseX, mouseY);
+				e.draw(this, mouseX, mouseY, root);
 			}
 		}
 	}
 	
 	@Override
-	public void dimension(ElementContainer parent, int mouseX, int mouseY) {
-		layout.init(this, mouseX, mouseY);
+	public void dimension(ElementContainer parent, ElementContainer root) {
+		layout.init(this, root);
 		
 		//dimension elements
 		for(int i = 0 ; i < elements.size() ; i++){
 			Element e = elements.get(i);
 			//increment relative coordinates
-			e.dx = absX();
-			e.dy = absY();
-			e.dimension(this, mouseX, mouseY);
+			e.dimension(this, root);
 		}
 		
 		//lay out elements
 		for(int i = 0 ; i < elements.size() ; i++){
 			Element e = elements.get(i);
-			layout.layout(this, e, i, mouseX, mouseY);
+			layout.layout(this, e, i, root);
 		}
 		
 		Dimension laidOutDimension = layout.getLaidOutDimension();
 		
-		//if(parent == null) BLogger.debug("post layout, laid out dimensions: (%d,%d), actual dimensions: (%d,%d)", laidOutDimension.width, laidOutDimension.height, width, height); 
-		
-		
 		if(widthDimension == LayoutDimension.WRAP_CONTENT){
-			this.width = laidOutDimension.width + paddingLeft + paddingRight;
+			this.width = laidOutDimension.width + paddingRight;
 		}
 		
 		if(heightDimension == LayoutDimension.WRAP_CONTENT){
-			this.height = laidOutDimension.height + paddingTop + paddingBottom;
+			this.height = laidOutDimension.height + paddingBottom;
 		}
 		
-		super.dimension(parent, mouseX, mouseY);
+		super.dimension(parent, root);
 	}
 
 	public void handleMouseInput(){
@@ -251,6 +253,34 @@ public class ElementContainer extends Element{
 		this.paddingTop = padding;
 		this.paddingRight = padding;
 		this.paddingBottom = padding;
+		this.paddingLeft = padding;
+		return this;
+	}
+	
+	public ElementContainer padding(int top, int right, int bottom, int left){
+		this.paddingTop = top;
+		this.paddingRight = right;
+		this.paddingBottom = bottom;
+		this.paddingLeft = left;
+		return this;
+	}
+	
+	public ElementContainer paddingTop(int padding){
+		this.paddingTop = padding;
+		return this;
+	}
+	
+	public ElementContainer paddingRight(int padding){
+		this.paddingRight = padding;
+		return this;
+	}
+	
+	public ElementContainer paddingBottom(int padding){
+		this.paddingBottom = padding;
+		return this;
+	}
+	
+	public ElementContainer paddingLeft(int padding){
 		this.paddingLeft = padding;
 		return this;
 	}

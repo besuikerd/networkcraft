@@ -46,14 +46,13 @@ public class HoritzontalLayout implements Layout{
 	}
 	
 	@Override
-	public void init(ElementContainer parent, int mouseX, int mouseY) {
+	public void init(ElementContainer parent, ElementContainer root) {
 		xOffset = parent.getPaddingLeft();
 		yOffset = parent.getPaddingTop();
 	}
 	
 	@Override
-	public boolean layout(ElementContainer container, Element e, int index, int mouseX,
-			int mouseY) {
+	public boolean layout(ElementContainer container, Element e, int index, ElementContainer root) {
 		
 		//check if element would fall out of horizontal bounds		
 		if(container.getWidthDimension() != LayoutDimension.WRAP_CONTENT && xOffset + e.getWidth() > container.getWidth() - container.getPaddingRight()){
@@ -64,11 +63,12 @@ public class HoritzontalLayout implements Layout{
 			maxHeight = e.getHeight();
 		}
 		
+		//layout element coordinates
 		e.setX(xOffset);
 		e.setY(yOffset);
 		
 		//increment xOffset
-		xOffset += e.getWidth() + marginX;
+		xOffset += e.getWidth() + (container.getElementCount() - 1 == index ? 0 : marginX);
 		return true;
 	}
 	

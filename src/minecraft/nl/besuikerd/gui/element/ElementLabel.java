@@ -6,7 +6,7 @@ import nl.besuikerd.core.BlockSide;
 public class ElementLabel extends Element{
 
 	protected String text;
-	protected int color = 0xFF5a5a5a;
+	protected int color = 0xFF404040;
 	
 	public ElementLabel(int x, int y, String text) {
 		super(x, y, 0, 0);
@@ -20,8 +20,8 @@ public class ElementLabel extends Element{
 	}
 
 	@Override
-	public void draw(ElementContainer parent, int mouseX, int mouseY) {
-		super.draw(parent, mouseX, mouseY);
+	public void draw(ElementContainer parent, int mouseX, int mouseY, ElementContainer root) {
+		super.draw(parent, mouseX, mouseY, root);
         fontRenderer.drawString(text, absX() + ((width - fontRenderer.getStringWidth(text)) / 2), absY() + ((height - fontRenderer.FONT_HEIGHT) / 2), color);
 	}
 }

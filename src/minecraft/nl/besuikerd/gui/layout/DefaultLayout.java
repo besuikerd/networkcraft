@@ -18,15 +18,14 @@ public class DefaultLayout implements Layout{
 	private int maxHeight;
 	
 	@Override
-	public void init(ElementContainer container, int mouseX, int mouseY) {
+	public void init(ElementContainer container, ElementContainer root) {
 		this.maxWidth = 0;
 		this.maxHeight = 0;
 	}
 	
 	
 	@Override
-	public boolean layout(ElementContainer container, Element e, int index,
-			int mouseX, int mouseY) {
+	public boolean layout(ElementContainer container, Element e, int index, ElementContainer root) {
 		//keep element within container bounds and apply padding
 		
 		//left bound crossed

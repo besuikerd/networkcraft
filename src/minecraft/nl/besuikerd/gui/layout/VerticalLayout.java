@@ -41,15 +41,14 @@ public class VerticalLayout implements Layout{
 	}
 	
 	@Override
-	public void init(ElementContainer parent, int mouseX, int mouseY) {
+	public void init(ElementContainer parent, ElementContainer root) {
 		xOffset = parent.getPaddingLeft();
 		yOffset = parent.getPaddingTop();
 		maxWidth = 0;
 	}
 	
 	@Override
-	public boolean layout(ElementContainer container, Element e, int index, int mouseX,
-			int mouseY) {
+	public boolean layout(ElementContainer container, Element e, int index, ElementContainer root) {
 		
 		//check if element would fall out of vertical bounds
 		if(container.getHeightDimension() != LayoutDimension.WRAP_CONTENT && yOffset + e.getHeight() > container.getHeight() - container.getPaddingBottom()){
@@ -64,7 +63,7 @@ public class VerticalLayout implements Layout{
 		e.setY(yOffset);
 		
 		//increment xOffset
-		yOffset += e.getHeight() + marginY;
+		yOffset += e.getHeight() + (container.getElementCount() - 1 == index ? 0 : marginY);
 		return true;
 	}
 	

@@ -2,6 +2,7 @@ package nl.besuikerd.networkcraft;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockPistonBase;
+import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.entity.EntityLivingBase;
