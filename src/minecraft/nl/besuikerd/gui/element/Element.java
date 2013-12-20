@@ -98,7 +98,7 @@ public abstract class Element extends Gui implements IProcessData{
 		this(0, 0, width, height);
 	}
 	
-	public void draw(ElementContainer parent, int mouseX, int mouseY){
+	public void draw(ElementContainer parent, int mouseX, int mouseY, ElementContainer root){
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 		if(textures != null){
 			mc.getTextureManager().bindTexture(textures);
@@ -108,7 +108,9 @@ public abstract class Element extends Gui implements IProcessData{
 	/**
 	 * callback before drawing the Element. Enables the repositioning of elements before actually drawing them
 	 */
-	public void dimension(ElementContainer parent, int mouseX, int mouseY){
+	public void dimension(ElementContainer parent, ElementContainer root){
+		
+		/* this behaviour is not working since the dimensions of the parent container are calculated after dimensioning children elements with WRAP_CONTENT
 		if(parent != null && widthDimension == LayoutDimension.MATCH_PARENT){
 			this.width = parent.width;
 		}
@@ -116,6 +118,7 @@ public abstract class Element extends Gui implements IProcessData{
 		if(parent != null && heightDimension == LayoutDimension.MATCH_PARENT){
 			this.height = parent.height;
 		}
+		*/
 	}
 	
 	/**

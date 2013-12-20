@@ -20,13 +20,13 @@ public class ElementItemContainer extends Element{
 	}
 	
 	@Override
-	public void draw(ElementContainer parent, int mouseX, int mouseY) {
+	public void draw(ElementContainer parent, int mouseX, int mouseY, ElementContainer root) {
 		
 		//re-align the slot
-		slot.xDisplayPosition = absX() + 1;
-		slot.yDisplayPosition = absY() + 1;
+		slot.xDisplayPosition = absX() + 1 - root.absX();
+		slot.yDisplayPosition = absY() + 1 - root.absY();
 		
-		super.draw(parent, mouseX, mouseY);
+		super.draw(parent, mouseX, mouseY, root);
 		drawTexturedModalRect(0, 0, texContainer.int1(), texContainer.int2(), texContainer.int3(), texContainer.int4());
 	}
 }

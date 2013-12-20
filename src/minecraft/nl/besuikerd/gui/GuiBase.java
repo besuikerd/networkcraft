@@ -27,8 +27,11 @@ public class GuiBase extends GuiContainer{
 	public GuiBase(ContainerBesu container) {
 		super(container);
 		root = new ElementStyledContainer(LayoutDimension.WRAP_CONTENT, LayoutDimension.WRAP_CONTENT).padding(5);
-		root.setLayout(new VerticalLayout(0, 5));
+		root.setLayout(new VerticalLayout());
 		init();
+		root.dimension(null, null);
+		xSize = root.getWidth();
+		ySize = root.getHeight();
 	}
 
 	private static final ResourceLocation bg = new ResourceLocation("textures/gui/demo_background.png");
@@ -42,9 +45,6 @@ public class GuiBase extends GuiContainer{
 	@Override
 	public void initGui() {
 		super.initGui();
-		
-		guiLeft = root.absX();
-		guiTop = root.absY();
 	}
 	
 	/**
@@ -80,22 +80,21 @@ public class GuiBase extends GuiContainer{
 	public boolean doesGuiPauseGame() {
 		return false;
 	}
-	
-	@Override
-	public void drawScreen(int mouseX, int mouseY, float par3) {
-
-		super.drawScreen(mouseX, mouseY, par3);
-	}
 
 	@Override
 	protected void drawGuiContainerBackgroundLayer(float f, int mouseX, int mouseY) {
+		//dimension all elements in the root container
+		root.dimension(null, null);
 		
-		root.dimension(null, mouseX, mouseY);
-		root.dimension(null, mouseX, mouseY);
-		//BLogger.debug("root dimensions: (%d,%d) (%d,%d) (%d,%d)", root.getX(), root.getY(), root.absX(), root.absY(), root.getWidth(), root.getHeight());
-		root.draw(null, mouseX, mouseY);
-//		int mouseX = Mouse.getEventX() * this.width / this.mc.displayWidth;
-//      int mouseY = this.height - Mouse.getEventY() * this.height / this.mc.displayHeight - 1;
+		//recalculate size of the root container
+		xSize = root.getWidth();
+		ySize = root.getHeight();
+
+		//center the root container
+		root.setX((width - root.getWidth()) / 2);
+		root.setY((height - root.getHeight()) / 2);
 		
+		//draw root container
+		root.draw(null, mouseX, mouseY, root);
 	}
 }

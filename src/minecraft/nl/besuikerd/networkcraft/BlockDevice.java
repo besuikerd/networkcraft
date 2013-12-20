@@ -6,13 +6,14 @@ import net.minecraft.block.material.Material;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Icon;
 import net.minecraft.world.World;
+import nl.besuikerd.core.block.MaterialBesu;
 
 public abstract class BlockDevice extends BlockNetworkContainer{
-
+	
 	protected Icon icon_device;
 	
 	public BlockDevice(int id) {
-		super(id, Material.iron);
+		super(id, MaterialBesu.material_device);
 		setStepSound(Block.soundMetalFootstep);
 		appendUnlocalizedName("device");
 	}
@@ -26,4 +27,6 @@ public abstract class BlockDevice extends BlockNetworkContainer{
 	public void registerIcons(NCIconRegister reg) {
 		icon_device = reg.registerIcon("device");
 	}
+	
+	
 }
