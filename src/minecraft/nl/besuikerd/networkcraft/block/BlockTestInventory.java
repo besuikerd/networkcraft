@@ -1,4 +1,4 @@
-package nl.besuikerd.networkcraft;
+package nl.besuikerd.networkcraft.block;
 
 import java.util.Random;
 
@@ -10,6 +10,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import nl.besuikerd.core.inventory.TileEntityTestInventory;
 import nl.besuikerd.gui.GuiId;
+import nl.besuikerd.networkcraft.NetworkCraft;
 
 public class BlockTestInventory extends BlockDevice{
 

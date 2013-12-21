@@ -11,8 +11,9 @@ public class ElementPlayerInventory extends ElementNamedContainer{
 	
 	public ElementPlayerInventory(List<? extends Slot> slots, int x, int y) {
 		super(x, y, 0, 0, "Inventory");
-		this.layout = new VerticalLayout(0, 0);
+		this.layout = new VerticalLayout();
 		this.heightDimension = LayoutDimension.WRAP_CONTENT;
+		this.widthDimension = LayoutDimension.WRAP_CONTENT;
 		add(new ElementItemContainerArray(9, slots.subList(9, 36)).paddingBottom(5));
 		add(new ElementItemContainerArray(9, slots.subList(0, 9)));
 	}

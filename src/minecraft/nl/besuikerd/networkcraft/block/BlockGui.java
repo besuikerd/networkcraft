@@ -1,4 +1,4 @@
-package nl.besuikerd.networkcraft;
+package nl.besuikerd.networkcraft.block;
 
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.EntityPlayer;
@@ -6,6 +6,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import nl.besuikerd.core.BLogger;
 import nl.besuikerd.gui.GuiId;
+import nl.besuikerd.networkcraft.NetworkCraft;
 
 public class BlockGui extends BlockDevice{
 

@@ -49,6 +49,6 @@ public class QuickNDirtyTest {
 	}
 	
 	private static void bitUtilsTest(){
-		
+		System.out.println(BitUtils.ByteToString(BitUtils.toggleOff(0xff, 5)));
 	}
 }

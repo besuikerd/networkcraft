@@ -94,7 +94,7 @@ public class GuiBase extends GuiContainer{
 		root.setX((width - root.getWidth()) / 2);
 		root.setY((height - root.getHeight()) / 2);
 		
-		//draw root container
+			//draw root container
 		root.draw(null, mouseX, mouseY, root);
 	}
 }

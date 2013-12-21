@@ -23,11 +23,11 @@ public class TileEntityTestInventory extends TileEntityInventory {
 
 		@Override
 		public void init() {
-			root.add(new ElementLabel("Super TestInventory!"));
-			root.add(new ElementItemContainerArray(9, inventorySlots.inventorySlots.subList(36, inventorySlots.inventorySlots.size()))
-			.paddingBottom(5));
-			root.padding(10);
-			root.add(new ElementPlayerInventory(inventorySlots.inventorySlots));
+			root.padding(10)
+			.add(new ElementLabel("Super TestInventory!"))
+			.add(new ElementItemContainerArray(9, inventorySlots.inventorySlots.subList(36, inventorySlots.inventorySlots.size())).paddingBottom(5))
+			.add(new ElementPlayerInventory(inventorySlots.inventorySlots))
+			;
 		}
 	}
 }
