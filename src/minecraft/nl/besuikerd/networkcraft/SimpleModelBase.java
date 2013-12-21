@@ -57,7 +57,7 @@ public class SimpleModelBase extends ModelBase{
 		this.dimY = maxY - minY;
 		this.dimZ = maxZ - minZ;
 		
-		BLogger.debug("bounding box: (%f, %f, %f) to (%f, %f, %f), size: (%f, %f, %f)", minX, minY, minZ, maxX, maxY, maxZ, dimX, dimY, dimZ);
+		//BLogger.debug("bounding box: (%f, %f, %f) to (%f, %f, %f), size: (%f, %f, %f)", minX, minY, minZ, maxX, maxY, maxZ, dimX, dimY, dimZ);
 	}
 
 	public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5) {

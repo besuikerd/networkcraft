@@ -19,6 +19,30 @@ public class BitUtils {
 		return ((b >> (n - 1)) & 1) == 1;
 	}
 	
+	public static byte toggleOn(byte b, int n){
+		return (byte) (b | (1 << (n - 1)));
+	}
+	
+	public static byte toggle(byte b, int n, boolean onOrOff){
+		return onOrOff ? toggleOn(b, n) : toggleOff(b, n);
+	}
+	
+	public static byte toggleOff(byte b, int n){
+		return (byte) (b & ~(1 << (n - 1)));
+	}
+	
+	public static int toggleOn(int i, int n){
+		return (byte) (i | (1 << (n - 1)));
+	}
+	
+	public static int toggleOff(int i, int n){
+		return (byte) (i & ~(1 << (n - 1)));
+	}
+	
+	public static int toggle(int i, int n, boolean onOrOff){
+		return onOrOff ? toggleOn(i, n) : toggleOff(i, n);
+	}
+	
 	/**
 	 * converts the 8 lsb of the given integer to a String
 	 * @param b

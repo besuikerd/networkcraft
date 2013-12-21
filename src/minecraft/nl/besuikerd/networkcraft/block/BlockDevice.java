@@ -1,4 +1,4 @@
-package nl.besuikerd.networkcraft;
+package nl.besuikerd.networkcraft.block;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
@@ -7,6 +7,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Icon;
 import net.minecraft.world.World;
 import nl.besuikerd.core.block.MaterialBesu;
+import nl.besuikerd.networkcraft.NCIconRegister;
 
 public abstract class BlockDevice extends BlockNetworkContainer{
 	
@@ -26,7 +27,5 @@ public abstract class BlockDevice extends BlockNetworkContainer{
 	@Override
 	public void registerIcons(NCIconRegister reg) {
 		icon_device = reg.registerIcon("device");
-	}
-	
-	
+	}	
 }

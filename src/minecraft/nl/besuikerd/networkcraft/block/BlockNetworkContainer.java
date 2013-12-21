@@ -1,4 +1,4 @@
-package nl.besuikerd.networkcraft;
+package nl.besuikerd.networkcraft.block;
 
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;

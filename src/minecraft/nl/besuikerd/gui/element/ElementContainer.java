@@ -58,10 +58,11 @@ public class ElementContainer extends Element{
 		this.heightDimension = height;
 	}
 
-	public void add(Element e){
+	public ElementContainer add(Element e){
 		e.index = elements.size();
 		this.elements.add(e);
 		e.dx = e.x + this.dx;
+		return this;
 	}
 	
 	public void clear(){

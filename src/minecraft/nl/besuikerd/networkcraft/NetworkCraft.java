@@ -15,6 +15,12 @@ import nl.besuikerd.core.inventory.TileEntityTestInventory;
 import nl.besuikerd.gui.GuiBase;
 import nl.besuikerd.gui.GuiHandlerBesu;
 import nl.besuikerd.gui.GuiId;
+import nl.besuikerd.networkcraft.block.BlockCable;
+import nl.besuikerd.networkcraft.block.BlockGui;
+import nl.besuikerd.networkcraft.block.BlockRouter;
+import nl.besuikerd.networkcraft.block.BlockTestInventory;
+import nl.besuikerd.networkcraft.tileentity.TileEntityCable;
+import nl.besuikerd.networkcraft.tileentity.TileEntityConnecting;
 import cpw.mods.fml.client.registry.ClientRegistry;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
@@ -43,7 +49,7 @@ public class NetworkCraft{
 	@Instance(value="networkcraft")
 	public static NetworkCraft instance;
 	
-	@SidedProxy(clientSide="nl.besuikerd.networkcraft.client.ClientProxy", serverSide="nl.besuikerd.networkcraft.CommonProxy")
+	@SidedProxy(clientSide="nl.besuikerd.networkcraft.ClientProxy", serverSide="nl.besuikerd.networkcraft.CommonProxy")
 	public static CommonProxy proxy;
 	
 	@EventHandler
@@ -69,7 +75,7 @@ public class NetworkCraft{
 		//register items
 		
 		//register tile entities
-		GameRegistry.registerTileEntity(TileEntityBlockCable.class, "cable");
+		GameRegistry.registerTileEntity(TileEntityCable.class, "cable");
 		GameRegistry.registerTileEntity(TileEntityConnecting.class, "connecting");
 		GameRegistry.registerTileEntity(TileEntityTestInventory.class, "testinventory");
 		

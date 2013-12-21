@@ -1,4 +1,4 @@
-package nl.besuikerd.networkcraft;
+package nl.besuikerd.networkcraft.block;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockPistonBase;
@@ -13,6 +13,7 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import nl.besuikerd.core.BlockSide;
 import nl.besuikerd.core.BLogger;
+import nl.besuikerd.networkcraft.NCIconRegister;
 
 public class BlockNetwork extends Block{
 	

@@ -1,4 +1,4 @@
-package nl.besuikerd.networkcraft;
+package nl.besuikerd.networkcraft.block;
 
 import net.minecraft.block.BlockChest;
 import net.minecraft.block.BlockEndPortal;
@@ -20,6 +20,7 @@ import net.minecraft.tileentity.TileEntityFurnace;
 import net.minecraft.util.Icon;
 import net.minecraft.world.World;
 import nl.besuikerd.core.BlockSide;
+import nl.besuikerd.networkcraft.NCIconRegister;
 
 public class BlockRouter extends BlockDevice{
 	

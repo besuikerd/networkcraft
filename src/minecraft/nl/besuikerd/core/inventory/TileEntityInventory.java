@@ -13,6 +13,7 @@ import nl.besuikerd.core.BlockSide;
 import nl.besuikerd.core.TileEntityNC;
 import nl.besuikerd.core.packet.IProcessData;
 import nl.besuikerd.core.utils.IntList;
+import nl.besuikerd.core.utils.NBTUtils;
 
 import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteArrayDataOutput;
@@ -110,16 +111,13 @@ public class TileEntityInventory extends TileEntityNC implements ISidedInventory
 	@Override
 	public void readFromNBT(NBTTagCompound tag) {
 		super.readFromNBT(tag);
-		ByteArrayDataInput in = ByteStreams.newDataInput(tag.getByteArray("items"));
-		inventory.read(in);
+		NBTUtils.readProcessData(inventory, tag, "items");
 	}
 
 	@Override
 	public void writeToNBT(NBTTagCompound tag) {
 		super.writeToNBT(tag);
-		ByteArrayDataOutput out = ByteStreams.newDataOutput();
-		inventory.write(out);
-		tag.setByteArray("items", out.toByteArray());
+		NBTUtils.writeProcessData(inventory, tag, "items");
 	}
 
 }

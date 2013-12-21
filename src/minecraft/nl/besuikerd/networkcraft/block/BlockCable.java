@@ -1,4 +1,4 @@
-package nl.besuikerd.networkcraft;
+package nl.besuikerd.networkcraft.block;
 
 import java.util.List;
 
@@ -13,6 +13,10 @@ import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 import nl.besuikerd.core.BlockSide;
 import nl.besuikerd.core.BLogger;
+import nl.besuikerd.core.block.MaterialBesu;
+import nl.besuikerd.networkcraft.NCIconRegister;
+import nl.besuikerd.networkcraft.tileentity.TileEntityCable;
+import nl.besuikerd.networkcraft.tileentity.TileEntityConnecting;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -21,32 +25,21 @@ public class BlockCable extends BlockConnecting{
 	public static final float BASE_MAX_POS = .7f, BASE_MIN_POS = .3f, CONN_MAX_POS = .6f, CONN_MIN_POS = .4f;
 	
 	public BlockCable(int id) {
-		super(id, Material.rock);
-		setHardness(2f);
+		super(id, MaterialBesu.material_device);
+//		setHardness(2f);
 		setUnlocalizedName("cable");
 		setCreativeTab(CreativeTabs.tabMisc);
 		setStepSound(Block.soundMetalFootstep);
 	}
-	
-	@Override
-	public boolean connectsTo(TileEntity other) {
-		return true;
-	}
 
 	@Override
 	public TileEntity createNewTileEntity(World world) {
-		return new TileEntityBlockCable();
+		return new TileEntityCable();
 	}
 	
 	@Override
 	public void registerIcons(NCIconRegister reg) {
 		this.blockIcon = reg.registerIcon("cable");
-	}
-
-	@Override
-	public void renderConnection(World world, TileEntity other, int x, int y,
-			int z, BlockSide side) {
-		
 	}
 	
 	public void addCollisionBoxesToList(World world, int x, int y, int z, AxisAlignedBB par5AxisAlignedBB, List par6List, Entity par7Entity)

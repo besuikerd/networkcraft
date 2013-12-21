@@ -1,9 +1,12 @@
-package nl.besuikerd.networkcraft;
+package nl.besuikerd.networkcraft.tileentity;
 
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 import nl.besuikerd.core.BLogger;
+import nl.besuikerd.core.BlockSide;
+import nl.besuikerd.networkcraft.SimpleModelBase;
+import nl.besuikerd.networkcraft.SimpleModelBase.ShapeBuilder;
 
 import org.lwjgl.opengl.GL11;
 
@@ -30,7 +33,7 @@ public class TileEntitySpecialRendererBlockCable extends TileEntitySpecialRender
 	private static boolean isLogged = false;
 	
 	@Override
-	public void renderConnection(TileEntityConnecting entity, int side,
+	public void renderConnection(TileEntity entity, BlockSide side,
 			double x, double y, double z, float f) {		
 		
 		GL11.glPushMatrix();
