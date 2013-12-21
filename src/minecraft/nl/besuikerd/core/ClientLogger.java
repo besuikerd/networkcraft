@@ -6,31 +6,33 @@ import java.util.logging.Logger;
 import nl.besuikerd.networkcraft.NetworkCraft;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.FMLLog;
+import cpw.mods.fml.relauncher.Side;
 
 /**
- * Besuikerd's Logger
+ * Besuikerd's client only Logger
  * @author Besuikerd
  *
  */
-public class BLogger {
+public class ClientLogger {
 	
 	private static final Logger logger = Logger.getLogger("Besuikerd");
 	
 	public static void init(){
 		logger.setParent(FMLLog.getLogger());
-		if(NetworkCraft.DEBUG_MODE){
-			info("DEBUG_MODE is enabled. More debug messages will be printed");
-		}
-		ClientLogger.init();
-		ServerLogger.init();
 	}
 	
 	public static void log(Level level, Object msg, Object... params){
-		logger.log(level, String.format("%s|%s", FMLCommonHandler.instance().getEffectiveSide(), String.format(msg.toString(), params)));
+		Side side = FMLCommonHandler.instance().getEffectiveSide();
+		if(side == Side.CLIENT){
+			logger.log(level, String.format("%s|%s", side, String.format(msg.toString(), params)));
+		}
 	}
 	
 	public static void log(Level level, Object msg){
-		logger.log(level, String.format("%s|%s", FMLCommonHandler.instance().getEffectiveSide(), msg));
+		Side side = FMLCommonHandler.instance().getEffectiveSide();
+		if(side == Side.CLIENT){
+			logger.log(level, String.format("%s|%s", side, msg));
+		}
 	}
 	
 	public static void warn(Object msg, Object... params){

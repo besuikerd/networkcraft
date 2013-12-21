@@ -2,24 +2,38 @@ package nl.besuikerd.networkcraft.graph;
 
 import java.util.List;
 
+import nl.besuikerd.core.BlockSide;
+
 public interface INetworkNode {
 	/**
-	 * The master node this node is connected to
-	 * @return The master node this node is connected to, or <code>null</code> if no master is connected
+	 * the master node this node is connected to
+	 * @return the master node this node is connected to, or <code>null</code> if no master is connected
 	 */
-	public INetworkNode getMaster();
+	public IMasterNode getMaster();
 	
 	/**
-	 * The cost to pass this node
-	 * @return The cost to pass this node
+	 * cost to pass this node
+	 * @return the cost to pass this node
 	 */
 	public int getNodeCost();
 	
 	/**
-	 * Nodes that are attached to this node
-	 * @return
+	 * total cost to get from this node to the root
+	 * @return the total cost to get from this node to the root
 	 */
-	public List<INetworkNode> getConnectedNodes();
+	public int getCost();
+	
+	/**
+	 * direction this node passes information to
+	 * @return the direction this node passes information to
+	 */
+	public BlockSide getDirection();
+	
+	/**
+	 * called when a nearby node is changed.
+	 * @param side the side of the node that has been changed
+	 */
+	public void onNodeChanged(BlockSide side);
 	
 	/**
 	 * x coordinate

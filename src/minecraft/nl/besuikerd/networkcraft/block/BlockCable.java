@@ -6,6 +6,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.MovingObjectPosition;
@@ -13,8 +14,11 @@ import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 import nl.besuikerd.core.BlockSide;
 import nl.besuikerd.core.BLogger;
+import nl.besuikerd.core.ClientLogger;
+import nl.besuikerd.core.ServerLogger;
 import nl.besuikerd.core.block.MaterialBesu;
 import nl.besuikerd.networkcraft.NCIconRegister;
+import nl.besuikerd.networkcraft.graph.INetworkNode;
 import nl.besuikerd.networkcraft.tileentity.TileEntityCable;
 import nl.besuikerd.networkcraft.tileentity.TileEntityConnecting;
 import cpw.mods.fml.relauncher.Side;
@@ -62,6 +66,18 @@ public class BlockCable extends BlockConnecting{
 	    
 	    setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F);
     }
+	
+	@Override
+	public boolean onBlockActivated(World world, int x, int y, int z,
+			EntityPlayer player, int unknown, float aX, float aY, float aZ) {
+		TileEntity tile = world.getBlockTileEntity(x, y, z);
+		if(tile != null && tile instanceof INetworkNode){
+			INetworkNode node = (INetworkNode) tile;
+			if(world.isRemote) player.addChatMessage(String.format("Cable[side=%s, cost=%d, coords=(%d,%d,%d), master?=%b]", node.getDirection(), node.getCost(), node.x(), node.y(), node.z(), node.getMaster() != null));
+			ServerLogger.debug("Cable[side=%s, cost=%d, coords=(%d,%d,%d)]", node.getDirection(), node.getCost(), node.x(), node.y(), node.z());
+		}
+		return true;
+	}
 	
 	private void setBlockBounds(BlockSide side){
 		switch(side){

@@ -19,6 +19,8 @@ import nl.besuikerd.networkcraft.block.BlockCable;
 import nl.besuikerd.networkcraft.block.BlockGui;
 import nl.besuikerd.networkcraft.block.BlockRouter;
 import nl.besuikerd.networkcraft.block.BlockTestInventory;
+import nl.besuikerd.networkcraft.graph.BlockMasterNode;
+import nl.besuikerd.networkcraft.graph.TileEntityMasterNode;
 import nl.besuikerd.networkcraft.tileentity.TileEntityCable;
 import nl.besuikerd.networkcraft.tileentity.TileEntityConnecting;
 import cpw.mods.fml.client.registry.ClientRegistry;
@@ -40,11 +42,10 @@ public class NetworkCraft{
 	
 	public static boolean DEBUG_MODE = true;
 	
-	public static Block blockRouter;
-	public static Block cable;
-	
-	public static Block blockGui;
+	public static Block blockCable;
+	public static Block blockMasterNode;
 	public static Block blockInventory;
+	
 	
 	@Instance(value="networkcraft")
 	public static NetworkCraft instance;
@@ -65,18 +66,15 @@ public class NetworkCraft{
 		instantiateBlocks();
 		
 		//register blocks
-		GameRegistry.registerBlock(blockRouter, blockRouter.getUnlocalizedName());
-		GameRegistry.registerBlock(cable, cable.getUnlocalizedName());
-		
-		
-		GameRegistry.registerBlock(blockGui, blockGui.getUnlocalizedName());
+		GameRegistry.registerBlock(blockCable, blockCable.getUnlocalizedName());
+		GameRegistry.registerBlock(blockMasterNode, blockMasterNode.getUnlocalizedName());
 		GameRegistry.registerBlock(blockInventory, blockInventory.getUnlocalizedName());
 		
 		//register items
 		
 		//register tile entities
 		GameRegistry.registerTileEntity(TileEntityCable.class, "cable");
-		GameRegistry.registerTileEntity(TileEntityConnecting.class, "connecting");
+		GameRegistry.registerTileEntity(TileEntityMasterNode.class, "masterNode");
 		GameRegistry.registerTileEntity(TileEntityTestInventory.class, "testinventory");
 		
 		//register gui handlers
@@ -98,9 +96,8 @@ public class NetworkCraft{
 	}
 	
 	private void instantiateBlocks(){
-		blockRouter = new BlockRouter(NCConfig.block_router);
-		cable = new BlockCable(NCConfig.block_cable);
-		blockGui = new BlockGui(450);
-		blockInventory = new BlockTestInventory(451);
+		blockCable = new BlockCable(NCConfig.block_cable);
+		blockMasterNode = new BlockMasterNode(NCConfig.block_masterNode);
+		blockInventory = new BlockTestInventory(NCConfig.block_inventory);
 	}
 }

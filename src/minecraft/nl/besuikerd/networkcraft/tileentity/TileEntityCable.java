@@ -1,10 +1,17 @@
 package nl.besuikerd.networkcraft.tileentity;
 
 import cpw.mods.fml.relauncher.Side;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.World;
+import nl.besuikerd.core.BLogger;
 import nl.besuikerd.core.BlockSide;
 import nl.besuikerd.core.utils.NBTUtils;
+import nl.besuikerd.networkcraft.graph.IMasterNode;
+import nl.besuikerd.networkcraft.graph.INetworkNode;
+import nl.besuikerd.networkcraft.graph.NetworkNode;
 import nl.besuikerd.networkcraft.graph.TileEntityNetworkNode;
 
 public class TileEntityCable extends TileEntityNetworkNode implements IConnectingSides{
@@ -14,16 +21,18 @@ public class TileEntityCable extends TileEntityNetworkNode implements IConnectin
 	
 	public TileEntityCable() {
 		this.connectingSides = new ConnectingSides(this);
+		this.node = new NetworkNode(this, 5);
 	}
 	
 	@Override
-	public boolean connectsTo(IConnectingSides other) {
-		return connectingSides.connectsTo(other);
+	public boolean connectsTo(TileEntity other) {
+		return other instanceof INetworkNode && !(getMaster() != null && other instanceof IMasterNode);
 	}
 
 	@Override
 	public BlockSide[] getConnectingSides() {
-		return connectingSides.getConnectingSides();
+//		return connectingSides.getConnectingSides();
+		return node.getDirection() == null ? new BlockSide[0] : new BlockSide[]{node.getDirection()};
 	}
 	
 	@Override
@@ -41,5 +50,24 @@ public class TileEntityCable extends TileEntityNetworkNode implements IConnectin
 	@Override
 	public void validateConnections() {
 		connectingSides.validateConnections();
+	}
+	
+	@Override
+	public void validateNeighbours() {
+		connectingSides.validateNeighbours();
+	}
+
+	@Override
+	public void onTileEntityPlacedBy(World world, int x, int y, int z,
+			EntityLivingBase entity, ItemStack stack) {
+		super.onTileEntityPlacedBy(world, x, y, z, entity, stack);
+		validateConnections();
+		validateNeighbours();
+	}
+	
+	@Override
+	public void onTileEntityRemoved(World world, int x, int y, int z) {
+		super.onTileEntityRemoved(world, x, y, z);
+		validateNeighbours();
 	}
 }

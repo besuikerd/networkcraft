@@ -3,32 +3,47 @@ package nl.besuikerd.networkcraft.graph;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.world.World;
+import nl.besuikerd.core.BlockSide;
+import nl.besuikerd.core.utils.NBTUtils;
 import nl.besuikerd.networkcraft.tileentity.TileEntityBesu;
 
 public class TileEntityNetworkNode extends TileEntityBesu implements INetworkNode{
 
-	protected INetworkNode master;
-	protected List<INetworkNode> connectedNodes;
-	protected int nodeCost;
+	public static final String TAG_NODE = "node";
+	
+	protected NetworkNode node;
 	
 	public TileEntityNetworkNode() {
-		this.connectedNodes = new ArrayList<INetworkNode>();
-		this.nodeCost = 5;
+		node = new NetworkNode(this, 1);
 	}
 	
 	@Override
-	public INetworkNode getMaster() {
-		return master;
+	public IMasterNode getMaster() {
+		return node.getMaster();
 	}
 
 	@Override
 	public int getNodeCost() {
-		return nodeCost;
+		return node.getNodeCost();
 	}
-
+	
 	@Override
-	public List<INetworkNode> getConnectedNodes() {
-		return connectedNodes;
+	public int getCost() {
+		return node.getCost();
+	}
+	
+	@Override
+	public BlockSide getDirection() {
+		return node.getDirection();
+	}
+	
+	@Override
+	public void onNodeChanged(BlockSide side) {
+		node.onNodeChanged(side);
 	}
 
 	@Override
@@ -45,5 +60,30 @@ public class TileEntityNetworkNode extends TileEntityBesu implements INetworkNod
 	public int z() {
 		return zCoord;
 	}
+	
+	@Override
+	public void writeToNBT(NBTTagCompound tag) {
+		super.writeToNBT(tag);
+		NBTUtils.writeProcessData(node, tag, TAG_NODE);
+	}
+	
+	@Override
+	public void readFromNBT(NBTTagCompound tag) {
+		super.readFromNBT(tag);
+		NBTUtils.readProcessData(node, tag, TAG_NODE);
+	}
 
+	@Override
+	public void onTileEntityPlacedBy(World world, int x, int y, int z,
+			EntityLivingBase entity, ItemStack stack) {
+		super.onTileEntityPlacedBy(world, x, y, z, entity, stack);
+		node.onPlaced();
+	}
+	
+	@Override
+	public void onRemoveTileEntity(World world, int x, int y, int z) {
+		super.onRemoveTileEntity(world, x, y, z);
+		node.onDestroyed();
+	}
+	
 }

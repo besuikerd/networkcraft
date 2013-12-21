@@ -20,7 +20,15 @@ public class TileEntitySpecialRendererBlockCable extends TileEntitySpecialRender
 	private static final SimpleModelBase rendererConnection = new SimpleModelBase(64, 64, 
 			new SimpleModelBase.ShapeBuilder()
 			.dimension(2, 5, 2)
-			.offset(-1, 3, -1)
+			.offset(-1, 3, -1),
+			
+			new SimpleModelBase.ShapeBuilder()
+			.dimension(4, 1, 4)
+			.offset(-2, 6, -2),
+			
+			new SimpleModelBase.ShapeBuilder()
+			.dimension(6, 1, 6)
+			.offset(-3, 5, -3)
 	);
 	
 	@Override

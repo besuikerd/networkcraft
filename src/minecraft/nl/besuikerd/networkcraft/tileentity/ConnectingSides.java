@@ -6,6 +6,7 @@ import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteArrayDataOutput;
 
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.World;
 import nl.besuikerd.core.BLogger;
 import nl.besuikerd.core.BlockSide;
 import nl.besuikerd.core.packet.IProcessData;
@@ -23,7 +24,6 @@ public class ConnectingSides implements IConnectingSides, IProcessData{
 	@Override
 	public void read(ByteArrayDataInput in) {
 		connectingSides = in.readByte();
-		BLogger.debug("sides: %s", Arrays.toString(BlockSide.fromByte(connectingSides)));
 	}
 
 	@Override
@@ -32,8 +32,8 @@ public class ConnectingSides implements IConnectingSides, IProcessData{
 	}
 
 	@Override
-	public boolean connectsTo(IConnectingSides other) {
-		return other != null;
+	public boolean connectsTo(TileEntity other) {
+		return other instanceof IConnectingSides;
 	}
 	
 	@Override
@@ -44,9 +44,9 @@ public class ConnectingSides implements IConnectingSides, IProcessData{
 			TileEntity other = (TileEntity) entity.worldObj.getBlockTileEntity(rel[0], rel[1], rel[2]);
 			
 			//set bit for current side if other IConnectingSide exists and connects to this IConnectingSide
-			connectingSides = BitUtils.toggle(connectingSides, side.ordinal() + 1, other != null && other instanceof IConnectingSides && entity instanceof IConnectingSides ? ((IConnectingSides) entity).connectsTo((IConnectingSides) other) : connectsTo((IConnectingSides) other));
+			connectingSides = BitUtils.toggle(connectingSides, side.ordinal() + 1, other != null && (entity instanceof IConnectingSides ? ((IConnectingSides) entity).connectsTo(other) : connectsTo(other)));
 		}
-		BLogger.debug("sides have changed: %b", oldConnections != connectingSides);
+//		BLogger.debug("sides have changed: %b", oldConnections != connectingSides);
 		//sides have changed
 		if(oldConnections != connectingSides){
 			entity.worldObj.markBlockForUpdate(entity.xCoord, entity.yCoord, entity.zCoord);
@@ -56,6 +56,17 @@ public class ConnectingSides implements IConnectingSides, IProcessData{
 	@Override
 	public BlockSide[] getConnectingSides() {
 		return BlockSide.fromByte(connectingSides);
+	}
+	
+	@Override
+	public void validateNeighbours(){
+		for(BlockSide b : BlockSide.values()){
+			int[] rel = b.getRelativeCoordinates(entity.xCoord, entity.yCoord, entity.zCoord);
+			TileEntity other = entity.worldObj.getBlockTileEntity(rel[0], rel[1], rel[2]);
+			if(other != null && other instanceof IConnectingSides){
+				((IConnectingSides) other).validateConnections();
+			}
+		}
 	}
 
 }
