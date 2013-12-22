@@ -6,6 +6,7 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
+import nl.besuikerd.core.ServerLogger;
 import nl.besuikerd.networkcraft.tileentity.TileEntityBesu;
 
 public abstract class BlockNetworkContainer extends BlockNetwork implements ITileEntityProvider{

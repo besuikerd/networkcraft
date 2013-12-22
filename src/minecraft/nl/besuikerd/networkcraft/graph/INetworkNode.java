@@ -30,7 +30,8 @@ public interface INetworkNode {
 	public BlockSide getDirection();
 	
 	/**
-	 * called when a nearby node is changed.
+	 * called when a nearby node is changed. Call it twice if a node has been
+	 * removed to allow the other nodes to rediscover shorter paths.
 	 * @param side the side of the node that has been changed
 	 */
 	public void onNodeChanged(BlockSide side);

@@ -16,6 +16,8 @@ public class NetworkNode implements INetworkNode, IProcessData{
 	protected BlockSide direction;
 	protected TileEntity entity;
 	
+	private boolean destroyed = false;
+	
 	public NetworkNode(TileEntity entity, int nodeCost) {
 		this.entity = entity;
 		this.nodeCost = nodeCost;
@@ -24,10 +26,7 @@ public class NetworkNode implements INetworkNode, IProcessData{
 	@Override
 	public void read(ByteArrayDataInput in) {
 		if(in.readBoolean()){
-			TileEntity tile = entity.worldObj.getBlockTileEntity(in.readInt(), in.readInt(), in.readInt());
-			if(tile != null && tile instanceof IMasterNode){
-				this.master = (IMasterNode) tile;
-			}
+			this.master = new MasterNodeInitializer(entity, in.readInt(), in.readInt(), in.readInt());
 		}
 		this.cost = in.readInt();
 		int dir = in.readInt();
@@ -89,6 +88,7 @@ public class NetworkNode implements INetworkNode, IProcessData{
 		this.master = null;
 		this.direction = null;
 		this.cost = -1;
+		destroyed = true;
 		postNodeChanged(); //clear all nodes unreachable because of destroy
 		postNodeChanged(); //enable nodes to look for alternative paths
 	}
@@ -96,30 +96,34 @@ public class NetworkNode implements INetworkNode, IProcessData{
 	
 	@Override
 	public void onNodeChanged(BlockSide side) {
-		int[] rel = side.getRelativeCoordinates(x(), y(), z());
-		TileEntity tile = entity.worldObj.getBlockTileEntity(rel[0], rel[1], rel[2]);
-		if(tile != null && tile instanceof INetworkNode){
-			INetworkNode node = (INetworkNode) tile;
-			if(side == direction){
-				if(master == null){ //node was declared unreachable one update before
-					this.direction = null;
-					findCheapestNode();
-					postNodeChanged();
-				} else if(node.getMaster() == null){ //check if direction is unreachable
-					this.master = null;
-					this.cost = -1;
-					postNodeChanged();
-				} else if(node.getCost() > this.cost){ //check if direction is more expensive now
-					findCheapestNode();
-				} else if(node.getCost() < this.cost){ //check if direction is cheaper now
+		if(!destroyed){ //needed to prevent destroyed node to linger and discover a 'better' way before destruction
+			int[] rel = side.getRelativeCoordinates(x(), y(), z());
+			TileEntity tile = entity.worldObj.getBlockTileEntity(rel[0], rel[1], rel[2]);
+			if(tile != null && tile instanceof INetworkNode){
+				INetworkNode node = (INetworkNode) tile;
+				
+				if(side == direction){
+					if(master == null){ //node was declared unreachable one update before
+						this.direction = null;
+						findCheapestNode();
+						postNodeChanged();
+					} else if(node.getMaster() == null){ //check if direction is unreachable
+						
+						this.master = null;
+						this.cost = -1;
+						postNodeChanged();
+					} else if(node.getCost() > this.cost){ //check if direction is more expensive now
+						findCheapestNode();
+					} else if(node.getCost() < this.cost){ //check if direction is cheaper now
+						this.cost = node.getCost();
+						postNodeChanged();
+					}
+				} else if(node.getMaster() != null && (node.getCost() < this.cost || this.master == null)){ //check if this direction is cheaper now
+					this.direction = side;
+					this.master = node.getMaster();
 					this.cost = node.getCost();
 					postNodeChanged();
 				}
-			} else if(node.getMaster() != null && (node.getCost() < this.cost || this.master == null)){ //check if this direction is cheaper now
-				this.direction = side;
-				this.master = node.getMaster();
-				this.cost = node.getCost();
-				postNodeChanged();
 			}
 		}
 	}
@@ -151,7 +155,6 @@ public class NetworkNode implements INetworkNode, IProcessData{
 	}
 	
 	private void postNodeChanged(){
-//		ServerLogger.debug("node has been changed: [side=%s, cost=%d, coords=(%d,%d,%d)]", direction, getCost(), x(), y(), z());
 		for(BlockSide side : BlockSide.values()){
 			int[] rel = side.getRelativeCoordinates(x(), y(), z());
 			TileEntity tile = entity.worldObj.getBlockTileEntity(rel[0], rel[1], rel[2]);			
