@@ -1,7 +1,6 @@
 package nl.besuikerd.core.packet;
 
 import net.minecraft.tileentity.TileEntity;
-import nl.besuikerd.core.TileEntityNC;
 
 import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteArrayDataOutput;
@@ -29,10 +28,5 @@ public class PacketTileUpdate extends PacketLocation{
 	
 	@Override
 	public void onReceive(Side side) {
-		if(entity != null){
-			if(entity instanceof TileEntityNC){
-				((TileEntityNC) entity).onPostReceive(player, side);
-			}
-		}
 	}
 }

@@ -1,8 +1,8 @@
 package nl.besuikerd.networkcraft;
 
 import nl.besuikerd.core.BLogger;
+import nl.besuikerd.networkcraft.render.TileEntitySpecialRendererBlockCable;
 import nl.besuikerd.networkcraft.tileentity.TileEntityCable;
-import nl.besuikerd.networkcraft.tileentity.TileEntitySpecialRendererBlockCable;
 import cpw.mods.fml.client.registry.ClientRegistry;
 
 public class ClientProxy extends CommonProxy{

@@ -8,8 +8,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import nl.besuikerd.core.BlockSide;
+import nl.besuikerd.core.tileentity.TileEntityBesu;
 import nl.besuikerd.core.utils.NBTUtils;
-import nl.besuikerd.networkcraft.tileentity.TileEntityBesu;
 
 public class TileEntityNetworkNode extends TileEntityBesu implements INetworkNode{
 

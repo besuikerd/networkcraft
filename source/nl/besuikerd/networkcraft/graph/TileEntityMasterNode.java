@@ -7,7 +7,7 @@ import net.minecraft.world.World;
 import nl.besuikerd.core.BLogger;
 import nl.besuikerd.core.BlockSide;
 import nl.besuikerd.core.ServerLogger;
-import nl.besuikerd.networkcraft.tileentity.TileEntityBesu;
+import nl.besuikerd.core.tileentity.TileEntityBesu;
 
 public class TileEntityMasterNode extends TileEntityBesu implements IMasterNode{
 

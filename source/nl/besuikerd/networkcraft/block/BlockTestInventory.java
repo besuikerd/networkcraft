@@ -8,9 +8,9 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
-import nl.besuikerd.core.inventory.TileEntityTestInventory;
-import nl.besuikerd.gui.GuiId;
+import nl.besuikerd.core.gui.GuiId;
 import nl.besuikerd.networkcraft.NetworkCraft;
+import nl.besuikerd.networkcraft.tileentity.TileEntityTestInventory;
 
 public class BlockTestInventory extends BlockDevice{
 

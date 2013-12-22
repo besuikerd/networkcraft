@@ -6,10 +6,11 @@ import net.minecraft.block.material.Material;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Icon;
 import net.minecraft.world.World;
+import nl.besuikerd.core.block.BlockContainerBesu;
 import nl.besuikerd.core.block.MaterialBesu;
 import nl.besuikerd.networkcraft.NCIconRegister;
 
-public abstract class BlockDevice extends BlockNetworkContainer{
+public abstract class BlockDevice extends BlockContainerBesu{
 	
 	protected Icon icon_device;
 	

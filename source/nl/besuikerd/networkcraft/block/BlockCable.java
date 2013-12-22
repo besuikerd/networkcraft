@@ -16,11 +16,12 @@ import nl.besuikerd.core.BlockSide;
 import nl.besuikerd.core.BLogger;
 import nl.besuikerd.core.ClientLogger;
 import nl.besuikerd.core.ServerLogger;
+import nl.besuikerd.core.block.BlockConnecting;
 import nl.besuikerd.core.block.MaterialBesu;
+import nl.besuikerd.core.tileentity.TileEntityConnecting;
 import nl.besuikerd.networkcraft.NCIconRegister;
 import nl.besuikerd.networkcraft.graph.INetworkNode;
 import nl.besuikerd.networkcraft.tileentity.TileEntityCable;
-import nl.besuikerd.networkcraft.tileentity.TileEntityConnecting;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 

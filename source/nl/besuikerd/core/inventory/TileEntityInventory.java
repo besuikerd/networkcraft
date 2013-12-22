@@ -1,25 +1,13 @@
 package nl.besuikerd.core.inventory;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import nl.besuikerd.core.BlockSide;
-import nl.besuikerd.core.TileEntityNC;
-import nl.besuikerd.core.packet.IProcessData;
-import nl.besuikerd.core.utils.IntList;
+import nl.besuikerd.core.tileentity.TileEntityBesu;
 import nl.besuikerd.core.utils.NBTUtils;
 
-import com.google.common.io.ByteArrayDataInput;
-import com.google.common.io.ByteArrayDataOutput;
-import com.google.common.io.ByteStreams;
-
-public class TileEntityInventory extends TileEntityNC implements ISidedInventory{
+public class TileEntityInventory extends TileEntityBesu implements ISidedInventory{
 	
 	protected InventoryBesu inventory;
 	

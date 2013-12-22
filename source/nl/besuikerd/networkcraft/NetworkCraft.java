@@ -1,29 +1,18 @@
 package nl.besuikerd.networkcraft;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.material.Material;
-import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.FurnaceRecipes;
 import net.minecraftforge.common.Configuration;
-import net.minecraftforge.common.MinecraftForge;
 import nl.besuikerd.core.BLogger;
-import nl.besuikerd.core.inventory.ContainerBesu;
+import nl.besuikerd.core.gui.GuiBase;
+import nl.besuikerd.core.gui.GuiHandlerBesu;
+import nl.besuikerd.core.gui.GuiId;
 import nl.besuikerd.core.inventory.ContainerBesuWithPlayerInventory;
-import nl.besuikerd.core.inventory.TileEntityTestInventory;
-import nl.besuikerd.gui.GuiBase;
-import nl.besuikerd.gui.GuiHandlerBesu;
-import nl.besuikerd.gui.GuiId;
 import nl.besuikerd.networkcraft.block.BlockCable;
-import nl.besuikerd.networkcraft.block.BlockGui;
-import nl.besuikerd.networkcraft.block.BlockRouter;
 import nl.besuikerd.networkcraft.block.BlockTestInventory;
 import nl.besuikerd.networkcraft.graph.BlockMasterNode;
 import nl.besuikerd.networkcraft.graph.TileEntityMasterNode;
 import nl.besuikerd.networkcraft.tileentity.TileEntityCable;
-import nl.besuikerd.networkcraft.tileentity.TileEntityConnecting;
-import cpw.mods.fml.client.registry.ClientRegistry;
+import nl.besuikerd.networkcraft.tileentity.TileEntityTestInventory;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.Mod.Instance;
@@ -34,7 +23,6 @@ import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.network.NetworkMod;
 import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
-import cpw.mods.fml.common.registry.LanguageRegistry;
 
 @Mod(modid="networkcraft", name="NetworkCraft", version="0.0.0")
 @NetworkMod(clientSideRequired=true)
