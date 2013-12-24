@@ -149,6 +149,7 @@ public class MasterNode extends NetworkNode implements IMasterNode, IProcessData
 		for(IMasterNode master : removedMasters){
 			connectedMasters.remove(master);
 		}
+		entity.worldObj.markBlockForUpdate(x(), y(), z());
 	}
 	
 	private void findMastersFromNode(INetworkNode node, Map<IMasterNode, Integer> map){

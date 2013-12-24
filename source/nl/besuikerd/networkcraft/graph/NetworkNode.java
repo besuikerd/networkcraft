@@ -5,6 +5,8 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import net.minecraft.client.Minecraft;
+import net.minecraft.profiler.Profiler;
 import net.minecraft.tileentity.TileEntity;
 import nl.besuikerd.core.BlockSide;
 import nl.besuikerd.core.ServerLogger;
