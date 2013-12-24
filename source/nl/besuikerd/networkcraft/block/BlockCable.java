@@ -74,8 +74,8 @@ public class BlockCable extends BlockConnecting{
 		TileEntity tile = world.getBlockTileEntity(x, y, z);
 		if(tile != null && tile instanceof INetworkNode){
 			INetworkNode node = (INetworkNode) tile;
-			if(world.isRemote) player.addChatMessage(String.format("Cable[side=%s, cost=%d, coords=(%d,%d,%d), master?=%b]", node.getDirection(), node.getCost(), node.x(), node.y(), node.z(), node.getMaster() != null));
-			ServerLogger.debug("Cable[side=%s, cost=%d, coords=(%d,%d,%d)]", node.getDirection(), node.getCost(), node.x(), node.y(), node.z());
+			if(world.isRemote) player.addChatMessage(String.format("Cable[side=%s, cost=%d, coords=(%d,%d,%d), master=%b]", node.getDirection(), node.getCost(), node.x(), node.y(), node.z(), node.getMaster() != null));
+			ServerLogger.debug("Cable[side=%s, cost=%d, coords=(%d,%d,%d), master=%s]", node.getDirection(), node.getCost(), node.x(), node.y(), node.z(), node.getMaster());
 		}
 		return true;
 	}

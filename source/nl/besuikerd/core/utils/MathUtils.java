@@ -16,4 +16,20 @@ public class MathUtils {
 	public static <E extends Comparable<E>> boolean inRange2D(E el1, E el2, E min1, E max1, E min2, E max2){
 		return inRange(el1, min1, max1) && inRange(el2, min2, max2);
 	}
+	
+	public static int sum(int... values){
+		int sum = 0;
+		for(int value : values) {
+			sum += value;
+		}
+		return sum;
+	}
+	
+	public static int product(int... values){
+		int product = 1;
+		for(int value : values){
+			product *= value;
+		}
+		return product;
+	}
 }

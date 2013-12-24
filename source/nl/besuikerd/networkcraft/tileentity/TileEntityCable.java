@@ -21,7 +21,7 @@ public class TileEntityCable extends TileEntityNetworkNode implements IConnectin
 	
 	public TileEntityCable() {
 		this.connectingSides = new ConnectingSides(this);
-		this.node = new NetworkNode(this, 5);
+		this.node = new NetworkNode(this, 1);
 	}
 	
 	@Override

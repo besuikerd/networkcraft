@@ -1,24 +1,58 @@
 package nl.besuikerd.networkcraft;
 
-import java.io.ByteArrayOutputStream;
-import java.io.OutputStream;
+import static nl.besuikerd.core.utils.FunctionalUtils.foldl;
+import static nl.besuikerd.core.utils.FunctionalUtils.foldr;
+import static nl.besuikerd.core.utils.FunctionalUtils.functionAny;
+import static nl.besuikerd.core.utils.FunctionalUtils.functionApplyFunction;
+import static nl.besuikerd.core.utils.FunctionalUtils.map;
+
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
-import static nl.besuikerd.core.utils.FunctionalUtils.*;
-
-import java.util.EnumSet;
+import net.minecraft.tileentity.TileEntity;
+import nl.besuikerd.core.utils.BitUtils;
+import nl.besuikerd.core.utils.FunctionalUtils.ABAFunction;
+import nl.besuikerd.core.utils.FunctionalUtils.ABBFunction;
+import nl.besuikerd.core.utils.collection.SafeConstrainedMap;
+import nl.besuikerd.core.utils.collection.SmallerThanMapConstraint;
+import nl.besuikerd.core.utils.ReflectUtils;
+import nl.besuikerd.networkcraft.graph.EndPoint;
+import nl.besuikerd.networkcraft.graph.IEndPoint;
+import nl.besuikerd.networkcraft.graph.INetworkNode;
+import nl.besuikerd.networkcraft.graph.MasterNode;
 
 import com.google.common.base.Function;
-
-import nl.besuikerd.core.utils.BitUtils;
-import nl.besuikerd.core.utils.MathUtils;
-import nl.besuikerd.core.utils.ReflectUtils;
+import com.google.common.collect.MapConstraints;
 
 public class QuickNDirtyTest {
 	
 	public static void main(String[] args) {
 		functionalTest();
-		bitUtilsTest();
+		bitUtilsTest();	
+
+		Map<Object, Integer> m = new HashMap<Object, Integer>();
+		m = SafeConstrainedMap.create(m, new SmallerThanMapConstraint<Object, Integer>(m));
+		m.put(0, 5);
+		m.put(0, 1);
+		m.put(0, 6);
+		System.out.println(m);
+	}
+	
+	public static void recurs(int n){
+		if(n > 0){
+			recurs(n - 1);
+		}
+	}
+	
+	static class Hoi extends TileEntity{
+		public Hoi(int n) {
+			xCoord = n;
+			yCoord = n;
+			zCoord = n;
+		}
 	}
 	
 	private static void functionalTest(){
@@ -47,7 +81,7 @@ public class QuickNDirtyTest {
 			}
 		})));
 	}
-	
+
 	private static void bitUtilsTest(){
 		System.out.println(BitUtils.ByteToString(BitUtils.toggleOff(0xff, 5)));
 	}

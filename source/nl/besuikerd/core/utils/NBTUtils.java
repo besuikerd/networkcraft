@@ -1,10 +1,13 @@
 package nl.besuikerd.core.utils;
 
-import com.google.common.io.ByteArrayDataOutput;
-import com.google.common.io.ByteStreams;
+import java.util.Map;
 
 import net.minecraft.nbt.NBTTagCompound;
 import nl.besuikerd.core.packet.IProcessData;
+
+import com.google.common.io.ByteArrayDataInput;
+import com.google.common.io.ByteArrayDataOutput;
+import com.google.common.io.ByteStreams;
 
 public class NBTUtils {
 	public static void writeProcessData(IProcessData data, NBTTagCompound tag, String key){

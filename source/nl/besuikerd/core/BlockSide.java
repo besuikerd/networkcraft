@@ -1,6 +1,9 @@
 package nl.besuikerd.core;
 
-import java.util.Arrays;
+import java.util.Iterator;
+
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.World;
 
 public enum BlockSide {
 	BOTTOM,
@@ -69,5 +72,52 @@ public enum BlockSide {
 	
 	public static boolean isSideSelected(byte selectedSides, BlockSide side){
 		return isSideSelected(selectedSides, side.ordinal());
+	}
+	
+	public static <E> Iterable<E> blockSideIterator(final Class<E> cls, final World world, final int x, final int y, final int z){
+		return new Iterable<E>(){
+			@Override
+			public Iterator<E> iterator() {
+				return new Iterator<E>() {
+					private int i = 0;
+					private E next;
+					
+					{
+						this.next = find();
+					}
+					
+					@Override
+					public boolean hasNext() {
+						return next != null;
+					}
+					
+					@Override
+					public E next() {
+						E theNext = next;
+						this.next = find();
+						return theNext;
+					}
+					
+					private E find(){
+						E found = null;
+						while(found == null && i < values().length){
+							BlockSide side = values()[i++];
+							int[] rel = side.getRelativeCoordinates(x, y, z);
+							TileEntity tile = world.getBlockTileEntity(rel[0], rel[1], rel[2]);
+							if(tile != null && cls.isInstance(tile)){
+								found = cls.cast(tile);
+							}
+						}
+						return found;
+					}
+					
+					@Override
+					public void remove() {
+						throw new UnsupportedOperationException();
+					}
+				};
+			}
+		};
+		
 	}
 }

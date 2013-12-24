@@ -1,4 +1,4 @@
-package nl.besuikerd.core.utils;
+package nl.besuikerd.core.utils.collection;
 
 import java.util.ArrayList;
 import java.util.Collection;

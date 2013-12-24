@@ -86,4 +86,13 @@ public class TileEntityNetworkNode extends TileEntityBesu implements INetworkNod
 		node.onDestroyed();
 	}
 	
+	@Override
+	public void onTileEntityRemoved(World world, int x, int y, int z) {
+		node.updateNetworkOnRemoval();
+	}
+	
+	@Override
+	public void updateNetwork() {
+		node.updateNetwork();
+	}
 }

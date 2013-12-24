@@ -1,5 +1,8 @@
 package nl.besuikerd.networkcraft.graph;
 
+import java.util.Map;
+import java.util.Set;
+
 import net.minecraft.tileentity.TileEntity;
 import nl.besuikerd.core.BlockSide;
 
@@ -10,68 +13,18 @@ import nl.besuikerd.core.BlockSide;
  * @author Besuikerd
  * 
  */
-public class MasterNodeInitializer implements IMasterNode {
-	private IMasterNode instance;
-	private TileEntity entity;
-
-	private int x;
-	private int y;
-	private int z;
+public class MasterNodeInitializer extends NetworkNodeInitializerBase<IMasterNode> implements IMasterNode {
 
 	public MasterNodeInitializer(TileEntity entity, int x, int y, int z) {
-		this.entity = entity;
-		this.x = x;
-		this.y = y;
-		this.z = z;
+		super(entity, x, y, z);
 	}
-
+	
 	@Override
-	public IMasterNode getMaster() {
-		checkExists();
-		return instance == null ? null : instance.getMaster();
+	public Class<IMasterNode> getClassInstance() {
+		return IMasterNode.class;
 	}
 
-	@Override
-	public int getNodeCost() {
-		checkExists();
-		return instance == null ? 0 : instance.getNodeCost();
-	}
-
-	@Override
-	public int getCost() {
-		checkExists();
-		return instance == null ? -1 : instance.getCost();
-	}
-
-	@Override
-	public BlockSide getDirection() {
-		checkExists();
-		return instance == null ? null : instance.getDirection();
-	}
-
-	@Override
-	public void onNodeChanged(BlockSide side) {
-		checkExists();
-		if (instance != null) {
-			instance.onNodeChanged(side);
-		}
-	}
-
-	@Override
-	public int x() {
-		return x;
-	}
-
-	@Override
-	public int y() {
-		return y;
-	}
-
-	@Override
-	public int z() {
-		return z;
-	}
-
+	
 	@Override
 	public void register(IEndPoint endPoint) {
 		checkExists();
@@ -88,12 +41,55 @@ public class MasterNodeInitializer implements IMasterNode {
 		}
 	}
 
-	private void checkExists() {
-		if (instance == null) {
-			TileEntity tile = entity.worldObj.getBlockTileEntity(x, y, z);
-			if (tile != null && tile instanceof IMasterNode) {
-				instance = (IMasterNode) tile;
-			}
+	@Override
+	public Set<IEndPoint> registeredEndPoints() {
+		checkExists();
+		if(instance != null){
+			return instance.registeredEndPoints();
 		}
+		return null;
+	}
+
+	@Override
+	public Map<IEndPoint, Integer> endPoints() {
+		checkExists();
+		if(instance != null){
+			return instance.endPoints();
+		}
+		return null;
+	}
+
+	@Override
+	public Map<IMasterNode, Integer> getConnectedMasters() {
+		checkExists();
+		if(instance != null){
+			return instance.getConnectedMasters();
+		}
+		return null;
+	}
+	
+	@Override
+	public void invalidate(INetworkNode addedNode, Map<IMasterNode, Integer> costs) {
+		checkExists();
+		if(instance != null){
+			instance.invalidate(addedNode, costs);
+		}
+	}
+
+	@Override
+	public void invalidateRemoval(INetworkNode removedNode, Set<IMasterNode> removedMasters) {
+		checkExists();
+		if(instance != null){
+			instance.invalidateRemoval(removedNode, removedMasters);
+		}
+	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if(obj instanceof IMasterNode){
+			IMasterNode ep = (IMasterNode) obj;
+			return ep.x() == x() && ep.y() == y() && ep.z() == z();
+		}
+		return false;
 	}
 }

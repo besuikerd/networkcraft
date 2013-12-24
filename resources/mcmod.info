@@ -1,0 +1,19 @@
+[
+{
+  "modid": "NetworkCraft",
+  "name": "NetworkCraft",
+  "version": "@VERSION@",
+  "mcversion": "@MC_VERSION@",
+  "description": "A mod about networking",
+  "credits": "",
+  "logoFile": "",
+  "url": "http://github.com/besuikerd/networkcraft",
+  "updateUrl": "",
+  "authors": [ "Besuikerd", "Jaapbaardaap" ],
+  "parent":"",
+  "screenshots": [],
+  "dependencies": [
+     "mod_MinecraftForge"
+  ]
+}
+]

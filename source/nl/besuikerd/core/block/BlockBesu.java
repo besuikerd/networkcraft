@@ -19,6 +19,8 @@ public class BlockBesu extends Block{
 		setUnlocalizedName("nc");
 	}
 	
+	
+	
 	@Override
 	public final void registerIcons(IconRegister reg) {
 		registerIcons(new NCIconRegister(reg));

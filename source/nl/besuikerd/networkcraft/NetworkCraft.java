@@ -8,8 +8,10 @@ import nl.besuikerd.core.gui.GuiHandlerBesu;
 import nl.besuikerd.core.gui.GuiId;
 import nl.besuikerd.core.inventory.ContainerBesuWithPlayerInventory;
 import nl.besuikerd.networkcraft.block.BlockCable;
+import nl.besuikerd.networkcraft.block.BlockEndPoint;
+import nl.besuikerd.networkcraft.block.BlockMasterNode;
 import nl.besuikerd.networkcraft.block.BlockTestInventory;
-import nl.besuikerd.networkcraft.graph.BlockMasterNode;
+import nl.besuikerd.networkcraft.graph.TileEntityEndPoint;
 import nl.besuikerd.networkcraft.graph.TileEntityMasterNode;
 import nl.besuikerd.networkcraft.tileentity.TileEntityCable;
 import nl.besuikerd.networkcraft.tileentity.TileEntityTestInventory;
@@ -24,7 +26,7 @@ import cpw.mods.fml.common.network.NetworkMod;
 import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
 
-@Mod(modid="networkcraft", name="NetworkCraft", version="0.0.0")
+@Mod(modid=Reference.MOD_ID, name=Reference.MOD_NAME, version=Reference.MOD_VERSION)
 @NetworkMod(clientSideRequired=true)
 public class NetworkCraft{
 	
@@ -32,13 +34,15 @@ public class NetworkCraft{
 	
 	public static Block blockCable;
 	public static Block blockMasterNode;
+	public static Block blockEndPoint;
+	
 	public static Block blockInventory;
 	
 	
 	@Instance(value="networkcraft")
 	public static NetworkCraft instance;
 	
-	@SidedProxy(clientSide="nl.besuikerd.networkcraft.ClientProxy", serverSide="nl.besuikerd.networkcraft.CommonProxy")
+	@SidedProxy(clientSide=Reference.PROXY_CLIENT, serverSide=Reference.PROXY_SERVER)
 	public static CommonProxy proxy;
 	
 	@EventHandler
@@ -57,6 +61,7 @@ public class NetworkCraft{
 		GameRegistry.registerBlock(blockCable, blockCable.getUnlocalizedName());
 		GameRegistry.registerBlock(blockMasterNode, blockMasterNode.getUnlocalizedName());
 		GameRegistry.registerBlock(blockInventory, blockInventory.getUnlocalizedName());
+		GameRegistry.registerBlock(blockEndPoint, blockEndPoint.getUnlocalizedName());
 		
 		//register items
 		
@@ -64,6 +69,7 @@ public class NetworkCraft{
 		GameRegistry.registerTileEntity(TileEntityCable.class, "cable");
 		GameRegistry.registerTileEntity(TileEntityMasterNode.class, "masterNode");
 		GameRegistry.registerTileEntity(TileEntityTestInventory.class, "testinventory");
+		GameRegistry.registerTileEntity(TileEntityEndPoint.class, "tileEntityEndPoint");
 		
 		//register gui handlers
 		NetworkRegistry.instance().registerGuiHandler(this, GuiHandlerBesu.getInstance());
@@ -86,6 +92,9 @@ public class NetworkCraft{
 	private void instantiateBlocks(){
 		blockCable = new BlockCable(NCConfig.block_cable);
 		blockMasterNode = new BlockMasterNode(NCConfig.block_masterNode);
+		blockEndPoint = new BlockEndPoint(NCConfig.block_endPoint);
+		
 		blockInventory = new BlockTestInventory(NCConfig.block_inventory);
+		
 	}
 }
