@@ -70,7 +70,6 @@ public abstract class NetworkNodeInitializerBase<E extends INetworkNode> impleme
 	public int z() {
 		return z;
 	}
-
 	
 	protected void checkExists() {
 		if (instance == null) {
@@ -82,15 +81,7 @@ public abstract class NetworkNodeInitializerBase<E extends INetworkNode> impleme
 	}
 	
 	@Override
-	public void updateNetwork() {
-		checkExists();
-		if(instance != null){
-			instance.updateNetwork();
-		}
-	}
-	
-	@Override
 	public int hashCode() {
-		return MathUtils.product(x(), y(), z());
+		return MathUtils.sum(x(), y(), z());
 	}
 }

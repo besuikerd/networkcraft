@@ -68,7 +68,7 @@ public class TileEntityMasterNode extends TileEntityBesu implements IMasterNode{
 	@Override
 	public void onTileEntityRemoved(World world, int x, int y, int z) {
 		super.onTileEntityRemoved(world, x, y, z);
-		node.updateNetworkOnRemoval();
+		node.onPostDestroyed();
 	}
 	
 	@Override
@@ -123,8 +123,8 @@ public class TileEntityMasterNode extends TileEntityBesu implements IMasterNode{
 	}
 
 	@Override
-	public void invalidate(INetworkNode addedNode, Map<IMasterNode, Integer> costs) {
-		node.invalidate(addedNode, costs);
+	public void invalidateConnectedMasters() {
+		node.invalidateConnectedMasters();
 	}
 	
 	@Override
@@ -135,11 +135,6 @@ public class TileEntityMasterNode extends TileEntityBesu implements IMasterNode{
 	@Override
 	public boolean equals(Object obj) {
 		return node.equals(obj);
-	}
-
-	@Override
-	public void updateNetwork() {
-		node.updateNetwork();
 	}
 	
 	@Override
@@ -153,9 +148,9 @@ public class TileEntityMasterNode extends TileEntityBesu implements IMasterNode{
 		super.writeToNBT(tag);
 		NBTUtils.writeProcessData(node, tag, TAG_NODE);
 	}
-	
+
 	@Override
-	public void invalidateRemoval(INetworkNode removedNode, Set<IMasterNode> removedMasters) {
-		node.invalidateRemoval(removedNode, removedMasters);
+	public void invalidateEndPoints() {
+		node.invalidateEndPoints();
 	}
 }

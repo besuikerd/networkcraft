@@ -63,10 +63,4 @@ public interface INetworkNode {
 	 * @return
 	 */
 	public int z();
-
-	/**
-	 * called when the addition or removal of this INetworkNode causes an update
-	 * to the network
-	 */
-	public void updateNetwork();
 }

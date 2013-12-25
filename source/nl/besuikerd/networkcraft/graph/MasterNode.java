@@ -7,7 +7,6 @@ import java.util.Set;
 
 import net.minecraft.tileentity.TileEntity;
 import nl.besuikerd.core.BlockSide;
-import nl.besuikerd.core.ServerLogger;
 import nl.besuikerd.core.packet.IProcessData;
 import nl.besuikerd.core.utils.collection.SafeConstrainedMap;
 import nl.besuikerd.core.utils.collection.SmallerThanMapConstraint;
@@ -22,8 +21,7 @@ public class MasterNode extends NetworkNode implements IMasterNode, IProcessData
 	protected Set<IEndPoint> registeredEndPoints;
 	protected Map<IEndPoint, Integer> endPoints;
 	protected Map<IMasterNode, Integer> connectedMasters;
-	
-	
+
 	public MasterNode(TileEntity entity, int cost) {
 		super(entity, cost);
 		this.registeredEndPoints = new HashSet<IEndPoint>();
@@ -58,12 +56,12 @@ public class MasterNode extends NetworkNode implements IMasterNode, IProcessData
 
 	@Override
 	public void register(IEndPoint endPoint) {
-		ServerLogger.debug("node registered at master %s, %s[cost=%d, coords=(%d,%d,%d)]", this, endPoint.getClass().getName(), endPoint.getNodeCost(), endPoint.x(), endPoint.y(), endPoint.z());
+		registeredEndPoints.add(endPoint);
 	}
 
 	@Override
 	public void unregister(IEndPoint endPoint) {
-		ServerLogger.debug("node unregistered at master %s, %s[cost=%d, coords=(%d,%d,%d)]", this, endPoint.getClass().getName(), endPoint.getNodeCost(), endPoint.x(), endPoint.y(), endPoint.z());
+		registeredEndPoints.remove(endPoint);
 	}
 
 	@Override
@@ -82,150 +80,149 @@ public class MasterNode extends NetworkNode implements IMasterNode, IProcessData
 	}
 
 	public void onPlaced() {
-		updateNetwork();
+		invalidateConnectedMasters();
+		invalidateEndPoints();
+		
+		invalidateMasters();
+		
 	}
 
 	public void onDestroyed() {
 		this.destroyed = true;
 	}
-	
-	/*
+
 	@Override
-	public void invalidate(boolean broadcast) {
-		Map<IMasterNode, Integer> newMap = new HashMap<IMasterNode, Integer>();
-		for(BlockSide side : BlockSide.values()){
-			int[] rel = side.getRelativeCoordinates(x(), y(), z());
-			TileEntity tile = entity.worldObj.getBlockTileEntity(rel[0], rel[1], rel[2]);
-			if(tile != null && tile instanceof INetworkNode){
-				INetworkNode node = (INetworkNode) tile;
-				if(node.getMaster() != null && !equals(node.getMaster())){
-					newMap.put(node.getMaster(), node.getCost());
-				}
-				if(node.getDirection() != null && node.getDirection() == side.opposite()){
-					findMastersFromNode(node, newMap);
-				}
-			}
-		}
-		if(broadcast){
-			for(Map.Entry<IMasterNode, Integer> entry : newMap.entrySet()){
-				Integer oldCost = connectedMasters.get(entry.getKey());
-				if(oldCost == null){
-					oldCost = Integer.MAX_VALUE;
-				}
-				if(oldCost > entry.getValue()){
-					entry.getKey().invalidate(false);
-				}
-			}
+	public void invalidateConnectedMasters() {
+
+		Map<INetworkNode, Integer> finishedNodes = new HashMap<INetworkNode, Integer>();
+		Map<INetworkNode, Integer> foundNodes = new HashMap<INetworkNode, Integer>();
+		foundNodes = SafeConstrainedMap.create(foundNodes, new SmallerThanMapConstraint<INetworkNode, Integer>(foundNodes));
+		Map<IMasterNode, Integer> foundMasters = new HashMap<IMasterNode, Integer>();
+		foundMasters = SafeConstrainedMap.create(foundMasters, new SmallerThanMapConstraint<IMasterNode, Integer>(foundMasters));
+
+		finishedNodes.put(this, 0); //initialize finished nodes with this node
+
+		findConnectedMasters(this, finishedNodes, foundNodes, foundMasters);
+
+		connectedMasters.clear();
+		for (Map.Entry<IMasterNode, Integer> entry : foundMasters.entrySet()) {
+			connectedMasters.put(entry.getKey(), entry.getValue());
 		}
 	}
-	*/
+
+	private void findConnectedMasters(INetworkNode current, Map<INetworkNode, Integer> finishedNodes, Map<INetworkNode, Integer> foundNodes, Map<IMasterNode, Integer> foundMasters) {
+		int currentCost = finishedNodes.get(current);
+		for (INetworkNode node : BlockSide.blockSideIterator(INetworkNode.class, entity.worldObj, current.x(), current.y(), current.z())) {
+			if (!finishedNodes.containsKey(node)) {
+				if (node instanceof IMasterNode) {
+					foundMasters.put((IMasterNode) node, currentCost);
+				} else {
+					foundNodes.put(node, currentCost + node.getNodeCost());
+				}
+			}
+		}
+
+		//determine cheapest nodes
+		int currentVal = Integer.MAX_VALUE;
+		Set<INetworkNode> cheapestNodes = new HashSet<INetworkNode>();
+		for (Map.Entry<INetworkNode, Integer> entry : foundNodes.entrySet()) {
+			if (entry.getValue() < currentVal) {
+				currentVal = entry.getValue();
+				cheapestNodes.clear();
+			}
+			if (entry.getValue() == currentVal) {
+				cheapestNodes.add(entry.getKey());
+			}
+		}
+		for (INetworkNode cheapestNode : cheapestNodes) {
+			foundNodes.remove(cheapestNode);
+			finishedNodes.put(cheapestNode, currentVal);
+			findConnectedMasters(cheapestNode, finishedNodes, foundNodes, foundMasters);
+		}
+	}
 	
-	public void invalidate(INetworkNode addedNode, Map<IMasterNode,Integer> costs) {
-		Map<IMasterNode, Integer> newConnectedMasters = SafeConstrainedMap.create(connectedMasters, new SmallerThanMapConstraint<IMasterNode, Integer>(connectedMasters));
+	@Override
+	public void invalidateEndPoints() {
+		endPoints.clear();
+		for(IEndPoint endPoint : registeredEndPoints){
+			if(endPoint != null) { //to prevent adding an endpoint that has just been deleted
+				endPoints.put(endPoint, endPoint.getCost());
+			}
+		}
+		Map<IEndPoint, Integer> newEndPoints = SafeConstrainedMap.create(endPoints, new SmallerThanMapConstraint<IEndPoint, Integer>(endPoints));
+		Set<IMasterNode> processedMasters = new HashSet<IMasterNode>();
+		findEndPoints(this, 0, processedMasters, newEndPoints);
 		
-		if(addedNode == null){
-			for(Map.Entry<IMasterNode, Integer> entry : costs.entrySet()){
-				newConnectedMasters.put(entry.getKey(), entry.getValue());
-			}
-		} else {
-			int selfCost = costs.get(this);
-			if(addedNode instanceof IMasterNode){ //add if node added was a master node
-				newConnectedMasters.put((IMasterNode)addedNode, selfCost);
-				
-			} else{
-				for(Map.Entry<IMasterNode, Integer> entry : costs.entrySet()){ //add other nodes to connected masters
-					if(!entry.getKey().equals(this)){
-						newConnectedMasters.put(entry.getKey(), entry.getValue() + selfCost + addedNode.getNodeCost());
-					}
-				}
-			}
-		}
-		ServerLogger.debug("connected masters: %s", newConnectedMasters.values());
-		entity.worldObj.markBlockForUpdate(x(), y(), z());
-	};
-	
-	@Override
-	public void invalidateRemoval(INetworkNode removedNode, Set<IMasterNode> removedMasters) {
-		for(IMasterNode master : removedMasters){
-			connectedMasters.remove(master);
-		}
 		entity.worldObj.markBlockForUpdate(x(), y(), z());
 	}
 	
-	private void findMastersFromNode(INetworkNode node, Map<IMasterNode, Integer> map){
-		for(BlockSide side : BlockSide.values()){
-			if(side != node.getDirection()){
-				TileEntity tile = entity.worldObj.getBlockTileEntity(node.x(), node.y(), node.z());
-				if(tile != null && tile instanceof INetworkNode){
-					INetworkNode other = (INetworkNode) tile;
-					if(other.getDirection() == node.getDirection().opposite()){
-						findMastersFromNode(other, map);
-					} else if(other.getDirection() != null && other.getMaster() != null && !node.getMaster().equals(other.getMaster())){
-						Integer cost = map.get(other.getMaster());
-						if(cost == null){
-							cost = Integer.MAX_VALUE;
-						}
-						int realCost = -1;
-						if(cost > (realCost = (node.getCost() - node.getMaster().getNodeCost()) + (other.getCost() - other.getMaster().getCost())) ){
-							map.put(other.getMaster(), node.getCost() + other.getCost());
-						}
-					}
+	private void findEndPoints(IMasterNode masterNode, int currentCost, Set<IMasterNode> processedMasters, Map<IEndPoint, Integer> endPoints){
+		for(Map.Entry<IMasterNode, Integer> entry : masterNode.getConnectedMasters().entrySet()){	
+			for(IEndPoint endpoint : entry.getKey().registeredEndPoints()){
+				if(endpoint.getMaster() != null){ //to prevent adding an endpoint that has just been deleted
+					endPoints.put(endpoint, currentCost + entry.getValue() + endpoint.getCost());
 				}
 			}
 		}
-	}
-	
+		processedMasters.add(masterNode);
+		for(Map.Entry<IMasterNode, Integer> entry : masterNode.getConnectedMasters().entrySet()){
+			if(!processedMasters.contains(entry.getKey())){
+				findEndPoints(entry.getKey(), currentCost + entry.getValue() + masterNode.getNodeCost(), processedMasters, endPoints);
+			}
+		}
+	} 
+
 	@Override
 	public void read(ByteArrayDataInput in) {
 		registeredEndPoints.clear();
 		endPoints.clear();
 		connectedMasters.clear();
-		
+
 		int size = in.readInt();
-		for(int i = 0 ; i < size ; i++){
+		for (int i = 0; i < size; i++) {
 			registeredEndPoints.add(new EndPointInitializer(entity, in.readInt(), in.readInt(), in.readInt()));
 		}
-		
+
 		size = in.readInt();
-		for(int i = 0 ; i < size ; i++){
+		for (int i = 0; i < size; i++) {
 			endPoints.put(new EndPointInitializer(entity, in.readInt(), in.readInt(), in.readInt()), in.readInt());
 		}
-		
+
 		size = in.readInt();
-		for(int i = 0 ; i < size ; i++){
+		for (int i = 0; i < size; i++) {
 			connectedMasters.put(new MasterNodeInitializer(entity, in.readInt(), in.readInt(), in.readInt()), in.readInt());
 		}
 	}
-	
+
 	@Override
 	public void write(ByteArrayDataOutput out) {
 		out.writeInt(registeredEndPoints.size());
-		for(IEndPoint endPoint : registeredEndPoints){
+		for (IEndPoint endPoint : registeredEndPoints) {
 			out.writeInt(endPoint.x());
 			out.writeInt(endPoint.y());
 			out.writeInt(endPoint.z());
 		}
-		
+
 		out.writeInt(endPoints.size());
-		for(Map.Entry<IEndPoint, Integer> entry : endPoints.entrySet()){
+		for (Map.Entry<IEndPoint, Integer> entry : endPoints.entrySet()) {
 			out.writeInt(entry.getKey().x());
 			out.writeInt(entry.getKey().y());
 			out.writeInt(entry.getKey().z());
 			out.writeInt(entry.getValue());
 		}
-		
+
 		out.writeInt(connectedMasters.size());
-		for(Map.Entry<IMasterNode, Integer> entry : connectedMasters.entrySet()){
+		for (Map.Entry<IMasterNode, Integer> entry : connectedMasters.entrySet()) {
 			out.writeInt(entry.getKey().x());
 			out.writeInt(entry.getKey().y());
 			out.writeInt(entry.getKey().z());
 			out.writeInt(entry.getValue());
 		}
 	}
-	
+
 	@Override
 	public boolean equals(Object obj) {
-		if(obj instanceof IMasterNode){
+		if (obj instanceof IMasterNode) {
 			IMasterNode ep = (IMasterNode) obj;
 			return ep.x() == x() && ep.y() == y() && ep.z() == z();
 		}

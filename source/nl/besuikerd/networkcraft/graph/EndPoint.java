@@ -16,10 +16,11 @@ public class EndPoint extends NetworkNode implements IEndPoint {
 
 	@Override
 	public void onPlaced() {
-		super.onPlaced();
+		findCheapestNode();
 		if(master != null){
 			master.register(this);
 		}
+		invalidateMasters();
 	}
 
 	@Override

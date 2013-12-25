@@ -69,18 +69,18 @@ public class MasterNodeInitializer extends NetworkNodeInitializerBase<IMasterNod
 	}
 	
 	@Override
-	public void invalidate(INetworkNode addedNode, Map<IMasterNode, Integer> costs) {
+	public void invalidateConnectedMasters() {
 		checkExists();
 		if(instance != null){
-			instance.invalidate(addedNode, costs);
+			instance.invalidateConnectedMasters();
 		}
 	}
-
+	
 	@Override
-	public void invalidateRemoval(INetworkNode removedNode, Set<IMasterNode> removedMasters) {
+	public void invalidateEndPoints() {
 		checkExists();
 		if(instance != null){
-			instance.invalidateRemoval(removedNode, removedMasters);
+			instance.invalidateEndPoints();
 		}
 	}
 	

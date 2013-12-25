@@ -31,4 +31,11 @@ public class SafeConstrainedMap<K, V> extends ForwardingMap<K, V>{
 			return null;
 		}
 	}
+	
+	@Override
+	public void putAll(Map<? extends K, ? extends V> map) {
+		for(Map.Entry entry : entrySet()){
+			put((K) entry.getKey(), (V) entry.getValue());
+		}
+	}
 }

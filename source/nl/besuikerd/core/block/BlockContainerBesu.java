@@ -8,6 +8,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import nl.besuikerd.core.ServerLogger;
 import nl.besuikerd.core.tileentity.TileEntityBesu;
+import nl.besuikerd.core.utils.profiling.BesuProfiler;
 
 public abstract class BlockContainerBesu extends BlockBesu implements ITileEntityProvider{
 	
@@ -19,25 +20,33 @@ public abstract class BlockContainerBesu extends BlockBesu implements ITileEntit
 	@Override
 	public void breakBlock(World world, int x, int y, int z,
 			int id, int meta) {
+		BesuProfiler p = BesuProfiler.newProfile();
 		TileEntity tile = world.getBlockTileEntity(x, y, z);
 		if(tile != null && tile instanceof TileEntityBesu){
+			
 			((TileEntityBesu) tile).onRemoveTileEntity(world, x, y, z);
+			
 		}
+		BesuProfiler p2 = BesuProfiler.newProfile();
 		super.breakBlock(world, x, y, z, id, meta);
 		world.removeBlockTileEntity(x, y, z);
 		if(tile != null && tile instanceof TileEntityBesu){
 			((TileEntityBesu) tile).onTileEntityRemoved(world, x, y, z);
 		}
+		
+		ServerLogger.debug("onRemove: %d [%s - %s]", p.getTime() + p2.getTime(), p, p2);
 	}
 	
 	@Override
 	public void onBlockPlacedBy(World world, int x, int y, int z,
 			EntityLivingBase entity, ItemStack stack) {
+		BesuProfiler p = BesuProfiler.newProfile();
 		super.onBlockPlacedBy(world, x, y, z, entity, stack);
 		TileEntity tile = world.getBlockTileEntity(x, y, z);
 		if(tile != null && tile instanceof TileEntityBesu){
 			((TileEntityBesu) tile).onTileEntityPlacedBy(world, x, y, z, entity, stack);
 		}
+		ServerLogger.debug("onPlaced: %s", p);
 	}
 	
 	

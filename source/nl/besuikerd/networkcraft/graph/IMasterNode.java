@@ -44,17 +44,13 @@ public interface IMasterNode extends INetworkNode {
 	public Map<IMasterNode, Integer> getConnectedMasters();
 
 	/**
-	 * notify this master that there are possibly new IMasterNodes connected to
-	 * this IMasterNode
+	 * invalidate this IMasterNode; allows it to recalculate it's nearby masters
 	 */
-	public void invalidate(INetworkNode addedNode, Map<IMasterNode, Integer> costs);
+	public void invalidateConnectedMasters();
 	
 	/**
-	 * the given nodes are not reachable anymore
-	 * @param removedNode
-	 * @param removedMasters
+	 * Invalidate this IMasterNode to allow it to recalculate endpoint costs
 	 */
-	public void invalidateRemoval(INetworkNode removedNode, Set<IMasterNode> removedMasters);
-	
-	
+	public void invalidateEndPoints();
+
 }
