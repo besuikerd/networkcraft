@@ -93,4 +93,11 @@ public class GuiHandlerBesu implements IGuiHandler{
 		registerGui(number.getNumber(), gui);
 	}
 	
+	public static void registerGuiForServer(int id, Class<? extends ContainerBesu> containerClass){
+		instance.registryServer[id] = containerClass;
+	}
+	
+	public static void registerGuiForServer(INumbered number, Class<? extends ContainerBesu> containerClass){
+		instance.registryServer[number.getNumber()] = containerClass;
+	}
 }

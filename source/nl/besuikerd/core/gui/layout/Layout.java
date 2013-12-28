@@ -30,4 +30,10 @@ public interface Layout {
 	 * @return The Dimension of Elements laid out so far by this Layout
 	 */
 	public Dimension getLaidOutDimension();
+	
+	/**
+	 * align an Element relative to the container
+	 * @param e
+	 */
+	public void align(Element e, ElementContainer parent);
 }

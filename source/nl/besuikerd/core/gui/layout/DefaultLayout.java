@@ -64,4 +64,32 @@ public class DefaultLayout implements Layout{
 		return new Dimension(maxWidth, maxHeight);
 	}
 	
+	@Override
+	public void align(Element e, ElementContainer parent) {
+		switch (e.getAlignment()) {
+			case TOP:
+				e.setY(parent.getPaddingTop());
+				e.setX((parent.getWidth() - e.getWidth()) / 2);
+				break;
+			case RIGHT:
+				e.setY((parent.getHeight() - e.getHeight()) / 2);
+				e.setX(parent.getWidth() - parent.getPaddingRight());
+				break;
+			case BOTTOM:
+				e.setY(parent.getHeight() - parent.getPaddingBottom());
+				e.setX((parent.getWidth() - e.getWidth()) / 2);
+				break;
+			case LEFT:
+				e.setY((parent.getHeight() - e.getHeight()) / 2);
+				e.setX(parent.getPaddingLeft());
+				break;
+			case CENTER:
+				e.setY((parent.getHeight() - e.getHeight()) / 2);
+				e.setX((parent.getWidth() - e.getWidth()) / 2);
+				break;
+			default:
+				break;
+		}
+		
+	}
 }

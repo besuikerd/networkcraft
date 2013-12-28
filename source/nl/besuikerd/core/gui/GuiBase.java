@@ -27,7 +27,7 @@ public class GuiBase extends GuiContainer{
 	public GuiBase(ContainerBesu container) {
 		super(container);
 		root = new ElementStyledContainer(LayoutDimension.WRAP_CONTENT, LayoutDimension.WRAP_CONTENT).padding(5);
-		root.setLayout(new VerticalLayout());
+		root.layout(new VerticalLayout());
 		init();
 		root.dimension(null, null);
 		xSize = root.getWidth();
@@ -70,6 +70,7 @@ public class GuiBase extends GuiContainer{
         
         //delegate mouse input to root Box
         root.handleMouseInput(null, x, y);
+        
     }
 	
 	public ElementContainer getRoot() {
@@ -94,7 +95,7 @@ public class GuiBase extends GuiContainer{
 		root.setX((width - root.getWidth()) / 2);
 		root.setY((height - root.getHeight()) / 2);
 		
-			//draw root container
+		//draw root container
 		root.draw(null, mouseX, mouseY, root);
 	}
 }

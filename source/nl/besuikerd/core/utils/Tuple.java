@@ -1,17 +1,35 @@
 package nl.besuikerd.core.utils;
 
+/**
+ * class representing a tuple. Helper functions are defined for tuples up to 10
+ * elements
+ * 
+ * @author Besuikerd
+ * 
+ */
 public class Tuple {
 	private Object[] elements;
 
 	public Tuple(Object... elements) {
 		this.elements = elements;
 	}
-	
-	public int n(){
+
+	public int n() {
 		return elements.length;
 	}
-	
-	public Object fst(){
+
+	/**
+	 * replace the nth element with the given object
+	 * @param o object to put
+	 * @param n element number to replace
+	 * @return this
+	 */
+	public Tuple putN(Object o, int n){
+		elements[n] = o;
+		return this;
+	}
+
+	public Object fst() {
 		return elements[0];
 	}
 
@@ -54,273 +72,272 @@ public class Tuple {
 	public Object nth(int n) {
 		return elements[n];
 	}
-	
-	
-	public int int1(){
+
+	public int int1() {
 		return intN(1);
 	}
-	
-	public int int2(){
+
+	public int int2() {
 		return intN(2);
 	}
-	
-	public int int3(){
+
+	public int int3() {
 		return intN(3);
 	}
-	
-	public int int4(){
+
+	public int int4() {
 		return intN(4);
 	}
-	
-	public int int5(){
+
+	public int int5() {
 		return intN(5);
 	}
-	
-	public int int6(){
+
+	public int int6() {
 		return intN(6);
 	}
-	
-	public int int7(){
+
+	public int int7() {
 		return intN(7);
 	}
-	
-	public int int8(){
+
+	public int int8() {
 		return intN(8);
 	}
-	
-	public int int9(){
+
+	public int int9() {
 		return intN(9);
 	}
-	
-	public int int10(){
+
+	public int int10() {
 		return intN(10);
 	}
-	
-	public double double1(){
+
+	public double double1() {
 		return doubleN(1);
 	}
-	
-	public double double2(){
+
+	public double double2() {
 		return doubleN(2);
 	}
 
-	public double double3(){
+	public double double3() {
 		return doubleN(3);
 	}
-	
-	public double double4(){
+
+	public double double4() {
 		return doubleN(4);
 	}
-	
-	public double double5(){
+
+	public double double5() {
 		return doubleN(5);
 	}
-	
-	public double double6(){
+
+	public double double6() {
 		return doubleN(6);
 	}
-	
-	public double double7(){
+
+	public double double7() {
 		return doubleN(7);
 	}
-	
-	public double double8(){
+
+	public double double8() {
 		return doubleN(8);
 	}
-	
-	public double double9(){
+
+	public double double9() {
 		return doubleN(9);
 	}
-	
-	public double double10(){
+
+	public double double10() {
 		return doubleN(10);
 	}
-	
-	public float float1(){
+
+	public float float1() {
 		return floatN(1);
 	}
-	
-	public float float2(){
+
+	public float float2() {
 		return floatN(2);
 	}
-	
-	public float float3(){
+
+	public float float3() {
 		return floatN(3);
 	}
-	
-	public float float4(){
+
+	public float float4() {
 		return floatN(4);
 	}
-	
-	public float float5(){
+
+	public float float5() {
 		return floatN(5);
 	}
-	
-	public float float6(){
+
+	public float float6() {
 		return floatN(6);
 	}
-	
-	public float float7(){
+
+	public float float7() {
 		return floatN(7);
 	}
-	
-	public float float8(){
+
+	public float float8() {
 		return floatN(8);
 	}
-	
-	public float float9(){
+
+	public float float9() {
 		return floatN(9);
 	}
-	
-	public float float10(){
+
+	public float float10() {
 		return floatN(10);
 	}
-	
-	public long long1(){
+
+	public long long1() {
 		return longN(1);
 	}
-	
-	public long long2(){
+
+	public long long2() {
 		return longN(2);
 	}
-	
-	public long long3(){
+
+	public long long3() {
 		return longN(3);
 	}
-	
-	public long long4(){
+
+	public long long4() {
 		return longN(4);
 	}
-	
-	public long long5(){
+
+	public long long5() {
 		return longN(5);
 	}
-	
-	public long long6(){
+
+	public long long6() {
 		return longN(6);
 	}
-	
-	public long long7(){
+
+	public long long7() {
 		return longN(7);
 	}
-	
-	public long long8(){
+
+	public long long8() {
 		return longN(8);
 	}
-	
-	public long long9(){
+
+	public long long9() {
 		return longN(9);
 	}
-	
-	public long long10(){
+
+	public long long10() {
 		return longN(10);
 	}
-	
-	public short short1(){
+
+	public short short1() {
 		return shortN(1);
 	}
-	
-	public short short2(){
+
+	public short short2() {
 		return shortN(2);
 	}
-	
-	public short short3(){
+
+	public short short3() {
 		return shortN(3);
 	}
-	
-	public short short4(){
+
+	public short short4() {
 		return shortN(4);
 	}
-	
-	public short short5(){
+
+	public short short5() {
 		return shortN(5);
 	}
-	
-	public short short6(){
+
+	public short short6() {
 		return shortN(6);
 	}
-	
-	public short short7(){
+
+	public short short7() {
 		return shortN(7);
 	}
-	
-	public short short8(){
+
+	public short short8() {
 		return shortN(8);
 	}
-	
-	public short short9(){
+
+	public short short9() {
 		return shortN(9);
 	}
-	
-	public short short10(){
+
+	public short short10() {
 		return shortN(10);
 	}
-	
-	public char char1(){
+
+	public char char1() {
 		return charN(1);
 	}
-	
-	public char char2(){
+
+	public char char2() {
 		return charN(2);
 	}
-	
-	public char char3(){
+
+	public char char3() {
 		return charN(3);
 	}
-	
-	public char char4(){
+
+	public char char4() {
 		return charN(4);
 	}
-	
-	public char char5(){
+
+	public char char5() {
 		return charN(5);
 	}
-	
-	public char char6(){
+
+	public char char6() {
 		return charN(6);
 	}
-	
-	public char char7(){
+
+	public char char7() {
 		return charN(7);
 	}
-	
-	public char char8(){
+
+	public char char8() {
 		return charN(8);
 	}
-	
-	public char char9(){
+
+	public char char9() {
 		return charN(9);
 	}
-	
-	public char char10(){
+
+	public char char10() {
 		return charN(10);
 	}
-	
-	public int intN(int n){
+
+	public int intN(int n) {
 		return (Integer) elements[n - 1];
 	}
-	
-	public double doubleN(int n){
+
+	public double doubleN(int n) {
 		return (Double) elements[n - 1];
 	}
-	
-	public float floatN(int n){
+
+	public float floatN(int n) {
 		return (Float) elements[n - 1];
 	}
-	
-	public long longN(int n){
+
+	public long longN(int n) {
 		return (Long) elements[n - 1];
 	}
-	
-	public short shortN(int n){
+
+	public short shortN(int n) {
 		return (Short) elements[n - 1];
 	}
-	
-	public char charN(int n){
+
+	public char charN(int n) {
 		return (Character) elements[n - 1];
 	}
-	
-	public <E> E objN(int n, Class<E> cls){
+
+	public <E> E objN(int n, Class<E> cls) {
 		return cls.cast(n);
 	}
 }

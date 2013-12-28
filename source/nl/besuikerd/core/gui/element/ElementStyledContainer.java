@@ -14,8 +14,9 @@ public class ElementStyledContainer extends ElementContainer{
 	
 	protected Tuple texCornerTL = new Tuple(64, 0, 4, 4);
 	protected Tuple texCornerTR = new Tuple(68, 0, 4, 4);
-	protected Tuple texCornerBL = new Tuple(64, 4, 4, 4);
 	protected Tuple texCornerBR = new Tuple(68, 4, 4, 4);
+	protected Tuple texCornerBL = new Tuple(64, 4, 4, 4);
+	
 	protected Tuple texBg = new Tuple(72, 0, 16, 16);
 	
 	public ElementStyledContainer(int x, int y, int width, int height) {
@@ -36,7 +37,8 @@ public class ElementStyledContainer extends ElementContainer{
 	public void draw(ElementContainer parent, int mouseX, int mouseY, ElementContainer root) {
 		mc.getTextureManager().bindTexture(textures);
 		GL11.glColor4f(1f, 1f, 1f, 1f);
-		drawBackgroundFromTextures(texBg, texEdgeTop, texEdgeRight, texEdgeBottom, texEdgeLeft, texCornerTL, texCornerTR, texCornerBL, texCornerBR);
+		drawBackgroundFromTextures(texBg, texEdgeTop, texEdgeRight, texEdgeBottom, texEdgeLeft, texCornerTL, texCornerTR, texCornerBR, texCornerBL);
 		super.draw(parent, mouseX, mouseY, root);
 	}
+	
 }

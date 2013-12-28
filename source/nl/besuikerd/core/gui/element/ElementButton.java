@@ -21,6 +21,18 @@ public class ElementButton extends Element{
 	
 	public ElementButton(int x, int y, int width, int height, String text) {
 		super(x, y, width, height);
+		this.text = text;
+	}
+	
+	public ElementButton(int width, int height, String text) {
+		super(0, 0, width, height);
+		this.text = text;
+	}
+	
+	public ElementButton(String text){
+		this(0, 0, 0, 0, text);
+		this.width = fontRenderer.getStringWidth(text) + 2;
+		this.height = fontRenderer.FONT_HEIGHT + 2;
 	}
 
 	private GuiButton button;
@@ -30,7 +42,6 @@ public class ElementButton extends Element{
 		//NCLogger.debug("rendering: %s", this);
 		super.draw(parent, mouseX, mouseY, root);
         
-        Tuple tex = null;
         if(isEnabled()){
         	if(isLeftClicked()){
         		drawButtonBackground(ButtonBackground.ACTIVATED);
@@ -70,7 +81,7 @@ public class ElementButton extends Element{
 	}
 	
 	private void drawButtonBackground(ButtonBackground bg){
-		drawBackgroundFromTextures(bg.bg, bg.edgeTop, bg.edgeRight, bg.edgeBottom, bg.edgeLeft, bg.cornerTL, bg.cornerTR, bg.cornerBL, bg.cornerBR);
+		drawBackgroundFromTextures(bg.bg, bg.edgeTop, bg.edgeRight, bg.edgeBottom, bg.edgeLeft, bg.cornerTL, bg.cornerTR, bg.cornerBR, bg.cornerBL);
 	}
 	
 	enum ButtonBackground{

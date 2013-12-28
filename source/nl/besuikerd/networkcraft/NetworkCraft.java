@@ -7,6 +7,8 @@ import nl.besuikerd.core.gui.GuiBase;
 import nl.besuikerd.core.gui.GuiHandlerBesu;
 import nl.besuikerd.core.gui.GuiId;
 import nl.besuikerd.core.inventory.ContainerBesuWithPlayerInventory;
+import nl.besuikerd.core.packet.PacketBesu;
+import nl.besuikerd.core.packet.PacketHandlerBesu;
 import nl.besuikerd.networkcraft.block.BlockCable;
 import nl.besuikerd.networkcraft.block.BlockEndPoint;
 import nl.besuikerd.networkcraft.block.BlockMasterNode;
@@ -24,10 +26,17 @@ import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.network.NetworkMod;
 import cpw.mods.fml.common.network.NetworkRegistry;
+import cpw.mods.fml.common.network.NetworkMod.SidedPacketHandler;
 import cpw.mods.fml.common.registry.GameRegistry;
+import cpw.mods.fml.relauncher.Side;
 
 @Mod(modid=Reference.MOD_ID, name=Reference.MOD_NAME, version=Reference.MOD_VERSION)
-@NetworkMod(clientSideRequired=true)
+@NetworkMod(
+	clientSideRequired=true, 
+	serverSideRequired = false, 
+	serverPacketHandlerSpec = @SidedPacketHandler(channels={PacketBesu.DEFAULT_CHANNEL}, packetHandler = PacketHandlerBesu.class),
+	clientPacketHandlerSpec = @SidedPacketHandler(channels={PacketBesu.DEFAULT_CHANNEL}, packetHandler = PacketHandlerBesu.class)
+)
 public class NetworkCraft{
 	
 	public static boolean DEBUG_MODE = true;
@@ -39,7 +48,7 @@ public class NetworkCraft{
 	public static Block blockInventory;
 	
 	
-	@Instance(value="networkcraft")
+	@Instance()
 	public static NetworkCraft instance;
 	
 	@SidedProxy(clientSide=Reference.PROXY_CLIENT, serverSide=Reference.PROXY_SERVER)
@@ -71,18 +80,18 @@ public class NetworkCraft{
 		GameRegistry.registerTileEntity(TileEntityTestInventory.class, "testinventory");
 		GameRegistry.registerTileEntity(TileEntityEndPoint.class, "tileEntityEndPoint");
 		
-		//register gui handlers
-		NetworkRegistry.instance().registerGuiHandler(this, GuiHandlerBesu.getInstance());
+
 		
-		//register guis
-		GuiHandlerBesu guiHandler = GuiHandlerBesu.getInstance();
-		guiHandler.registerGui(GuiId.TEST, GuiBase.class);
-		guiHandler.registerGui(GuiId.INVENTORYTEST, TileEntityTestInventory.GuiTileEntityTestInventory.class, ContainerBesuWithPlayerInventory.class);
 	}
 	
 	@EventHandler
 	public void load(FMLInitializationEvent e){
+		
+		//register gui handlers
+		NetworkRegistry.instance().registerGuiHandler(instance, GuiHandlerBesu.getInstance());
+		BLogger.debug(proxy);
 		proxy.registerRenderers();
+		proxy.registerGuis(GuiHandlerBesu.getInstance());
 	}
 	
 	@EventHandler

@@ -4,6 +4,9 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
+import nl.besuikerd.core.BLogger;
+import nl.besuikerd.core.gui.layout.Alignment;
+import nl.besuikerd.core.gui.layout.Layout;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.Gui;
@@ -24,10 +27,9 @@ public abstract class Element extends Gui implements IProcessData{
 	
 	public static final int ENABLED = 1;
 	public static final int HOVERING = 2;
-	public static final int FOCUSED = 4;
-	public static final int LEFT_CLICKED = 8;
-	public static final int RIGHT_CLICKED = 16;
-	public static final int MIDDLE_CLICKED = 32;
+	public static final int LEFT_CLICKED = 4;
+	public static final int RIGHT_CLICKED = 8;
+	public static final int MIDDLE_CLICKED = 16;
 	
 	
 	public static final int BUTTON_LEFT = 0;
@@ -66,6 +68,8 @@ public abstract class Element extends Gui implements IProcessData{
 	
 	protected LayoutDimension widthDimension;
 	protected LayoutDimension heightDimension;
+	
+	protected Alignment alignment;
 	
 	protected int dx;
 	protected int dy;
@@ -109,16 +113,6 @@ public abstract class Element extends Gui implements IProcessData{
 	 * callback before drawing the Element. Enables the repositioning of elements before actually drawing them
 	 */
 	public void dimension(ElementContainer parent, ElementContainer root){
-		
-		/* this behaviour is not working since the dimensions of the parent container are calculated after dimensioning children elements with WRAP_CONTENT
-		if(parent != null && widthDimension == LayoutDimension.MATCH_PARENT){
-			this.width = parent.width;
-		}
-		
-		if(parent != null && heightDimension == LayoutDimension.MATCH_PARENT){
-			this.height = parent.height;
-		}
-		*/
 	}
 	
 	/**
@@ -141,7 +135,6 @@ public abstract class Element extends Gui implements IProcessData{
 	 * callback when the element is clicked on
 	 */
 	protected boolean onPressed(ElementContainer parent, int x, int y, int which){
-		toggleOn(FOCUSED);
 		return false;
 	}
 	
@@ -178,9 +171,6 @@ public abstract class Element extends Gui implements IProcessData{
 	 * @return if the Element should consume the mouse event
 	 */
 	protected boolean handleMouseInput(ElementContainer parent, int x, int y){
-		if(isFocused() && !parent.isFrontElement(this)){
-			toggleOff(FOCUSED);
-		}
 		return false;
 	}
 	
@@ -190,10 +180,6 @@ public abstract class Element extends Gui implements IProcessData{
 	
 	public boolean isEnabled(){
 		return is(ENABLED);
-	}
-	
-	public boolean isFocused(){
-		return is(FOCUSED);
 	}
 	
 	@Override
@@ -277,6 +263,15 @@ public abstract class Element extends Gui implements IProcessData{
 		return heightDimension;
 	}
 	
+	public Alignment getAlignment() {
+		return alignment;
+	}
+	
+	public Element align(Alignment alignment){
+		this.alignment = alignment;
+		return this;
+	}
+	
 	protected void renderBorder(int thickness, int color){
 		//top border
 		drawRectangle(thickness, 0, width - thickness, thickness, color);
@@ -355,7 +350,7 @@ public abstract class Element extends Gui implements IProcessData{
 		drawBackgroundFromTextures(bg, nullTuple, nullTuple, nullTuple, nullTuple, nullTuple, nullTuple, nullTuple, nullTuple);
 	}
 	
-	protected void drawBackgroundFromTextures(Tuple bg, Tuple edgeTop, Tuple edgeRight, Tuple edgeBottom, Tuple edgeLeft, Tuple cornerTL, Tuple cornerTR, Tuple cornerBL, Tuple cornerBR){
+	protected void drawBackgroundFromTextures(Tuple bg, Tuple edgeTop, Tuple edgeRight, Tuple edgeBottom, Tuple edgeLeft, Tuple cornerTL, Tuple cornerTR, Tuple cornerBR, Tuple cornerBL){
 		
 		//height to render
 		int toDrawY = height - (edgeTop.int4() + edgeBottom.int4());
@@ -373,6 +368,11 @@ public abstract class Element extends Gui implements IProcessData{
 			toDrawY -= drawHeight; 
 		}
 		drawBorderFromTextures(edgeTop, edgeRight, edgeBottom, edgeLeft, cornerTL, cornerTR, cornerBL, cornerBR);
+	}
+	
+	protected void drawBackgroundFromTextures(Tuple bg, Tuple edgeTop, Tuple edgeRight, Tuple edgeBottom, Tuple edgeLeft){
+		Tuple nullTuple = new Tuple(0, 0, 0, 0);
+		drawBackgroundFromTextures(bg, edgeTop, edgeRight, edgeBottom, edgeLeft, nullTuple, nullTuple, nullTuple, nullTuple);
 	}
 	
 	

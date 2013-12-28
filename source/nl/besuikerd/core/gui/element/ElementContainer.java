@@ -57,6 +57,10 @@ public class ElementContainer extends Element{
 		this.widthDimension = width;
 		this.heightDimension = height;
 	}
+	
+	public ElementContainer(){
+		this(LayoutDimension.WRAP_CONTENT, LayoutDimension.WRAP_CONTENT);
+	}
 
 	public ElementContainer add(Element e){
 		e.index = elements.size();
@@ -118,6 +122,13 @@ public class ElementContainer extends Element{
 			this.height = laidOutDimension.height + paddingBottom;
 		}
 		
+		//align elements
+		for(Element e : elements){
+			if(e.getAlignment() != null){
+				layout.align(e, this);
+			}
+		}
+		
 		super.dimension(parent, root);
 	}
 
@@ -154,7 +165,6 @@ public class ElementContainer extends Element{
 				
 				
 				if(MathUtils.inRange2D(x, y, e.absX(), e.absX() + e.width - 1, e.absY(), e.absY() + e.height - 1)){ //element is within range
-					
 
 					if(lastClicked == null){
 						//check if buttons are pressed
@@ -167,16 +177,16 @@ public class ElementContainer extends Element{
 									lastOffsetX = x - e.absX();
 									lastOffsetY = y - e.absY();
 									long oldTime = e.lastClicks.get(buttonFlag);
-									//set last click time on the current time
-									e.lastClicks.put(buttonFlag, System.currentTimeMillis());
+
+									e.lastClicks.put(buttonFlag, System.currentTimeMillis()); //set last click time on the current time
 									
-									if(e.onPressed(this, x, y, lastButtonPressed)){
+									if(e.onPressed(this, x - e.absX(), y - e.absY(), lastButtonPressed)){
 										return true;
 									}
 									
 									//check if button is double pressed
 									if(System.currentTimeMillis() - oldTime < Element.THRESHOLD_DOUBLE_PRESS){
-										if(e.onDoublePressed(this, x, y, lastButtonPressed)){
+										if(e.onDoublePressed(this, x - e.absX(), e.absY(), lastButtonPressed)){
 											return true;
 										}
 									}
@@ -190,7 +200,6 @@ public class ElementContainer extends Element{
 					}
 					
 					//check if mouse is not yet hovering above element
-					//if(!FunctionalUtils.foldl(false, Element.BUTTONS, FunctionalUtils.functionAny(functionIsButtonDown)) && !e.isHovering()){
 					if(lastClicked == null && !e.isHovering()){
 						e.toggleOn(Element.HOVERING);
 						e.onHover(this, x, y);
@@ -286,7 +295,8 @@ public class ElementContainer extends Element{
 		return this;
 	}
 	
-	public void setLayout(Layout layout) {
+	public ElementContainer layout(Layout layout) {
 		this.layout = layout;
+		return this;
 	}
 }

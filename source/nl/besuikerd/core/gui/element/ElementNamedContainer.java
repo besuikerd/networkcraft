@@ -1,5 +1,6 @@
 package nl.besuikerd.core.gui.element;
 
+import nl.besuikerd.core.gui.layout.Alignment;
 import nl.besuikerd.core.gui.layout.LayoutDimension;
 
 public class ElementNamedContainer extends ElementContainer{
@@ -15,9 +16,7 @@ public class ElementNamedContainer extends ElementContainer{
 	public ElementNamedContainer(int x, int y, int width, int height, String name) {
 		super(x, y, width, height);
 		this.name = name;
-		ElementLabel label = new ElementLabel(name);
-//		label.widthDimension = LayoutDimension.MATCH_PARENT;
-		add(label);
+		add(new ElementLabel(name).align(Alignment.CENTER));
 	}
 
 

@@ -25,10 +25,12 @@ import cpw.mods.fml.relauncher.Side;
  */
 public abstract class PacketBesu implements IProcessData{
 	
+	public static final String DEFAULT_CHANNEL = "besu";
+	
 	/**
 	 * channel defaults to "besu"
 	 */
-	protected String channel = "besu";
+	protected String channel = DEFAULT_CHANNEL;
 	
 	private static final BiMap<Byte, Class<? extends PacketBesu>> ids;
 	

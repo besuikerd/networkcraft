@@ -76,4 +76,20 @@ public class HoritzontalLayout implements Layout{
 	public Dimension getLaidOutDimension() {
 		return new Dimension(xOffset, yOffset + maxHeight);
 	}
+	
+	@Override
+	public void align(Element e, ElementContainer parent) {
+		if (yOffset == parent.getPaddingTop()) { //check if there is only a single row
+			switch (e.getAlignment()) {
+				case BOTTOM:
+					e.setY(parent.getHeight() - e.getHeight() - parent.getPaddingBottom());
+					break;
+				case CENTER:
+					e.setY((parent.getHeight() - e.getHeight()) / 2);
+					break;
+				default:
+					break;
+			}
+		}
+	}
 }
