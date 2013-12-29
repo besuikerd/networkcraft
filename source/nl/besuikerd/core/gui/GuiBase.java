@@ -16,6 +16,7 @@ import nl.besuikerd.core.inventory.TileEntityInventory;
 
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
+import org.lwjgl.opengl.GL11;
 
 public class GuiBase extends GuiContainer{
 	
@@ -68,9 +69,15 @@ public class GuiBase extends GuiContainer{
         int x = Mouse.getEventX() * this.width / this.mc.displayWidth;
         int y = this.height - Mouse.getEventY() * this.height / this.mc.displayHeight - 1;
         
-        //delegate mouse input to root Box
+        //delegate mouse input to root container
         root.handleMouseInput(null, x, y);
         
+
+        int wheel = 0;
+		if((wheel = Mouse.getDWheel()) != 0){
+	        //delegate scroll input to root container
+			root.onScrolled(null, x, y, wheel);
+		}
     }
 	
 	public ElementContainer getRoot() {
@@ -95,6 +102,8 @@ public class GuiBase extends GuiContainer{
 		root.setX((width - root.getWidth()) / 2);
 		root.setY((height - root.getHeight()) / 2);
 		
+		mc.getTextureManager().bindTexture(root.getTextures());//TODO move this to a proper location
+		GL11.glColor4f(1f, 1f, 1f, 1f);
 		//draw root container
 		root.draw(null, mouseX, mouseY, root);
 	}

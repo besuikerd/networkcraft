@@ -1,17 +1,23 @@
 package nl.besuikerd.core.gui.element;
 
+import static nl.besuikerd.core.utils.TupleUtils.nullTuple;
+import static nl.besuikerd.core.utils.TupleUtils.xDiff;
+import static nl.besuikerd.core.utils.TupleUtils.yDiff;
+
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-import nl.besuikerd.core.BLogger;
-import nl.besuikerd.core.gui.layout.Alignment;
-import nl.besuikerd.core.gui.layout.Layout;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.util.ResourceLocation;
+import nl.besuikerd.core.gui.layout.Alignment;
 import nl.besuikerd.core.gui.layout.LayoutDimension;
+import nl.besuikerd.core.gui.texture.ElementState;
+import nl.besuikerd.core.gui.texture.IStateFulBackground;
+import nl.besuikerd.core.gui.texture.ITexture;
+import nl.besuikerd.core.gui.texture.ITexturedBackground;
 import nl.besuikerd.core.packet.IProcessData;
 import nl.besuikerd.core.utils.MathUtils;
 import nl.besuikerd.core.utils.Tuple;
@@ -138,6 +144,12 @@ public abstract class Element extends Gui implements IProcessData{
 		return false;
 	}
 	
+	
+	/**
+	 * callback when mouse scroll wheel is changed when hovering over this element
+	 */
+	protected void onScrolled(ElementContainer parent, int x, int y, int amount){}
+	
 	/**
 	 * callback when the element is released
 	 * @param x
@@ -203,20 +215,24 @@ public abstract class Element extends Gui implements IProcessData{
 		return is(HOVERING);
 	}
 	
-	public void setEnabled(boolean enabled){
+	public Element enabled(boolean enabled){
 		toggle(ENABLED, enabled);
+		return this;
 	}
 	
-	protected void toggle(int s, boolean on){
+	protected Element toggle(int s, boolean on){
 		this.state = on ? state | s : ((Integer.MAX_VALUE - s) & state);
+		return this;
 	}
 	
-	protected void toggleOff(int s){
+	protected Element toggleOff(int s){
 		toggle(s, false);
+		return this;
 	}
 	
-	protected void toggleOn(int s){
+	protected Element toggleOn(int s){
 		toggle(s, true);
+		return this;
 	}
 	
 	protected boolean inRange(int x, int y){
@@ -294,85 +310,104 @@ public abstract class Element extends Gui implements IProcessData{
 		Gui.drawRect(xLeft, yLeft, xLeft + width, yLeft + height, color);
 	}
 	
-	protected void drawBorderFromTextures(Tuple edgeTop, Tuple edgeRight, Tuple edgeBottom, Tuple edgeLeft, Tuple cornerTL, Tuple cornerTR, Tuple cornerBL, Tuple cornerBR){
+	protected void drawBorderFromTextures(Tuple edgeTop, Tuple edgeRight, Tuple edgeBottom, Tuple edgeLeft, Tuple cornerTL, Tuple cornerTR, Tuple cornerBR, Tuple cornerBL){
 		
 		//draw top edge	
-		int toDraw = width - (cornerTL.int3() + cornerTR.int3());
+		int toDraw = width - (xDiff(cornerTL) + xDiff(cornerTR));
 		while(toDraw > 0){
 			//actual width being drawn this iteration
-			int drawWidth = toDraw < edgeTop.int3() ? toDraw : edgeTop.int3();
-			drawTexturedModalRect(width - (toDraw + cornerTR.int3()), 0, edgeTop.int1(), edgeTop.int2(), drawWidth, edgeTop.int4());
+			int drawWidth = toDraw < xDiff(edgeTop) ? toDraw : xDiff(edgeTop);
+			drawTexturedModalRect(width - (toDraw + xDiff(cornerTR)), 0, edgeTop.int1(), edgeTop.int2(), drawWidth, yDiff(edgeTop));
 			toDraw -= drawWidth;
 		}
 		
 		//draw bottom edge
-		toDraw = width - (cornerBL.int3() + cornerBR.int3());
+		toDraw = width - (xDiff(cornerBL) + xDiff(cornerBR));
 		while(toDraw > 0){
 			//actual width being drawn this iteration
-			int drawWidth = toDraw < edgeBottom.int3() ? toDraw : edgeBottom.int3();			
-			drawTexturedModalRect(width - (toDraw + cornerBR.int3()), height - (edgeBottom.int4()), edgeBottom.int1(), edgeBottom.int2(), drawWidth, edgeBottom.int4());
+			int drawWidth = toDraw < xDiff(edgeBottom) ? toDraw : xDiff(edgeBottom);			
+			drawTexturedModalRect(width - (toDraw + xDiff(cornerBR)), height - (yDiff(edgeBottom)), edgeBottom.int1(), edgeBottom.int2(), drawWidth, yDiff(edgeBottom));
 			toDraw -= drawWidth;
 		}
 		
 		//draw left edge
-		toDraw = height - (cornerTL.int4() + cornerBL.int4());
+		toDraw = height - (yDiff(cornerTL) + yDiff(cornerBL));
 		while(toDraw > 0){
 			//actual height being drawn this iteration
-			int drawHeight = toDraw < edgeLeft.int4() ? toDraw : edgeLeft.int4();
-			drawTexturedModalRect(0, height - (toDraw + cornerBL.int4()), edgeLeft.int1(), edgeLeft.int2(), edgeLeft.int3(), drawHeight);
+			int drawHeight = toDraw < yDiff(edgeLeft) ? toDraw : yDiff(edgeLeft);
+			drawTexturedModalRect(0, height - (toDraw + yDiff(cornerBL)), edgeLeft.int1(), edgeLeft.int2(), xDiff(edgeLeft), drawHeight);
 			toDraw -= drawHeight;
 		}
 		
 		//draw right edge
-		toDraw = height - (cornerTR.int4() + cornerBR.int4());
+		toDraw = height - (yDiff(cornerTR) + yDiff(cornerBR));
 		while(toDraw > 0){
 			//actual height being drawn this iteration
-			int drawHeight = toDraw < edgeRight.int4() ? toDraw : edgeRight.int4();
-			drawTexturedModalRect(width - edgeRight.int3(), height - (toDraw + cornerBR.int4()), edgeRight.int1(), edgeRight.int2(), edgeRight.int3(), drawHeight);
+			int drawHeight = toDraw < yDiff(edgeRight) ? toDraw : yDiff(edgeRight);
+			drawTexturedModalRect(width - xDiff(edgeRight), height - (toDraw + yDiff(cornerBR)), edgeRight.int1(), edgeRight.int2(), xDiff(edgeRight), drawHeight);
 			toDraw -= drawHeight;
 		}
 		
 		//draw top left corner
-		drawTexturedModalRect(0, 0, cornerTL.int1(), cornerTL.int2(), cornerTL.int3(), cornerTL.int4());
+		drawTexturedModalRect(0, 0, cornerTL.int1(), cornerTL.int2(), xDiff(cornerTL), yDiff(cornerTL));
 		
 		//draw top right corner
-		drawTexturedModalRect(width - cornerTR.int3(), 0, cornerTR.int1(), cornerTR.int2(), cornerTR.int3(), cornerTR.int4());
+		drawTexturedModalRect(width - xDiff(cornerTR), 0, cornerTR.int1(), cornerTR.int2(), xDiff(cornerTR), yDiff(cornerTR));
 		
 		//draw bottom left corner
-		drawTexturedModalRect(0, height - cornerBL.int4(), cornerBL.int1(), cornerBL.int2(), cornerBL.int3(), cornerBL.int4());
+		drawTexturedModalRect(0, height - yDiff(cornerBL), cornerBL.int1(), cornerBL.int2(), xDiff(cornerBL), yDiff(cornerBL));
 		
 		//draw bottom right corner
-		drawTexturedModalRect(width - cornerBR.int3(), height - cornerBR.int4(), cornerBR.int1(), cornerBR.int2(), cornerBR.int3(), cornerBR.int4());
+		drawTexturedModalRect(width - xDiff(cornerBR), height - yDiff(cornerBR), cornerBR.int1(), cornerBR.int2(), xDiff(cornerBR), yDiff(cornerBR));
 	}
 	
 	protected void drawBackgroundFromTexture(Tuple bg){
-		Tuple nullTuple = new Tuple(0,0,0,0);
 		drawBackgroundFromTextures(bg, nullTuple, nullTuple, nullTuple, nullTuple, nullTuple, nullTuple, nullTuple, nullTuple);
 	}
 	
 	protected void drawBackgroundFromTextures(Tuple bg, Tuple edgeTop, Tuple edgeRight, Tuple edgeBottom, Tuple edgeLeft, Tuple cornerTL, Tuple cornerTR, Tuple cornerBR, Tuple cornerBL){
 		
 		//height to render
-		int toDrawY = height - (edgeTop.int4() + edgeBottom.int4());
+		int toDrawY = height - (yDiff(edgeTop) + yDiff(edgeBottom));
 		//draw a horizontal row
 		while(toDrawY > 0){
 			//actual height being drawn this iteration
-			int drawHeight = toDrawY < bg.int4() ? toDrawY : bg.int4();
-			int toDrawX = width - (edgeLeft.int3() + edgeRight.int3());
+			int drawHeight = toDrawY < yDiff(bg) ? toDrawY : yDiff(bg);
+			int toDrawX = width - (xDiff(edgeLeft) + xDiff(edgeRight));
 			while(toDrawX > 0){
 				//actual width being drawn this iteration
-				int drawWidth = toDrawX < bg.int3() ? toDrawX : bg.int3();
-				drawTexturedModalRect(width - (toDrawX + edgeRight.int3()), height - (toDrawY + edgeBottom.int4()), bg.int1(), bg.int2(), drawWidth, drawHeight);
+				int drawWidth = toDrawX < xDiff(bg) ? toDrawX : xDiff(bg);
+				drawTexturedModalRect(width - (toDrawX + xDiff(edgeRight)), height - (toDrawY + yDiff(edgeBottom)), bg.int1(), bg.int2(), drawWidth, drawHeight);
 				toDrawX -= drawWidth;
 			}
 			toDrawY -= drawHeight; 
 		}
-		drawBorderFromTextures(edgeTop, edgeRight, edgeBottom, edgeLeft, cornerTL, cornerTR, cornerBL, cornerBR);
+		drawBorderFromTextures(edgeTop, edgeRight, edgeBottom, edgeLeft, cornerTL, cornerTR, cornerBR, cornerBL);
 	}
 	
 	protected void drawBackgroundFromTextures(Tuple bg, Tuple edgeTop, Tuple edgeRight, Tuple edgeBottom, Tuple edgeLeft){
-		Tuple nullTuple = new Tuple(0, 0, 0, 0);
 		drawBackgroundFromTextures(bg, edgeTop, edgeRight, edgeBottom, edgeLeft, nullTuple, nullTuple, nullTuple, nullTuple);
+	}
+	
+	protected void drawBackgroundFromTextures(ITexturedBackground texture){
+		drawBackgroundFromTextures(texture.background(), texture.edgeTop(), texture.edgeRight(), texture.edgeBottom(), texture.edgeLeft(), texture.cornerTL(), texture.cornerTR(), texture.cornerBR(), texture.cornerBL());
+	}
+	
+	protected void drawStatefulBackgroundFromTextures(IStateFulBackground<ElementState> bg, ElementState state){
+		drawBackgroundFromTextures(bg.backgroundForState(state));
+	}
+	
+	protected void drawStatefulBackgroundFromTextures(IStateFulBackground<ElementState> bg){
+		ElementState state = isEnabled() ? isLeftClicked() ? ElementState.ACTIVATED : isHovering() ? ElementState.HOVERING : ElementState.NORMAL : ElementState.DISABLED;
+		drawStatefulBackgroundFromTextures(bg, state);
+	}
+	
+	protected void drawTexture(ITexture texture, int x, int y){
+		drawTexturedModalRect(x, y, texture.getTexture().int1(), texture.getTexture().int2(), xDiff(texture.getTexture()), yDiff(texture.getTexture()));
+	}
+	
+	protected void drawTextureCentered(ITexture texture){
+		drawTexture(texture, (width - xDiff(texture.getTexture())) / 2, (height - yDiff(texture.getTexture()) / 2));
 	}
 	
 	
@@ -394,5 +429,17 @@ public abstract class Element extends Gui implements IProcessData{
 			out.writeInt(width);
 			out.writeInt(height);
 		}
+	}
+	
+	public FontRenderer getFontRenderer() {
+		return fontRenderer;
+	}
+	
+	public Minecraft getMinecraft() {
+		return mc;
+	}
+	
+	public ResourceLocation getTextures() {
+		return textures;
 	}
 }

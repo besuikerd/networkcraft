@@ -79,6 +79,10 @@ public class ElementContainer extends Element{
 	
 	@Override
 	public void draw(ElementContainer parent, int mouseX, int mouseY, ElementContainer root) {
+		if(root == null){ //init as root if no root exists
+			root = this;
+		}
+		
 		super.draw(parent, mouseX, mouseY, root);
 		
 		//render last element to first element
@@ -97,6 +101,12 @@ public class ElementContainer extends Element{
 	
 	@Override
 	public void dimension(ElementContainer parent, ElementContainer root) {
+		if(root == null){ //init as root if no root exists
+			root = this;
+		}
+		
+		
+		
 		layout.init(this, root);
 		
 		//dimension elements
@@ -165,7 +175,6 @@ public class ElementContainer extends Element{
 				
 				
 				if(MathUtils.inRange2D(x, y, e.absX(), e.absX() + e.width - 1, e.absY(), e.absY() + e.height - 1)){ //element is within range
-
 					if(lastClicked == null){
 						//check if buttons are pressed
 						for(int buttonFlag : Element.BUTTONS){
@@ -233,14 +242,17 @@ public class ElementContainer extends Element{
 	@Override
 	protected boolean onMove(ElementContainer parent, int x, int y, int which) {
 		super.onMove(parent, x, y, which);
-		/*
-		if(!movementConsumedByChild){
-			this.x = x;
-			this.y = y;
-			return true;
-		}
-		*/
 		return false;
+	}
+	
+	@Override
+	public void onScrolled(ElementContainer parent, int x, int y, int amount) {
+		super.onScrolled(parent, x, y, amount);
+		for(Element e : elements){
+			if(MathUtils.inRange2D(x, y, e.absX(), e.absX() + e.width - 1, e.absY(), e.absY() + e.height - 1)){ //element is within range
+				e.onScrolled(parent, x - e.absX(), y - e.absY(), amount);
+			}
+		}
 	}
 	
 	public int getPaddingTop() {

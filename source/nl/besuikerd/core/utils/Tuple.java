@@ -8,6 +8,9 @@ package nl.besuikerd.core.utils;
  * 
  */
 public class Tuple {
+	
+	
+	
 	private Object[] elements;
 
 	public Tuple(Object... elements) {
