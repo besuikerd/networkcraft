@@ -28,24 +28,28 @@ public class DefaultLayout implements Layout{
 	public boolean layout(ElementContainer container, Element e, int index, ElementContainer root) {
 		//keep element within container bounds and apply padding
 		
-		//left bound crossed
-		if(e.getX() < container.getPaddingLeft()){
-			e.setX(container.getPaddingLeft());
+		if(container.getWidthDimension() != LayoutDimension.WRAP_CONTENT){
+			//left bound crossed
+			if(e.getX() < container.getPaddingLeft()){
+				e.setX(container.getPaddingLeft());
+			}
+			
+			//right bound crossed
+			if(e.getX() + e.getWidth() + container.getPaddingRight() > container.getWidth()){
+				e.setX(container.getWidth() - (e.getWidth() + container.getPaddingRight()));
+			}
 		}
 		
-		//top bound crossed
-		if(e.getY() < container.getPaddingTop()){
-			e.setY(container.getPaddingTop());
-		}
-		
-		//right bound crossed
-		if(e.getX() + e.getWidth() + container.getPaddingRight() > container.getWidth()){
-			e.setX(container.getWidth() - (e.getWidth() + container.getPaddingRight()));
-		}
-		
-		//left bound crossed
-		if(e.getY() + e.getHeight() + container.getPaddingBottom() > container.getHeight()){
-			e.setY(container.getHeight() - (e.getHeight() + container.getPaddingBottom()));
+		if(container.getHeightDimension() != LayoutDimension.WRAP_CONTENT){
+			//top bound crossed
+			if(e.getY() < container.getPaddingTop()){
+				e.setY(container.getPaddingTop());
+			}
+			
+			//bottom bound crossed
+			if(e.getY() + e.getHeight() + container.getPaddingBottom() > container.getHeight()){
+				e.setY(container.getHeight() - (e.getHeight() + container.getPaddingBottom()));
+			}
 		}
 		
 		if(e.getX() + e.getWidth() > maxWidth){

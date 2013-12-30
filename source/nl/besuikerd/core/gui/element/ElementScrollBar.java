@@ -110,7 +110,7 @@ public class ElementScrollBar extends ElementContainer {
 	public void setProgress(double progress){
 		double old = progress;
 		this.progress = progress > 1 ? 1 : progress < 0 ? 0 : progress;
-		onProgressChange(old, progress);
+		onProgressChange(old, this.progress);
 	}
 	
 	public void onProgressChange(double old, double progress){
@@ -119,7 +119,6 @@ public class ElementScrollBar extends ElementContainer {
 	
 	@Override
 	public void onScrolled(ElementContainer parent, int x, int y, int amount) {
-		BLogger.debug("scroll event: %d", amount);
 		setProgress(progress + (-0.1 * (amount / 120)));
 	}
 }

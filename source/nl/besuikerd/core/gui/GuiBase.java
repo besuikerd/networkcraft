@@ -70,7 +70,7 @@ public class GuiBase extends GuiContainer{
         int y = this.height - Mouse.getEventY() * this.height / this.mc.displayHeight - 1;
         
         //delegate mouse input to root container
-        root.handleMouseInput(null, x, y);
+        root.handleMouseInput(null, null, x, y);
         
 
         int wheel = 0;

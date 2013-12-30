@@ -182,7 +182,7 @@ public abstract class Element extends Gui implements IProcessData{
 	 * callback for custom mouse input handling. is called even when the mouse if not in range of the Element
 	 * @return if the Element should consume the mouse event
 	 */
-	protected boolean handleMouseInput(ElementContainer parent, int x, int y){
+	protected boolean handleMouseInput(ElementContainer parent, ElementContainer root, int x, int y){
 		return false;
 	}
 	
@@ -236,7 +236,7 @@ public abstract class Element extends Gui implements IProcessData{
 	}
 	
 	protected boolean inRange(int x, int y){
-		return MathUtils.inRange2D(x, y, this.x, this.x + this.width, this.y, this.y + this.height);
+		return MathUtils.inRange2D(x, y, absX(), absX() + width, absY(), absY() + height);
 	}
 	
 	public void setWidth(int width) {

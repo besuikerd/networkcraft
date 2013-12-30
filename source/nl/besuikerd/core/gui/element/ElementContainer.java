@@ -141,16 +141,14 @@ public class ElementContainer extends Element{
 		
 		super.dimension(parent, root);
 	}
-
-	public void handleMouseInput(){
-		int x = Mouse.getEventX() * this.width / this.mc.displayWidth;
-        int y = this.height - Mouse.getEventY() * this.height / this.mc.displayHeight - 1;
-        handleMouseInput(this, x, y);
-	}
 	
 	@Override
-	public boolean handleMouseInput(ElementContainer parent, int x, int y) {
-		super.handleMouseInput(this, x, y);
+	public boolean handleMouseInput(ElementContainer parent, ElementContainer root, int x, int y) {
+		if(root == null){
+			root = this;
+		}
+		
+		super.handleMouseInput(this, root, x, y);
 		movementConsumedByChild = false;
 		
 		//process last clicked Element first
@@ -160,7 +158,7 @@ public class ElementContainer extends Element{
 			int moveY = y - (absY() + lastOffsetY);
 			movementConsumedByChild = lastClicked.onMove(this, Math.min(Math.max(0, moveX), width - lastClicked.width), Math.min(Math.max(0, moveY), height - lastClicked.height), lastButtonPressed);
 			
-			if(lastClicked.handleMouseInput(this, x, y)){
+			if(lastClicked.handleMouseInput(this, root, x, y)){
 				return true;
 			}
 		}
@@ -169,12 +167,12 @@ public class ElementContainer extends Element{
 		for(int i = 0 ; i < elements.size() ; i++){
 			Element e = elements.get(i);
 
-			if(!e.equals(lastClicked) && e.handleMouseInput(this, x, y)){ //skip lastClicked Element. If child element consumes mouse input, return
+			if(!e.equals(lastClicked) && e.handleMouseInput(this, root, x, y)){ //skip lastClicked Element. If child element consumes mouse input, return
 				return true;
 			} else{
 				
 				
-				if(MathUtils.inRange2D(x, y, e.absX(), e.absX() + e.width - 1, e.absY(), e.absY() + e.height - 1)){ //element is within range
+				if(root.inRange(x, y) && MathUtils.inRange2D(x, y, e.absX(), e.absX() + e.width - 1, e.absY(), e.absY() + e.height - 1)){ //element is within range
 					if(lastClicked == null){
 						//check if buttons are pressed
 						for(int buttonFlag : Element.BUTTONS){

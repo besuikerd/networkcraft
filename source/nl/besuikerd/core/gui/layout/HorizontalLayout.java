@@ -9,7 +9,7 @@ import nl.besuikerd.core.BLogger;
 import nl.besuikerd.core.gui.element.Element;
 import nl.besuikerd.core.gui.element.ElementContainer;
 
-public class HoritzontalLayout implements Layout{
+public class HorizontalLayout implements Layout{
 
 	private int xOffset;
 	private int yOffset;
@@ -25,22 +25,22 @@ public class HoritzontalLayout implements Layout{
 	
 	private boolean init;
 	
-	public HoritzontalLayout(int marginX, int marginY) {
+	public HorizontalLayout(int marginX, int marginY) {
 		this.marginX = marginX;
 		this.marginY = marginY;
 		maxHeight = 0;
 	}
 	
-	public HoritzontalLayout(){
+	public HorizontalLayout(){
 		this(0, 0);
 	}
 	
-	public HoritzontalLayout marginX(int x){
+	public HorizontalLayout marginX(int x){
 		this.marginX = x;
 		return this;
 	}
 	
-	public HoritzontalLayout marginY(int y){
+	public HorizontalLayout marginY(int y){
 		this.marginY = y;
 		return this;
 	}
