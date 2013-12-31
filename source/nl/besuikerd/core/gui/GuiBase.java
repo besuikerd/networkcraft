@@ -54,13 +54,23 @@ public class GuiBase extends GuiContainer{
 	public void init(){}
 	
 	@Override
-	protected void keyTyped(char par1, int code) {
-		super.keyTyped(par1, code);
-		
-		if(code == mc.gameSettings.keyBindInventory.keyCode){
-			mc.thePlayer.closeScreen();
+	public void handleKeyboardInput() {
+		root.handleKeyboardInput();
+		super.handleKeyboardInput();
+	}
+	
+	@Override
+	protected void keyTyped(char key, int code) {
+		if(!root.keyTyped(key, code)){
+			super.keyTyped(key, code);
+			
+			if(code == mc.gameSettings.keyBindInventory.keyCode){
+				mc.thePlayer.closeScreen();
+			}
 		}
 	}
+	
+	
 	
 	@Override
 	public void handleMouseInput() {

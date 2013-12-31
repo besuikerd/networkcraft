@@ -63,7 +63,6 @@ public class ElementScrollBar extends ElementContainer {
 	private abstract class ElementScrollerButton extends ElementButton {
 
 		public static final long THRESHOLD_SCROLLBUTTON_PRESSED = 150l;
-		private boolean isPressed = false;
 		private long oldTime;
 
 		public ElementScrollerButton(int width, int i, StateFulBackground solidButton, ElementStylerTexture elementStylerTexture) {
@@ -73,8 +72,8 @@ public class ElementScrollBar extends ElementContainer {
 		@Override
 		protected boolean onPressed(ElementContainer parent, int x, int y, int which) {
 			changeProgress();
-			this.oldTime = System.currentTimeMillis() + THRESHOLD_SCROLLBUTTON_PRESSED;
-			return true;
+			this.oldTime = System.currentTimeMillis() + 2*THRESHOLD_SCROLLBUTTON_PRESSED;
+			return false;
 		}
 
 		abstract void changeProgress();
@@ -87,7 +86,6 @@ public class ElementScrollBar extends ElementContainer {
 			}
 			super.draw(parent, mouseX, mouseY, root);
 		}
-
 	}
 
 	private class ElementScrollerContainer extends ElementStyledContainer {
@@ -101,7 +99,6 @@ public class ElementScrollBar extends ElementContainer {
 		protected boolean onPressed(ElementContainer parent, int x, int y, int which) {
 			if (self.isEnabled() && !MathUtils.inRange2D(x, y, scroller.x, scroller.x + scroller.width, scroller.y, scroller.y + scroller.height)) { // only do this when scroller isn't in range
 				setProgress((double) (y - scroller.height / 2) / (height - scroller.height));
-
 			}
 			return false;
 		}

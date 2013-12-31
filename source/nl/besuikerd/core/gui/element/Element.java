@@ -138,6 +138,22 @@ public abstract class Element extends Gui implements IProcessData{
 	}
 	
 	/**
+	 * callback when a key is typed while in the gui
+	 * @return should return true if key is consumed
+	 */
+	protected boolean keyTyped(char key, int code){
+		return false;
+	}
+
+	/**
+	 * callback for custom keyboard input handling
+	 * @return should return true if key should be consumed.
+	 */
+	public boolean handleKeyboardInput() {
+		return false;
+	}
+	
+	/**
 	 * callback when the element is clicked on
 	 */
 	protected boolean onPressed(ElementContainer parent, int x, int y, int which){
@@ -222,6 +238,10 @@ public abstract class Element extends Gui implements IProcessData{
 	protected Element toggle(int s, boolean on){
 		this.state = on ? state | s : ((Integer.MAX_VALUE - s) & state);
 		return this;
+	}
+	
+	protected Element toggle(int s){
+		return toggle(s, !is(s));
 	}
 	
 	protected Element toggleOff(int s){
