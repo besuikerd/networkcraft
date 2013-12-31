@@ -3,6 +3,7 @@ package nl.besuikerd.networkcraft.tileentity;
 import nl.besuikerd.core.gui.GuiBase;
 import nl.besuikerd.core.gui.element.ElementButton;
 import nl.besuikerd.core.gui.element.ElementContainer;
+import nl.besuikerd.core.gui.element.ElementInputField;
 import nl.besuikerd.core.gui.element.ElementItemContainerArray;
 import nl.besuikerd.core.gui.element.ElementLabel;
 import nl.besuikerd.core.gui.element.ElementPlayerInventory;
@@ -31,6 +32,7 @@ public class TileEntityTestInventory extends TileEntityInventory {
 				.layout(new HoritzontalLayout(1,0))
 				.add(new ElementContainer()
 					.layout(new VerticalLayout())
+					.add(new ElementInputField(100))
 					.add(new ElementLabel("Super TestInventory!").align(Alignment.CENTER))
 					.add(new ElementItemContainerArray(9, inventorySlots.inventorySlots.subList(36, inventorySlots.inventorySlots.size())).paddingBottom(5))
 					.add(new ElementPlayerInventory(inventorySlots.inventorySlots))

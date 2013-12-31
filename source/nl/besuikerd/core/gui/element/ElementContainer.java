@@ -10,6 +10,7 @@ import nl.besuikerd.core.gui.layout.Layout;
 import nl.besuikerd.core.gui.layout.LayoutDimension;
 import nl.besuikerd.core.utils.MathUtils;
 
+import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 
 import com.google.common.base.Function;
@@ -141,6 +142,27 @@ public class ElementContainer extends Element{
 		
 		super.dimension(parent, root);
 	}
+	
+	@Override
+	public boolean keyTyped(char key, int code) {
+		for(int i = 0 ; i < elements.size() ; i++){
+			Element e = elements.get(i);
+			if(e.keyTyped(key, code)){
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	public boolean handleKeyboardInput(){
+		for(int i = 0 ; i < elements.size() ; i++){
+			Element e = elements.get(i);
+			if(e.handleKeyboardInput()){
+				return true;
+			}
+		}
+		return false;
+	}
 
 	public void handleMouseInput(){
 		int x = Mouse.getEventX() * this.width / this.mc.displayWidth;
@@ -172,8 +194,6 @@ public class ElementContainer extends Element{
 			if(!e.equals(lastClicked) && e.handleMouseInput(this, x, y)){ //skip lastClicked Element. If child element consumes mouse input, return
 				return true;
 			} else{
-				
-				
 				if(MathUtils.inRange2D(x, y, e.absX(), e.absX() + e.width - 1, e.absY(), e.absY() + e.height - 1)){ //element is within range
 					if(lastClicked == null){
 						//check if buttons are pressed
