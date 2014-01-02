@@ -11,6 +11,8 @@ import nl.besuikerd.core.inventory.TileEntityInventory;
 import nl.besuikerd.core.utils.INumbered;
 import nl.besuikerd.core.utils.ReflectUtils;
 import cpw.mods.fml.common.network.IGuiHandler;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public class GuiHandlerBesu implements IGuiHandler{
 	public static final int HANDLER_LIMIT = 256;

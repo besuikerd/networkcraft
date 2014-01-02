@@ -2,10 +2,11 @@ package nl.besuikerd.core.gui.element;
 
 import java.util.Collection;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.inventory.Slot;
 import nl.besuikerd.core.gui.layout.HorizontalLayout;
 import nl.besuikerd.core.gui.layout.LayoutDimension;
-
 
 public class ElementItemContainerArray extends ElementContainer{
 	

@@ -15,6 +15,9 @@ import org.lwjgl.input.Mouse;
 
 import com.google.common.base.Function;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
 public class ElementContainer extends Element{
 	
 	
@@ -22,6 +25,9 @@ public class ElementContainer extends Element{
 	protected int paddingRight;
 	protected int paddingBottom;
 	protected int paddingLeft;
+	
+	//TODO typefocus variable for the root, should be made more generic maybe
+	protected Element typeFocus;
 	
 	//function that checks wheter or not a button is down or not
 	private static final Function<Integer, Boolean> functionIsButtonDown = new Function<Integer, Boolean>() {
@@ -87,7 +93,8 @@ public class ElementContainer extends Element{
 		super.draw(parent, mouseX, mouseY, root);
 		
 		//render last element to first element
-		for(int i = elements.size() - 1;  i >= 0 ; i--){
+//		for(int i = elements.size() - 1;  i >= 0 ; i--){
+		for(int i = 0; i < elements.size(); i++){
 			Element e = elements.get(i);
 			
 			e.dx = absX();
@@ -101,12 +108,22 @@ public class ElementContainer extends Element{
 	}
 	
 	@Override
+	public void update(ElementContainer parent, ElementContainer root, int mouseX, int mouseY) {
+		if(root == null){
+			root = this;
+		}
+		
+		for(int i = 0; i < elements.size(); i++){
+			Element e = elements.get(i);
+			e.update(this, root, mouseX, mouseY);
+		}
+	}
+	
+	@Override
 	public void dimension(ElementContainer parent, ElementContainer root) {
 		if(root == null){ //init as root if no root exists
 			root = this;
 		}
-		
-		
 		
 		layout.init(this, root);
 		
@@ -144,10 +161,13 @@ public class ElementContainer extends Element{
 	}
 	
 	@Override
-	public boolean keyTyped(char key, int code) {
+	public boolean keyTyped(char key, int code, ElementContainer root) {
+		if(root == null){
+			root = this;
+		}
 		for(int i = 0 ; i < elements.size() ; i++){
 			Element e = elements.get(i);
-			if(e.keyTyped(key, code)){
+			if(e.keyTyped(key, code, root)){
 				return true;
 			}
 		}
@@ -184,8 +204,7 @@ public class ElementContainer extends Element{
 				return true;
 			}
 		}
-		
-		
+
 		for(int i = 0 ; i < elements.size() ; i++){
 			Element e = elements.get(i);
 
@@ -287,6 +306,14 @@ public class ElementContainer extends Element{
 	
 	public int getPaddingLeft() {
 		return paddingLeft;
+	}
+	
+	public Element getTypeFocus(){
+		return typeFocus;
+	}
+	
+	public void setTypeFocus(Element typeFocus){
+		this.typeFocus = typeFocus;
 	}
 	
 	public ElementContainer padding(int padding){

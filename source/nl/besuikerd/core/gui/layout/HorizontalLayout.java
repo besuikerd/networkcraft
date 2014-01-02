@@ -5,6 +5,8 @@ import java.util.Stack;
 
 import javax.swing.plaf.basic.BasicInternalFrameTitlePane.MaximizeAction;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import nl.besuikerd.core.BLogger;
 import nl.besuikerd.core.gui.element.Element;
 import nl.besuikerd.core.gui.element.ElementContainer;

@@ -6,6 +6,8 @@ import nl.besuikerd.core.utils.MathUtils;
 
 import org.lwjgl.opengl.GL11;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import static org.lwjgl.opengl.GL11.*;
 
 public class ElementViewport extends Element{
@@ -37,7 +39,22 @@ public class ElementViewport extends Element{
 		this.root.width = container.width;
 		this.root.dx = absX();
 		this.root.dy = absY();
-		BLogger.debug("width: %d", this.width);
+//		BLogger.debug("width: %d", this.width);
+	}
+	
+	@Override
+	protected boolean keyTyped(char key, int code, ElementContainer root) {
+		return container.keyTyped(key, code, root);
+	}
+	
+	@Override
+	public void update(ElementContainer parent, ElementContainer root, int mouseX, int mouseY) {
+		container.update(parent, root, mouseX, mouseY);
+	}
+	
+	@Override
+	public boolean handleKeyboardInput() {
+		return container.handleKeyboardInput();
 	}
 	
 	@Override

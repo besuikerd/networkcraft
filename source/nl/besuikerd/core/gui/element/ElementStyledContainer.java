@@ -2,6 +2,8 @@ package nl.besuikerd.core.gui.element;
 
 import org.lwjgl.opengl.GL11;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import nl.besuikerd.core.gui.layout.LayoutDimension;
 import nl.besuikerd.core.gui.texture.ITexturedBackground;
 import nl.besuikerd.core.gui.texture.TexturedBackground;

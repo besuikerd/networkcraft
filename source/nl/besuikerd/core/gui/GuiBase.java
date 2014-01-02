@@ -18,6 +18,9 @@ import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.GL11;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
 public class GuiBase extends GuiContainer{
 	
 	protected TileEntityInventory inventory;
@@ -61,7 +64,7 @@ public class GuiBase extends GuiContainer{
 	
 	@Override
 	protected void keyTyped(char key, int code) {
-		if(!root.keyTyped(key, code)){
+		if(!root.keyTyped(key, code, null)){
 			super.keyTyped(key, code);
 			
 			if(code == mc.gameSettings.keyBindInventory.keyCode){
@@ -101,6 +104,9 @@ public class GuiBase extends GuiContainer{
 
 	@Override
 	protected void drawGuiContainerBackgroundLayer(float f, int mouseX, int mouseY) {
+		//update all elements bevore rendering
+		root.update(null, null, mouseX, mouseY);
+		
 		//dimension all elements in the root container
 		root.dimension(null, null);
 		

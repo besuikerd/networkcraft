@@ -2,6 +2,8 @@ package nl.besuikerd.core.gui.element;
 
 import javax.swing.GroupLayout.Alignment;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import nl.besuikerd.core.BLogger;
 import nl.besuikerd.core.gui.layout.HorizontalLayout;
 import nl.besuikerd.core.gui.layout.LayoutDimension;

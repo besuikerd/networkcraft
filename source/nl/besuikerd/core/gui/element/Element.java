@@ -27,6 +27,9 @@ import org.lwjgl.opengl.GL11;
 import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteArrayDataOutput;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
 public abstract class Element extends Gui implements IProcessData{
 	
 	protected ResourceLocation textures = new ResourceLocation("networkcraft", "textures/gui/elements.png");
@@ -116,6 +119,12 @@ public abstract class Element extends Gui implements IProcessData{
 	};
 	
 	/**
+	 * callback before dimentionizing the Element. Enables changing element's properties before rendering them.
+	 */
+	public void update(ElementContainer parent, ElementContainer root, int mouseX, int mouseY){
+	}
+	
+	/**
 	 * callback before drawing the Element. Enables the repositioning of elements before actually drawing them
 	 */
 	public void dimension(ElementContainer parent, ElementContainer root){
@@ -141,7 +150,7 @@ public abstract class Element extends Gui implements IProcessData{
 	 * callback when a key is typed while in the gui
 	 * @return should return true if key is consumed
 	 */
-	protected boolean keyTyped(char key, int code){
+	protected boolean keyTyped(char key, int code, ElementContainer root){
 		return false;
 	}
 

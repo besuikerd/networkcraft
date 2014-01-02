@@ -1,5 +1,7 @@
 package nl.besuikerd.core.gui.element;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.inventory.Slot;
 import nl.besuikerd.core.BLogger;
 import nl.besuikerd.core.utils.Tuple;
