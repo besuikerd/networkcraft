@@ -17,10 +17,9 @@ public class ElementProgressBar extends ElementStyledContainer{
 	}
 
 	@Override
-	public void draw(ElementContainer parent, int mouseX, int mouseY, ElementContainer root) {
-		super.draw(parent, mouseX, mouseY, root);
+	public void draw(ElementRootContainer root, int mouseX, int mouseY) {
+		super.draw(root, mouseX, mouseY);
 		drawRect(absX() + 2, absY() + 2, absX()+(int)((width-4)*progress), absY()+height-2, color);
-				
 	}
 	
 	public void addProgress(Double d){

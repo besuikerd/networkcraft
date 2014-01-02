@@ -5,12 +5,12 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import nl.besuikerd.core.gui.element.ElementContainer;
-import nl.besuikerd.core.gui.element.ElementStyledContainer;
-import nl.besuikerd.core.gui.layout.LayoutDimension;
+import nl.besuikerd.core.gui.element.ElementRootContainer;
 import nl.besuikerd.core.gui.layout.VerticalLayout;
 import nl.besuikerd.core.inventory.ContainerBesu;
 import nl.besuikerd.core.inventory.TileEntityInventory;
 
+import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 
@@ -19,14 +19,15 @@ public class GuiBase extends GuiContainer{
 	protected TileEntityInventory inventory;
 	protected EntityPlayer player;
 	protected World world;
-	protected ElementContainer root;
+	protected ElementRootContainer root;
 	
 	public GuiBase(ContainerBesu container) {
 		super(container);
-		root = new ElementStyledContainer(LayoutDimension.WRAP_CONTENT, LayoutDimension.WRAP_CONTENT).padding(5);
-		root.layout(new VerticalLayout());
+		root = new ElementRootContainer();
+		root.layout(new VerticalLayout())
+		.padding(5);
 		init();
-		root.dimension(null, null);
+		root.dimension(root);
 		xSize = root.getWidth();
 		ySize = root.getHeight();
 	}
@@ -50,23 +51,9 @@ public class GuiBase extends GuiContainer{
 	public void init(){}
 	
 	@Override
-	public void handleKeyboardInput() {
-		root.handleKeyboardInput();
-		super.handleKeyboardInput();
-	}
-	
-	@Override
 	protected void keyTyped(char key, int code) {
-		if(!root.keyTyped(key, code, null)){
-			super.keyTyped(key, code);
-			
-			if(code == mc.gameSettings.keyBindInventory.keyCode){
-				mc.thePlayer.closeScreen();
-			}
-		}
+		super.keyTyped(key, code);
 	}
-	
-	
 	
 	@Override
 	public void handleMouseInput() {
@@ -76,15 +63,15 @@ public class GuiBase extends GuiContainer{
         int y = this.height - Mouse.getEventY() * this.height / this.mc.displayHeight - 1;
         
         //delegate mouse input to root container
-        root.handleMouseInput(null, null, x, y);
-        
-
-        int wheel = 0;
-		if((wheel = Mouse.getDWheel()) != 0){
-	        //delegate scroll input to root container
-			root.onScrolled(null, x, y, wheel);
-		}
+        root.handleMouseInput(root, x, y);
     }
+	
+	@Override
+	public void handleKeyboardInput() {
+		if(!root.handleKeyboardInput(root) || Keyboard.getEventKey() == Keyboard.KEY_ESCAPE){ //if the root element consumes input, do not let others handle keyboard input
+			super.handleKeyboardInput();
+		}
+	}
 	
 	public ElementContainer getRoot() {
 		return root;
@@ -97,11 +84,11 @@ public class GuiBase extends GuiContainer{
 
 	@Override
 	protected void drawGuiContainerBackgroundLayer(float f, int mouseX, int mouseY) {
-		//update all elements bevore rendering
-		root.update(null, null, mouseX, mouseY);
+		//update all elements before rendering
+		root.update(root);
 		
 		//dimension all elements in the root container
-		root.dimension(null, null);
+		root.dimension(root);
 		
 		//recalculate size of the root container
 		xSize = root.getWidth();
@@ -114,6 +101,6 @@ public class GuiBase extends GuiContainer{
 		mc.getTextureManager().bindTexture(root.getTextures());//TODO move this to a proper location
 		GL11.glColor4f(1f, 1f, 1f, 1f);
 		//draw root container
-		root.draw(null, mouseX, mouseY, root);
+		root.draw(root, mouseX, mouseY);
 	}
 }

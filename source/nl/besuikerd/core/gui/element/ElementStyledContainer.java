@@ -38,11 +38,15 @@ public class ElementStyledContainer extends ElementContainer{
 	public ElementStyledContainer(LayoutDimension width, LayoutDimension height) {
 		this(width, height, TexturedBackground.STYLED_CONTAINER);
 	}
+	
+	public ElementStyledContainer() {
+		this(LayoutDimension.WRAP_CONTENT, LayoutDimension.WRAP_CONTENT);
+	}
 
 	@Override
-	public void draw(ElementContainer parent, int mouseX, int mouseY, ElementContainer root) {
+	public void draw(ElementRootContainer root, int mouseX, int mouseY) {
 		drawBackgroundFromTextures(background);
-		super.draw(parent, mouseX, mouseY, root);
+		super.draw(root, mouseX, mouseY);
 	}
 	
 }

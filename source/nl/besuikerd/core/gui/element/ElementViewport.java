@@ -16,67 +16,75 @@ import static org.lwjgl.opengl.GL11.glStencilFunc;
 import static org.lwjgl.opengl.GL11.glStencilMask;
 import static org.lwjgl.opengl.GL11.glStencilOp;
 
-public class ElementViewport extends Element{
+/**
+ * Element that can contain a container. the container is only visible within
+ * the bounds of the viewport. the container can be larger than the viewport.
+ * the viewport acts as a root for the container within the viewport, to make
+ * sure mouse events are handled properly
+ * 
+ * @author Besuikerd
+ * 
+ */
+public class ElementViewport extends Element {
 
+	/**
+	 * container that is visible within this viewport
+	 */
 	protected ElementContainer container;
-	protected ElementContainer root;
 	
+	/**
+	 * root delegate
+	 */
+	protected ElementRootContainer root;
+
+	/**
+	 * x-offset for container within viewport; can also be negative
+	 */
 	protected int xOffset;
+
+	/**
+	 * y-offset for container within viewport; can also be negative
+	 */
 	protected int yOffset;
-	
-	
+
 	public ElementViewport(int height, ElementContainer container) {
 		super(0, height);
-		root = new ElementContainer(0, height);
+		root = new ElementRootContainer(0, height);
 		root.add(container);
 		this.container = container;
 	}
-	
+
 	@Override
-	public void dimension(ElementContainer parent, ElementContainer root) {
-		super.dimension(parent, root);
+	public void dimension(ElementRootContainer root) {
+		super.dimension(root);
+		//move container to the correct spot within the viewport
 		container.dx = absX();
 		container.dy = absY();
 		container.x = xOffset;
 		container.y = yOffset;
-		
-		container.dimension(parent, root);
+
+		//layout container and fix dimensions
+		container.dimension(root);
 		this.width = container.width;
-		this.root.width = container.width;
-		this.root.dx = absX();
-		this.root.dy = absY();
-//		BLogger.debug("width: %d", this.width);
-	}
-	
-	@Override
-	protected boolean keyTyped(char key, int code, ElementContainer root) {
-		return container.keyTyped(key, code, root);
-	}
-	
-	@Override
-	public void update(ElementContainer parent, ElementContainer root, int mouseX, int mouseY) {
-		container.update(parent, root, mouseX, mouseY);
-	}
-	
-	@Override
-	public boolean handleKeyboardInput() {
-		return container.handleKeyboardInput();
-	}
-	
-	@Override
-	protected boolean handleMouseInput(ElementContainer parent, ElementContainer root, int x, int y) {
-		return container.handleMouseInput(parent, this.root, x, y);
-	}
-	
-	@Override
-	protected void onScrolled(ElementContainer parent, int x, int y, int amount) {
-		container.onScrolled(parent, x, y, amount);
+
+		//limit root delegate within bounds of the real root
+		this.root.width = Math.min(container.width, root.width - root.paddingLeft - root.paddingRight);
+		this.root.height = Math.min(height, root.height - root.paddingTop - root.paddingBottom);
+		this.root.dx = Math.max(absX(), root.absX() + root.paddingLeft);
+		this.root.dy = Math.max(absY(), root.absY() + root.paddingTop);
 	}
 
 	@Override
-	public void draw(ElementContainer parent, int mouseX, int mouseY, ElementContainer root) {
-		super.draw(parent, mouseX, mouseY, root);
-		
+	protected boolean handleMouseInput(ElementRootContainer root, int mouseX, int mouseY) {
+		super.handleMouseInput(root, mouseX, mouseY);
+		this.root.focusedElement = root.focusedElement; //copy focus from real root
+		this.root.scrollMovement = root.scrollMovement; //copy scroll movement from real root
+		return container.handleMouseInput(this.root, mouseX - xOffset, mouseY - yOffset);
+	}
+
+	@Override
+	public void draw(ElementRootContainer root, int mouseX, int mouseY) {
+		super.draw(root, mouseX, mouseY);
 		glEnable(GL_STENCIL_TEST);
 		glStencilFunc(GL_ALWAYS, 0x1, 0xff);
 		glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
@@ -85,12 +93,12 @@ public class ElementViewport extends Element{
 		glStencilMask(0xff); // draw to mask
 		glClear(GL_STENCIL_BUFFER_BIT); //clear stencil
 		glColor4f(1, 1, 1, 1);
-		drawRect(absX(), absY(), absX() + width, absY() + height, 0xffffffff); //draw square mask
+		drawRect(Math.max(absX(), root.absX()), Math.max(absY(), root.absY()), Math.min(absX() + width, root.absX() + root.width), Math.min(absY() + height, root.absY() + root.height), 0xffffffff); //draw square mask
 		glStencilMask(0x0); //don't draw to mask
 		glStencilFunc(GL_EQUAL, 0x1, 0xff);
 		glColorMask(true, true, true, true); //restore color mask
 		glDepthMask(true); //restore depth mask
-		container.draw(parent, mouseX, mouseY, root);
+		container.draw(this.root, mouseX, mouseY);
 		glDisable(GL_STENCIL_TEST);
 	}
 }

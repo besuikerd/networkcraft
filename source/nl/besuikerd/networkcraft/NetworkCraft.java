@@ -9,10 +9,12 @@ import nl.besuikerd.core.packet.PacketHandlerBesu;
 import nl.besuikerd.networkcraft.block.BlockCable;
 import nl.besuikerd.networkcraft.block.BlockEndPoint;
 import nl.besuikerd.networkcraft.block.BlockMasterNode;
+import nl.besuikerd.networkcraft.block.BlockTestGui;
 import nl.besuikerd.networkcraft.block.BlockTestInventory;
 import nl.besuikerd.networkcraft.graph.TileEntityEndPoint;
 import nl.besuikerd.networkcraft.graph.TileEntityMasterNode;
 import nl.besuikerd.networkcraft.tileentity.TileEntityCable;
+import nl.besuikerd.networkcraft.tileentity.TileEntityTestGui;
 import nl.besuikerd.networkcraft.tileentity.TileEntityTestInventory;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
@@ -42,6 +44,7 @@ public class NetworkCraft{
 	public static Block blockEndPoint;
 	
 	public static Block blockInventory;
+	public static Block blockGui;
 	
 	
 	@Instance()
@@ -67,6 +70,7 @@ public class NetworkCraft{
 		GameRegistry.registerBlock(blockMasterNode, blockMasterNode.getUnlocalizedName());
 		GameRegistry.registerBlock(blockInventory, blockInventory.getUnlocalizedName());
 		GameRegistry.registerBlock(blockEndPoint, blockEndPoint.getUnlocalizedName());
+		GameRegistry.registerBlock(blockGui, blockGui.getUnlocalizedName());
 		
 		//register items
 		
@@ -75,7 +79,7 @@ public class NetworkCraft{
 		GameRegistry.registerTileEntity(TileEntityMasterNode.class, "masterNode");
 		GameRegistry.registerTileEntity(TileEntityTestInventory.class, "testinventory");
 		GameRegistry.registerTileEntity(TileEntityEndPoint.class, "tileEntityEndPoint");
-		
+		GameRegistry.registerTileEntity(TileEntityTestGui.class, "testGui");
 
 		
 	}
@@ -100,6 +104,6 @@ public class NetworkCraft{
 		blockEndPoint = new BlockEndPoint(NCConfig.block_endPoint);
 		
 		blockInventory = new BlockTestInventory(NCConfig.block_inventory);
-		
+		blockGui = new BlockTestGui(NCConfig.block_gui);
 	}
 }
