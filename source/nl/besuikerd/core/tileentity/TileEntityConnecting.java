@@ -2,19 +2,13 @@ package nl.besuikerd.core.tileentity;
 
 import java.util.Arrays;
 
-import com.google.common.base.Function;
-
-import cpw.mods.fml.common.FMLCommonHandler;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.INetworkManager;
 import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.Packet132TileEntityData;
 import net.minecraft.tileentity.TileEntity;
 import nl.besuikerd.core.BLogger;
-import nl.besuikerd.core.utils.FunctionalUtils;
-import nl.besuikerd.networkcraft.protocols.DataLink;
-import nl.besuikerd.networkcraft.protocols.Physical;
-import nl.besuikerd.networkcraft.protocols.osiLayerDataModel;
+import cpw.mods.fml.common.FMLCommonHandler;
 
 public abstract class TileEntityConnecting extends TileEntityBesu{
 	public static final String TAG_CONNECTED_SIDES = "SIDES";

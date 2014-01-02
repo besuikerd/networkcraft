@@ -4,19 +4,14 @@ import java.awt.Dimension;
 import java.util.ArrayList;
 import java.util.List;
 
-import nl.besuikerd.core.BLogger;
 import nl.besuikerd.core.gui.layout.DefaultLayout;
 import nl.besuikerd.core.gui.layout.Layout;
 import nl.besuikerd.core.gui.layout.LayoutDimension;
 import nl.besuikerd.core.utils.MathUtils;
 
-import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 
 import com.google.common.base.Function;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
 public class ElementContainer extends Element{
 	

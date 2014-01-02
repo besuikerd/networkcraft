@@ -8,9 +8,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
-import nl.besuikerd.core.BLogger;
 import nl.besuikerd.core.BlockSide;
-import nl.besuikerd.core.ServerLogger;
 import nl.besuikerd.core.tileentity.TileEntityBesu;
 import nl.besuikerd.core.utils.NBTUtils;
 

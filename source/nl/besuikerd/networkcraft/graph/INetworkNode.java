@@ -1,7 +1,5 @@
 package nl.besuikerd.networkcraft.graph;
 
-import java.util.List;
-
 import nl.besuikerd.core.BlockSide;
 
 public interface INetworkNode {

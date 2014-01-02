@@ -1,20 +1,13 @@
 package nl.besuikerd.networkcraft.graph;
 
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Map;
 import java.util.Set;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.profiler.Profiler;
 import net.minecraft.tileentity.TileEntity;
 import nl.besuikerd.core.BlockSide;
 import nl.besuikerd.core.ServerLogger;
 import nl.besuikerd.core.packet.IProcessData;
 import nl.besuikerd.core.utils.MathUtils;
-import nl.besuikerd.core.utils.collection.SafeConstrainedMap;
-import nl.besuikerd.core.utils.collection.SmallerThanMapConstraint;
 import nl.besuikerd.core.utils.profiling.BesuProfiler;
 
 import com.google.common.io.ByteArrayDataInput;

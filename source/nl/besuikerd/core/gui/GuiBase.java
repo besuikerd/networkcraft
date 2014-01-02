@@ -1,12 +1,9 @@
 package nl.besuikerd.core.gui;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
-import nl.besuikerd.core.BLogger;
 import nl.besuikerd.core.gui.element.ElementContainer;
 import nl.besuikerd.core.gui.element.ElementStyledContainer;
 import nl.besuikerd.core.gui.layout.LayoutDimension;
@@ -15,11 +12,7 @@ import nl.besuikerd.core.inventory.ContainerBesu;
 import nl.besuikerd.core.inventory.TileEntityInventory;
 
 import org.lwjgl.input.Mouse;
-import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.GL11;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
 public class GuiBase extends GuiContainer{
 	

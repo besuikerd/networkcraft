@@ -1,7 +1,5 @@
 package nl.besuikerd.networkcraft.tileentity;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import nl.besuikerd.core.gui.GuiBase;
 import nl.besuikerd.core.gui.element.ElementButton;
 import nl.besuikerd.core.gui.element.ElementContainer;
@@ -10,13 +8,9 @@ import nl.besuikerd.core.gui.element.ElementItemContainerArray;
 import nl.besuikerd.core.gui.element.ElementLabel;
 import nl.besuikerd.core.gui.element.ElementPlayerInventory;
 import nl.besuikerd.core.gui.element.ElementProgressBar;
-import nl.besuikerd.core.gui.element.ElementScrollBar;
 import nl.besuikerd.core.gui.element.ElementScrollContainer;
-import nl.besuikerd.core.gui.element.ElementStyledContainer;
-import nl.besuikerd.core.gui.element.ElementViewport;
 import nl.besuikerd.core.gui.layout.Alignment;
 import nl.besuikerd.core.gui.layout.HorizontalLayout;
-import nl.besuikerd.core.gui.layout.LayoutDimension;
 import nl.besuikerd.core.gui.layout.VerticalLayout;
 import nl.besuikerd.core.inventory.ContainerBesu;
 import nl.besuikerd.core.inventory.InventoryStackBesu;

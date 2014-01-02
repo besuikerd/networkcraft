@@ -1,13 +1,8 @@
 package nl.besuikerd.render;
 
-import java.util.Arrays;
-
-import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ResourceLocation;
 import nl.besuikerd.core.BlockSide;
-import nl.besuikerd.core.BLogger;
 import nl.besuikerd.networkcraft.tileentity.IConnectingSides;
 
 import org.lwjgl.opengl.GL11;

@@ -1,12 +1,10 @@
 package nl.besuikerd.networkcraft.tileentity;
 
-import cpw.mods.fml.relauncher.Side;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
-import nl.besuikerd.core.BLogger;
 import nl.besuikerd.core.BlockSide;
 import nl.besuikerd.core.utils.NBTUtils;
 import nl.besuikerd.networkcraft.graph.IMasterNode;

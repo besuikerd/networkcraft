@@ -1,16 +1,7 @@
 package nl.besuikerd.core.block;
 
-import java.util.Arrays;
-
 import net.minecraft.block.material.Material;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.IBlockAccess;
-import net.minecraft.world.World;
-import nl.besuikerd.core.BLogger;
-import nl.besuikerd.core.BlockSide;
-import nl.besuikerd.networkcraft.tileentity.IConnectingSides;
 
 public abstract class BlockConnecting extends BlockContainerBesu {
 	

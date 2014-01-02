@@ -1,11 +1,7 @@
 package nl.besuikerd.networkcraft.block;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockContainer;
-import net.minecraft.block.material.Material;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Icon;
-import net.minecraft.world.World;
 import nl.besuikerd.core.block.BlockContainerBesu;
 import nl.besuikerd.core.block.MaterialBesu;
 import nl.besuikerd.networkcraft.NCIconRegister;

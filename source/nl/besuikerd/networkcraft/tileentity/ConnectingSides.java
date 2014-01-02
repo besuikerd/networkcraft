@@ -1,16 +1,12 @@
 package nl.besuikerd.networkcraft.tileentity;
 
-import java.util.Arrays;
-
-import com.google.common.io.ByteArrayDataInput;
-import com.google.common.io.ByteArrayDataOutput;
-
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.world.World;
-import nl.besuikerd.core.BLogger;
 import nl.besuikerd.core.BlockSide;
 import nl.besuikerd.core.packet.IProcessData;
 import nl.besuikerd.core.utils.BitUtils;
+
+import com.google.common.io.ByteArrayDataInput;
+import com.google.common.io.ByteArrayDataOutput;
 
 public class ConnectingSides implements IConnectingSides, IProcessData{
 

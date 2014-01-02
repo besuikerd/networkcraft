@@ -1,10 +1,7 @@
 package nl.besuikerd.core.gui.element;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import nl.besuikerd.core.gui.texture.ElementState;
 import nl.besuikerd.core.gui.texture.IStateFulBackground;
-import nl.besuikerd.core.gui.texture.StateFulBackground;
 
 public class ElementStatefulBackground extends Element{
 

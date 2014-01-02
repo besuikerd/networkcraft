@@ -1,7 +1,5 @@
 package nl.besuikerd.core.gui.layout;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
 /**
  * Android style dimension calculation

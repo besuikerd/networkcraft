@@ -1,11 +1,7 @@
 package nl.besuikerd.core.gui.element;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-import nl.besuikerd.core.BLogger;
 import nl.besuikerd.core.gui.layout.VerticalLayout;
 import nl.besuikerd.core.gui.texture.ElementStylerTexture;
-import nl.besuikerd.core.gui.texture.IElementStyler;
 import nl.besuikerd.core.gui.texture.ITexturedBackground;
 import nl.besuikerd.core.gui.texture.StateFulBackground;
 import nl.besuikerd.core.gui.texture.Texture;

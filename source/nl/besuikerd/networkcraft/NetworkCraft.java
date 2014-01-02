@@ -3,10 +3,7 @@ package nl.besuikerd.networkcraft;
 import net.minecraft.block.Block;
 import net.minecraftforge.common.Configuration;
 import nl.besuikerd.core.BLogger;
-import nl.besuikerd.core.gui.GuiBase;
 import nl.besuikerd.core.gui.GuiHandlerBesu;
-import nl.besuikerd.core.gui.GuiId;
-import nl.besuikerd.core.inventory.ContainerBesuWithPlayerInventory;
 import nl.besuikerd.core.packet.PacketBesu;
 import nl.besuikerd.core.packet.PacketHandlerBesu;
 import nl.besuikerd.networkcraft.block.BlockCable;
@@ -25,10 +22,9 @@ import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.network.NetworkMod;
-import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.network.NetworkMod.SidedPacketHandler;
+import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
-import cpw.mods.fml.relauncher.Side;
 
 @Mod(modid=Reference.MOD_ID, name=Reference.MOD_NAME, version=Reference.MOD_VERSION)
 @NetworkMod(

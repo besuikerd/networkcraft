@@ -1,23 +1,11 @@
 package nl.besuikerd.core.gui.element;
 
-import java.awt.event.KeyEvent;
-import java.nio.charset.Charset;
-import java.util.Currency;
 import java.util.regex.Pattern;
 
-import javax.swing.ViewportLayout;
+import nl.besuikerd.core.gui.layout.HorizontalLayout;
+import nl.besuikerd.core.gui.texture.TexturedBackground;
 
 import org.lwjgl.input.Keyboard;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-import net.minecraft.client.gui.FontRenderer;
-import nl.besuikerd.core.BLogger;
-import nl.besuikerd.core.gui.layout.Alignment;
-import nl.besuikerd.core.gui.layout.HorizontalLayout;
-import nl.besuikerd.core.gui.layout.VerticalLayout;
-import nl.besuikerd.core.gui.texture.TexturedBackground;
-import nl.besuikerd.core.utils.MathUtils;
 
 public class ElementInputField extends ElementContainer {
 

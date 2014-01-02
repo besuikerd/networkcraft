@@ -4,7 +4,6 @@ import java.util.Map;
 import java.util.Set;
 
 import net.minecraft.tileentity.TileEntity;
-import nl.besuikerd.core.BlockSide;
 
 /**
  * wrapped around a TileEntity to simulate a reference to a masternode. Once one

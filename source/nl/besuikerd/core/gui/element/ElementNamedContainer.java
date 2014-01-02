@@ -1,9 +1,6 @@
 package nl.besuikerd.core.gui.element;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import nl.besuikerd.core.gui.layout.Alignment;
-import nl.besuikerd.core.gui.layout.LayoutDimension;
 
 public class ElementNamedContainer extends ElementContainer{
 

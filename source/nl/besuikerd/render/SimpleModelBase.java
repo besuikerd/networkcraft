@@ -1,13 +1,8 @@
 package nl.besuikerd.render;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.entity.Entity;
-import nl.besuikerd.core.BLogger;
 
 public class SimpleModelBase extends ModelBase{
 	

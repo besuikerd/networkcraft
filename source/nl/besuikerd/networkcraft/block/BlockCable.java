@@ -3,7 +3,6 @@ package nl.besuikerd.networkcraft.block;
 import java.util.List;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.material.Material;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -13,8 +12,6 @@ import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 import nl.besuikerd.core.BlockSide;
-import nl.besuikerd.core.BLogger;
-import nl.besuikerd.core.ClientLogger;
 import nl.besuikerd.core.ServerLogger;
 import nl.besuikerd.core.block.BlockConnecting;
 import nl.besuikerd.core.block.MaterialBesu;

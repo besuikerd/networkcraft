@@ -1,13 +1,10 @@
 package nl.besuikerd.networkcraft.render;
 
-import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
-import nl.besuikerd.core.BLogger;
 import nl.besuikerd.core.BlockSide;
 import nl.besuikerd.render.SimpleModelBase;
 import nl.besuikerd.render.TileEntitySpecialRendererConnecting;
-import nl.besuikerd.render.SimpleModelBase.ShapeBuilder;
 
 import org.lwjgl.opengl.GL11;
 

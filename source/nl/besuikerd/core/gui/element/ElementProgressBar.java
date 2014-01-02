@@ -2,8 +2,6 @@ package nl.besuikerd.core.gui.element;
 
 import nl.besuikerd.core.gui.texture.TexturedBackground;
 
-import org.lwjgl.opengl.GL11;
-
 public class ElementProgressBar extends ElementStyledContainer{
 
 	private double progress = 0;

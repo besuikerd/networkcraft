@@ -2,8 +2,6 @@ package nl.besuikerd.core.gui.layout;
 
 import java.awt.Dimension;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import nl.besuikerd.core.gui.element.Element;
 import nl.besuikerd.core.gui.element.ElementContainer;
 

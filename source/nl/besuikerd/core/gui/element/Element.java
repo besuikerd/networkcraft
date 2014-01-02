@@ -27,9 +27,6 @@ import org.lwjgl.opengl.GL11;
 import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteArrayDataOutput;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-
 public abstract class Element extends Gui implements IProcessData{
 	
 	protected ResourceLocation textures = new ResourceLocation("networkcraft", "textures/gui/elements.png");

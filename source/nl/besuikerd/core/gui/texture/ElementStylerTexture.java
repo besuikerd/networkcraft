@@ -1,6 +1,5 @@
 package nl.besuikerd.core.gui.texture;
 
-import nl.besuikerd.core.BLogger;
 import nl.besuikerd.core.gui.element.Element;
 import nl.besuikerd.core.gui.layout.Alignment;
 import nl.besuikerd.core.utils.TupleUtils;

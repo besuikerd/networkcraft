@@ -1,8 +1,5 @@
 package nl.besuikerd.core.inventory;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 

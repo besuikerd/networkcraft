@@ -1,13 +1,11 @@
 package nl.besuikerd.core.utils;
 
-import static nl.besuikerd.core.utils.FunctionalUtils.functionApplyFunction;
 import static nl.besuikerd.core.utils.FunctionalUtils.functionGetClass;
 import static nl.besuikerd.core.utils.FunctionalUtils.map;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.Arrays;
 
 import nl.besuikerd.core.BLogger;
 

@@ -1,7 +1,6 @@
 package nl.besuikerd.networkcraft.graph;
 
 import net.minecraft.tileentity.TileEntity;
-import nl.besuikerd.core.BlockSide;
 
 public class EndPointInitializer extends NetworkNodeInitializerBase<IEndPoint> implements IEndPoint{
 

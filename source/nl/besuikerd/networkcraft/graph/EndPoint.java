@@ -1,12 +1,7 @@
 package nl.besuikerd.networkcraft.graph;
 
-import javax.xml.ws.Endpoint;
-
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.MathHelper;
 import nl.besuikerd.core.BlockSide;
-import nl.besuikerd.core.ServerLogger;
-import nl.besuikerd.core.utils.MathUtils;
 
 public class EndPoint extends NetworkNode implements IEndPoint {
 

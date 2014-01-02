@@ -1,7 +1,5 @@
 package nl.besuikerd.core.gui;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import nl.besuikerd.core.utils.INumbered;
 
 public enum GuiId implements INumbered{

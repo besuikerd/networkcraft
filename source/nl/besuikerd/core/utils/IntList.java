@@ -1,7 +1,6 @@
 package nl.besuikerd.core.utils;
 
 import java.util.AbstractList;
-import java.util.Arrays;
 
 /**
  * List containing int values. Backed by an int[]. Can retrieve the int[] data in constant time. Tradeoff is that the insertion and deletion of elements are more expensive (O(n))

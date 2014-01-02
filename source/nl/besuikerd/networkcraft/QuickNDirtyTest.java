@@ -8,24 +8,17 @@ import static nl.besuikerd.core.utils.FunctionalUtils.map;
 
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
 
 import net.minecraft.tileentity.TileEntity;
 import nl.besuikerd.core.utils.BitUtils;
 import nl.besuikerd.core.utils.FunctionalUtils.ABAFunction;
 import nl.besuikerd.core.utils.FunctionalUtils.ABBFunction;
+import nl.besuikerd.core.utils.ReflectUtils;
 import nl.besuikerd.core.utils.collection.SafeConstrainedMap;
 import nl.besuikerd.core.utils.collection.SmallerThanMapConstraint;
-import nl.besuikerd.core.utils.ReflectUtils;
-import nl.besuikerd.networkcraft.graph.EndPoint;
-import nl.besuikerd.networkcraft.graph.IEndPoint;
-import nl.besuikerd.networkcraft.graph.INetworkNode;
-import nl.besuikerd.networkcraft.graph.MasterNode;
 
 import com.google.common.base.Function;
-import com.google.common.collect.MapConstraints;
 
 public class QuickNDirtyTest {
 	
