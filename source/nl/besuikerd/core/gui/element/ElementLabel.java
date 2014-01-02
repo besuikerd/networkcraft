@@ -18,8 +18,8 @@ public class ElementLabel extends Element{
 	}
 
 	@Override
-	public void draw(ElementContainer parent, int mouseX, int mouseY, ElementContainer root) {
-		super.draw(parent, mouseX, mouseY, root);
+	public void draw(ElementRootContainer root, int mouseX, int mouseY) {
+		super.draw(root, mouseX, mouseY);
         fontRenderer.drawString(text, absX() + ((width - fontRenderer.getStringWidth(text)) / 2), absY() + ((height - fontRenderer.FONT_HEIGHT) / 2), color);
 	}
 }

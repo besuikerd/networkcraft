@@ -13,7 +13,7 @@ public class MathUtils {
 		return inRange(el1, min, max) && inRange(el2, min, max);
 	}
 	
-	public static <E extends Comparable<E>> boolean inRange2D(E el1, E el2, E min1, E max1, E min2, E max2){
+	public static <E extends Comparable<E>> boolean inRange2D(E el1, E min1, E max1, E el2, E min2, E max2){
 		return inRange(el1, min1, max1) && inRange(el2, min2, max2);
 	}
 	

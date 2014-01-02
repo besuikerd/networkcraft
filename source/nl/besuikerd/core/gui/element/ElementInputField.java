@@ -27,7 +27,7 @@ public class ElementInputField extends ElementContainer {
 	
 	public ElementInputField(int width, String text, String regex){
 		this.layout = new HorizontalLayout();
-		this.inputFieldBackgroundContainer = new ElementInputFieldContainer(width, fontRenderer.FONT_HEIGHT + 4);
+		this.inputFieldBackgroundContainer = new ElementStyledContainer(width, fontRenderer.FONT_HEIGHT + 4, TexturedBackground.CONTAINER);
 		this.inputFieldContainer = new ElementContainer(0,0,width, fontRenderer.FONT_HEIGHT + 4);
 		this.inputFieldLabel = new ElementInputLabel(2, 2, width, text, regex);
 		inputFieldContainer.add(inputFieldLabel);
@@ -36,13 +36,6 @@ public class ElementInputField extends ElementContainer {
 		add(inputFieldBackgroundContainer);
 	}
 
-	private class ElementInputFieldContainer extends ElementStyledContainer {
-
-		public ElementInputFieldContainer(int width, int height) {
-			super(width, height, TexturedBackground.CONTAINER);
-			padding(0); //no padding is fine
-		}
-	}	
 	
 	public Element setFocus(boolean focus){
 		if(focus){
@@ -54,7 +47,8 @@ public class ElementInputField extends ElementContainer {
 	}
 	
 	@Override
-	protected boolean onPressed(ElementContainer parent, int x, int y, int which) {
+	protected boolean onPressed(ElementRootContainer root, int x, int y, int which) {
+		super.onPressed(root, x, y, which);
 		forceTypeFocus = true;
 		return inputFieldLabel.placeCursor(x, y);
 	}
@@ -212,7 +206,8 @@ public class ElementInputField extends ElementContainer {
 		}
 		
 		@Override
-		public void update(ElementContainer parent, ElementContainer root, int mouseX, int mouseY) {
+		public void update(ElementRootContainer) {
+			super.update(parent, root);
 			if(forceTypeFocus || (root.getTypeFocus() == null && this.isEnabled() && !releaseTypeFocus)){
 				root.setTypeFocus(this);
 				forceTypeFocus = false;
@@ -240,7 +235,8 @@ public class ElementInputField extends ElementContainer {
 		}
 		
 		@Override
-		public void dimension(ElementContainer parent, ElementContainer root) {
+		public void dimension(ElementRootContainer root) {
+			super.dimension(root);
 			this.maxWidth = parent.width - 2;
 		}
 
