@@ -16,23 +16,24 @@ public class ElementProgressBar extends ElementStyledContainer{
 		this.color = color;
 	}
 
-	@Override
+	@Override 
 	public void draw(ElementContainer parent, int mouseX, int mouseY, ElementContainer root) {
 		super.draw(parent, mouseX, mouseY, root);
 		drawRect(absX() + 2, absY() + 2, absX()+(int)((width-4)*progress), absY()+height-2, color);
-				
 	}
 	
-	public void addProgress(Double d){
+	public ElementProgressBar addProgress(Double d){
 		progress+=d;
+		return this;
 	}
 	
 	public double getProgress() {
 		return progress;
 	}
 
-	public void setProgress(double progress) {
+	public ElementProgressBar setProgress(double progress) {
 		this.progress = progress;
+		return this;
 	}
 
 }

@@ -35,7 +35,7 @@ public class TileEntityTestInventory extends TileEntityInventory {
 					.layout(new VerticalLayout())
 					.add(new ElementContainer()
 						.layout(new HorizontalLayout())
-						.add(new ElementProgressBar(100, 10))
+						.add(new ElementProgressBar(100, 10).setProgress(0.5))
 					)
 					.add(new ElementContainer()
 						.layout(new HorizontalLayout())

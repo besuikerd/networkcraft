@@ -143,7 +143,7 @@ public class ElementInputField extends ElementContainer {
 			if ((!this.isEnabled() && code != Keyboard.KEY_RETURN) || !hasFocus) {
 				return false;
 			}
-			if (Character.isLetterOrDigit(key) || Pattern.matches(acceptedChars, Character.toString(key))) {
+			if (Character.isLetterOrDigit(key) || (acceptedChars != "" && Pattern.matches(acceptedChars, Character.toString(key)))) {
 				if (!blockInput || fontRenderer.getStringWidth(textBuilder.toString() + key) + 2 < maxWidth) {
 					textBuilder.insert(cursorOffset, key);
 					cursorOffset++;
