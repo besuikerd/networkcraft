@@ -21,7 +21,7 @@ public class ElementNamedContainer extends ElementContainer{
 
 
 	@Override
-	public void draw(ElementContainer parent, int mouseX, int mouseY, ElementContainer root) {
-		super.draw(parent, mouseX, mouseY, root);
+	public void draw(ElementRootContainer root, int mouseX, int mouseY) {
+		super.draw(root, mouseX, mouseY);
 	}
 }

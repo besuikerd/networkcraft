@@ -22,6 +22,7 @@ import nl.besuikerd.core.packet.IProcessData;
 import nl.besuikerd.core.utils.MathUtils;
 import nl.besuikerd.core.utils.Tuple;
 
+import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 
 import com.google.common.io.ByteArrayDataInput;
@@ -36,6 +37,7 @@ public abstract class Element extends Gui implements IProcessData{
 	public static final int LEFT_CLICKED = 4;
 	public static final int RIGHT_CLICKED = 8;
 	public static final int MIDDLE_CLICKED = 16;
+	public static final int FOCUSED = 32;
 	
 	
 	public static final int BUTTON_LEFT = 0;
@@ -72,12 +74,24 @@ public abstract class Element extends Gui implements IProcessData{
 	protected int width;
 	protected int height;
 	
+	/**
+	 * parent container
+	 */
+	protected ElementContainer parent;
+	
 	protected LayoutDimension widthDimension;
 	protected LayoutDimension heightDimension;
 	
 	protected Alignment alignment;
 	
+	/**
+	 * x offset the parent container has
+	 */
 	protected int dx;
+	
+	/**
+	 * y offset the parent container has
+	 */
 	protected int dy;
 	
 	/**
@@ -85,7 +99,13 @@ public abstract class Element extends Gui implements IProcessData{
 	 */
 	protected int index;
 	
+	/**
+	 * state flags are stored in this variable
+	 */
 	protected int state;
+	
+	protected int xOffsetButtonPress;
+	protected int yOffsetButtonPress;
 	
 	public Element(int x, int y, int width, int height) {
 		this.mc = Minecraft.getMinecraft();
@@ -108,7 +128,7 @@ public abstract class Element extends Gui implements IProcessData{
 		this(0, 0, width, height);
 	}
 	
-	public void draw(ElementContainer parent, int mouseX, int mouseY, ElementContainer root){
+	public void draw(ElementRootContainer root, int mouseX, int mouseY){
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 		if(textures != null){
 			mc.getTextureManager().bindTexture(textures);
@@ -118,7 +138,7 @@ public abstract class Element extends Gui implements IProcessData{
 	/**
 	 * callback before drawing the Element. Enables the repositioning of elements before actually drawing them
 	 */
-	public void dimension(ElementContainer parent, ElementContainer root){
+	public void dimension(ElementRootContainer root){
 	}
 	
 	/**
@@ -140,7 +160,7 @@ public abstract class Element extends Gui implements IProcessData{
 	/**
 	 * callback when the element is clicked on
 	 */
-	protected boolean onPressed(ElementContainer parent, int x, int y, int which){
+	protected boolean onPressed(ElementRootContainer root, int x, int y, int which){
 		return false;
 	}
 	
@@ -148,42 +168,114 @@ public abstract class Element extends Gui implements IProcessData{
 	/**
 	 * callback when mouse scroll wheel is changed when hovering over this element
 	 */
-	protected void onScrolled(ElementContainer parent, int x, int y, int amount){}
+	protected boolean onScrolled(ElementRootContainer root, int x, int y, int amount){
+		return false;
+	}
 	
 	/**
 	 * callback when the element is released
 	 * @param x
 	 * @param y
 	 */
-	protected void onReleased(ElementContainer parent, int x, int y, int which){
+	protected void onReleased(ElementRootContainer root, int x, int y, int which){
 	}
 	
 	/**
 	 * callback when the mouse hovers over this element
 	 */
-	protected void onHover(ElementContainer parent, int x, int y){
+	protected void onHover(ElementRootContainer root, int x, int y){
 	}
 	
 	/**
 	 * callback when the mouse clicks twice on this element
 	 */
-	protected boolean onDoublePressed(ElementContainer parent, int x, int y, int which){
+	protected boolean onDoublePressed(ElementRootContainer root, int x, int y, int which){
 		return false;
 	}
 	
 	/**
 	 * callback when this element has been clicked on and the mouse is moved
 	 */
-	protected boolean onMove(ElementContainer parent, int x, int y, int which){
+	protected boolean onMove(ElementRootContainer root, int x, int y, int which){
 		return false;
 	}
 	
+	protected void onFocus(ElementRootContainer root){
+		
+	}
+	
 	/**
-	 * callback for custom mouse input handling. is called even when the mouse if not in range of the Element
-	 * @return if the Element should consume the mouse event
+	 * callback before focus is being released
+	 * @param root root container
+	 * @return whether this element allows focus to be released
 	 */
-	protected boolean handleMouseInput(ElementContainer parent, ElementContainer root, int x, int y){
-		return false;
+	protected boolean onReleaseFocus(ElementRootContainer root){
+		return true;
+	}
+
+	/**
+	 * 
+	 * @param parent parent container
+	 * @param root root container
+	 * @param mouseX mouse x coordinate relative to the parent container
+	 * @param mouseY mouse y coordinate relative to the parent container
+	 * @return true to consume mouse input
+	 */
+	protected boolean handleMouseInput(ElementRootContainer root, int mouseX, int mouseY){
+		boolean consumeMouseInput = false; //should mouse input be consumed?
+		
+		
+		for(int buttonFlag : BUTTONS){
+			if(Mouse.isButtonDown(mouseMap.get(buttonFlag))){
+				if(is(buttonFlag) /*&& xOffsetButtonPress - mouseX != x && yOffsetButtonPress - mouseY != y*/){ //element is moved
+					consumeMouseInput = onMove(root, x + mouseX - xOffsetButtonPress, y + mouseY - yOffsetButtonPress, buttonFlag);
+				}
+			} else if(is(buttonFlag)){
+				toggleOff(buttonFlag);
+				onReleased(root, mouseX, mouseY, buttonFlag);
+			}
+		}
+		if(MathUtils.inRange2D(absX() + mouseX, root.absX(), root.absX() + root.width, absY() + mouseY, root.absY(), root.absY() + root.height) && MathUtils.inRange2D(mouseX, 0, width, mouseY, 0, height)){ //check if mouse touches the element
+			
+			boolean aButtonIsDown = false; //is a button pressed?
+			for(int buttonFlag : BUTTONS){
+				if(Mouse.isButtonDown(mouseMap.get(buttonFlag))){
+					aButtonIsDown = true;
+					if(!is(buttonFlag) && is(HOVERING)){
+						toggleOn(buttonFlag);
+						xOffsetButtonPress = mouseX;
+						yOffsetButtonPress = mouseY;
+						consumeMouseInput = onPressed(root, mouseX, mouseY, buttonFlag) || consumeMouseInput;
+						
+						//handle double clicks
+						long oldTime = lastClicks.get(buttonFlag);
+						long currentTime = System.currentTimeMillis();
+						lastClicks.put(buttonFlag, currentTime);
+						if(currentTime - oldTime < THRESHOLD_DOUBLE_PRESS){
+							consumeMouseInput = onDoublePressed(root, mouseX, mouseY, buttonFlag) || consumeMouseInput;
+						}
+						
+						break; //exit looping through buttons; only 1 button press is allowed at a time
+					}
+				}
+			}
+			
+			//handle hovering
+			if(!aButtonIsDown){
+				toggleOn(HOVERING);
+				onHover(root, mouseX, mouseY);
+			}
+			
+			//handle scroll input
+			if(root.scrollMovement != 0){
+				consumeMouseInput = onScrolled(root, x, y, root.scrollMovement) || consumeMouseInput;
+			}
+			
+		} else{
+			toggleOff(HOVERING);
+		}
+		
+		return consumeMouseInput;
 	}
 	
 	public boolean is(int flag){
@@ -215,6 +307,10 @@ public abstract class Element extends Gui implements IProcessData{
 		return is(HOVERING);
 	}
 	
+	public boolean isFocused(){
+		return is(FOCUSED);
+	}
+	
 	public Element enabled(boolean enabled){
 		toggle(ENABLED, enabled);
 		return this;
@@ -236,7 +332,7 @@ public abstract class Element extends Gui implements IProcessData{
 	}
 	
 	protected boolean inRange(int x, int y){
-		return MathUtils.inRange2D(x, y, absX(), absX() + width, absY(), absY() + height);
+		return MathUtils.inRange2D(x, absX(), absX() + width, y, absY(), absY() + height);
 	}
 	
 	public void setWidth(int width) {

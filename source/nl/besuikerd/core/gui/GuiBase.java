@@ -8,6 +8,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import nl.besuikerd.core.BLogger;
 import nl.besuikerd.core.gui.element.ElementContainer;
+import nl.besuikerd.core.gui.element.ElementRootContainer;
 import nl.besuikerd.core.gui.element.ElementStyledContainer;
 import nl.besuikerd.core.gui.layout.LayoutDimension;
 import nl.besuikerd.core.gui.layout.VerticalLayout;
@@ -23,14 +24,15 @@ public class GuiBase extends GuiContainer{
 	protected TileEntityInventory inventory;
 	protected EntityPlayer player;
 	protected World world;
-	protected ElementContainer root;
+	protected ElementRootContainer root;
 	
 	public GuiBase(ContainerBesu container) {
 		super(container);
-		root = new ElementStyledContainer(LayoutDimension.WRAP_CONTENT, LayoutDimension.WRAP_CONTENT).padding(5);
-		root.layout(new VerticalLayout());
+		root = new ElementRootContainer();
+		root.layout(new VerticalLayout())
+		.padding(5);
 		init();
-		root.dimension(null, null);
+		root.dimension(root);
 		xSize = root.getWidth();
 		ySize = root.getHeight();
 	}
@@ -70,14 +72,7 @@ public class GuiBase extends GuiContainer{
         int y = this.height - Mouse.getEventY() * this.height / this.mc.displayHeight - 1;
         
         //delegate mouse input to root container
-        root.handleMouseInput(null, null, x, y);
-        
-
-        int wheel = 0;
-		if((wheel = Mouse.getDWheel()) != 0){
-	        //delegate scroll input to root container
-			root.onScrolled(null, x, y, wheel);
-		}
+        root.handleMouseInput(root, x, y);
     }
 	
 	public ElementContainer getRoot() {
@@ -92,7 +87,7 @@ public class GuiBase extends GuiContainer{
 	@Override
 	protected void drawGuiContainerBackgroundLayer(float f, int mouseX, int mouseY) {
 		//dimension all elements in the root container
-		root.dimension(null, null);
+		root.dimension(root);
 		
 		//recalculate size of the root container
 		xSize = root.getWidth();
@@ -105,6 +100,6 @@ public class GuiBase extends GuiContainer{
 		mc.getTextureManager().bindTexture(root.getTextures());//TODO move this to a proper location
 		GL11.glColor4f(1f, 1f, 1f, 1f);
 		//draw root container
-		root.draw(null, mouseX, mouseY, root);
+		root.draw(root, mouseX, mouseY);
 	}
 }

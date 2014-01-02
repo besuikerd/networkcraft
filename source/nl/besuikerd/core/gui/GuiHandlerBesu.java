@@ -39,12 +39,13 @@ public class GuiHandlerBesu implements IGuiHandler{
 		TileEntity entity = null;
 		
 		//id should be valid and a TileEntity must exist in the given coords
-		if(id >= 0 && id < registryServer.length && world.blockExists(x, y, z) && (entity = world.getBlockTileEntity(x, y, z)) != null && entity instanceof TileEntityInventory){
+		if(id >= 0 && id < registryServer.length && world.blockExists(x, y, z) && (entity = world.getBlockTileEntity(x, y, z)) != null){
 			Class<? extends ContainerBesu> clsContainer = this.registryServer[id];
 			if(clsContainer != null){
 				ContainerBesu container = ReflectUtils.newInstance(clsContainer);
-				TileEntityInventory entityInventory = (TileEntityInventory) entity;
-				container.bindEntity(entityInventory, player);
+				if(entity instanceof TileEntityInventory){
+					container.bindEntity((TileEntityInventory) entity, player);	
+				}
 				return container;
 			}
 		}
@@ -54,20 +55,25 @@ public class GuiHandlerBesu implements IGuiHandler{
 	@Override
 	public Object getClientGuiElement(int id, EntityPlayer player, World world,
 			int x, int y, int z) {
-		TileEntity entity = null;
+		TileEntity tile = null;
 		
 		//id should be valid and a TileEntity must exist in the given coords
-		if(id >= 0 && id < registryClient.length && world.blockExists(x, y, z) && (entity = world.getBlockTileEntity(x, y, z)) != null){
+		if(id >= 0 && id < registryClient.length && world.blockExists(x, y, z) && (tile = world.getBlockTileEntity(x, y, z)) != null){
 			Class<? extends Gui> guiClass = this.registryClient[id];
 			Class<? extends ContainerBesu> containerClass = this.registryServer[id];
 			if(guiClass != null && containerClass != null){
-				if(GuiContainer.class.isAssignableFrom(guiClass) && entity instanceof TileEntityInventory){
+				if(GuiContainer.class.isAssignableFrom(guiClass)){
 					ContainerBesu container = ReflectUtils.newInstance(containerClass);
-					TileEntityInventory inventory = (TileEntityInventory) entity;
-					container.bindEntity(inventory, player);
+					
+					if(tile instanceof TileEntityInventory){
+						container.bindEntity((TileEntityInventory) tile, player);
+					}
+					
 					Gui g = ReflectUtils.newInstance(guiClass, container);
-					if(g != null && g instanceof GuiBase){
-						((GuiBase) g).bindTileEntity(inventory, player, world);
+					if(tile instanceof TileEntityInventory){
+						if(g != null && g instanceof GuiBase){
+							((GuiBase) g).bindTileEntity((TileEntityInventory) tile, player, world);
+						}
 					}
 					return g;
 				}
@@ -98,6 +104,10 @@ public class GuiHandlerBesu implements IGuiHandler{
 	}
 	
 	public static void registerGuiForServer(INumbered number, Class<? extends ContainerBesu> containerClass){
-		instance.registryServer[number.getNumber()] = containerClass;
+		registerGuiForServer(number.getNumber(), containerClass);
+	}
+	
+	public static void registerGuiForServer(INumbered number){
+		registerGuiForServer(number, ContainerBesu.class);
 	}
 }

@@ -42,39 +42,60 @@ public class ElementButton extends ElementStatefulBackground{
 	
 	public ElementButton(String text){
 		this(0, 0, 0, 0, text);
-		this.width = fontRenderer.getStringWidth(text) + 2;
-		this.height = fontRenderer.FONT_HEIGHT + 2;
+		this.width = fontRenderer.getStringWidth(text) + 12;
+		this.height = fontRenderer.FONT_HEIGHT + 6;
 	}
 
 	private GuiButton button;
 
 	@Override
-	public void draw(ElementContainer parent, int mouseX, int mouseY, ElementContainer root) {
-		super.draw(parent, mouseX, mouseY, root);
+	public void draw(ElementRootContainer root, int mouseX, int mouseY) {
+		super.draw(root, mouseX, mouseY);
 		styler.style(this);
 	}
 	
 	@Override
-	protected boolean onDoublePressed(ElementContainer parent, int x, int y, int which) {
-		super.onDoublePressed(parent, x, y, which);
-		BLogger.debug("double pressed at: (%d,%d) by %d", x, y, which);
-		return false;
-	}
-	
-	@Override
-	protected boolean onMove(ElementContainer parent, int x, int y, int which) {
-		super.onMove(parent, x, y, which);
-		if(which == BUTTON_RIGHT){
-			this.x = x;
-			this.y = y;
-		}
+	protected boolean onPressed(ElementRootContainer root, int x, int y, int which) {
+		super.onPressed(root, x, y, which);
+		BLogger.debug("onPressed (%d, %d, %d)", x, y, which);
+		root.requestFocus(this);
 		return true;
 	}
 	
 	@Override
-	protected boolean onPressed(ElementContainer parent, int x, int y, int which) {
-		super.onPressed(parent, x, y, which);
+	protected void onReleased(ElementRootContainer root, int x, int y, int which) {
+		BLogger.debug("onReleased: (%d,%d,%d)", x, y, which);
+		root.releaseFocus(this); 
+	}
+	
+	@Override
+	protected void onHover(ElementRootContainer root, int x, int y) {
+		super.onHover(root, x, y);
+		BLogger.debug("onHover (%d, %d)", x, y);
+	}
+	
+	@Override
+	protected boolean onDoublePressed(ElementRootContainer root, int x, int y, int which) {
+		BLogger.debug("doublePressed: (%d,%d)", x, y);
 		return true;
+	}
+	
+	@Override
+	protected boolean onScrolled(ElementRootContainer root, int x, int y, int amount) {
+		BLogger.debug("scrolled: (%d,%d): %d", x, y, amount);
+		return super.onScrolled(root, x, y, amount);
+	}
+	
+	@Override
+	protected void onFocus(ElementRootContainer root) {
+		BLogger.debug("focused");
+		super.onFocus(root);
+	}
+	
+	@Override
+	protected boolean onReleaseFocus(ElementRootContainer root) {
+		BLogger.debug("focus lost");
+		return super.onReleaseFocus(root);
 	}
 	
 	public ElementButton styler(IElementStyler styler){

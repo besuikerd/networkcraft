@@ -3,7 +3,7 @@ package nl.besuikerd.core.gui;
 import nl.besuikerd.core.utils.INumbered;
 
 public enum GuiId implements INumbered{
-	TEST(0),
+	GUITEST(0),
 	INVENTORYTEST(1)
 	
 	;
@@ -16,6 +16,6 @@ public enum GuiId implements INumbered{
 	
 	@Override
 	public int getNumber() {
-		return 0;
+		return number;
 	}
 }

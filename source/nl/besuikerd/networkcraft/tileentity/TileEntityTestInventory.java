@@ -41,11 +41,11 @@ public class TileEntityTestInventory extends TileEntityInventory {
 				)
 //				.add(new ElementScrollBar(10))
 				.add(new ElementScrollContainer(50, new ElementContainer()
-//					.layout(new HorizontalLayout())
-//					.add(new ElementScrollContainer(300, new ElementContainer()
+					.layout(new HorizontalLayout())
+					.add(new ElementScrollContainer(300, new ElementContainer()
 						.layout(new HorizontalLayout())
 						.add(new ElementButton(50, 750, "bla"))
-//					))
+					))
 				))
 				
 			

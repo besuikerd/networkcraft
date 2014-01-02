@@ -10,6 +10,11 @@ public class ElementScrollContainer extends ElementContainer{
 	protected ElementViewport viewport;
 	protected ElementScrollBar scrollBar;
 	
+	@Override
+	protected boolean onScrolled(ElementRootContainer root, int x, int y, int amount) {
+		BLogger.debug("SCROLLED!");
+		return scrollBar.onScrolled(root, x, y, amount);
+	}
 	
 	public ElementScrollContainer(int height, final ElementContainer container) {
 		super(LayoutDimension.WRAP_CONTENT, LayoutDimension.ABSOLUTE);
@@ -25,12 +30,5 @@ public class ElementScrollContainer extends ElementContainer{
 		
 		add(viewport);
 		add(scrollBar);
-	}
-
-	
-	
-	@Override
-	public void onScrolled(ElementContainer parent, int x, int y, int amount) {
-		scrollBar.onScrolled(parent, x, y, amount);
 	}
 }

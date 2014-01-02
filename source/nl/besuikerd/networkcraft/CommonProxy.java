@@ -13,7 +13,7 @@ public class CommonProxy {
 	}
 	
 	public void registerGuis(GuiHandlerBesu handler){
-		BLogger.debug("opening server gui");
 		handler.registerGuiForServer(GuiId.INVENTORYTEST, ContainerBesuWithPlayerInventory.class);
+		handler.registerGuiForServer(GuiId.GUITEST);
 	}
 }
