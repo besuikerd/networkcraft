@@ -1,15 +1,15 @@
 package nl.besuikerd.core.gui.element;
 
 import nl.besuikerd.core.gui.layout.LayoutDimension;
-import nl.besuikerd.core.gui.texture.ITexturedBackground;
-import nl.besuikerd.core.gui.texture.TexturedBackground;
+import nl.besuikerd.core.gui.texture.scalable.IScalableTexture;
+import nl.besuikerd.core.gui.texture.scalable.ScalableTexture;
 import nl.besuikerd.core.utils.TupleUtils;
 
 public class ElementStyledContainer extends ElementContainer{
 
-	protected ITexturedBackground background;
+	protected IScalableTexture background;
 	
-	public ElementStyledContainer(int x, int y, int width, int height, ITexturedBackground background) {
+	public ElementStyledContainer(int x, int y, int width, int height, IScalableTexture background) {
 		super(x, y, width, height);
 		this.background = background;
 		paddingTop = TupleUtils.yDiff(background.edgeTop());
@@ -18,18 +18,18 @@ public class ElementStyledContainer extends ElementContainer{
 		paddingLeft = TupleUtils.xDiff(background.edgeLeft());
 	}
 	
-	public ElementStyledContainer(int width, int height, ITexturedBackground background) {
+	public ElementStyledContainer(int width, int height, IScalableTexture background) {
 		this(0, 0, width, height, background);
 	}
 
-	public ElementStyledContainer(LayoutDimension width, LayoutDimension height, ITexturedBackground background) {
+	public ElementStyledContainer(LayoutDimension width, LayoutDimension height, IScalableTexture background) {
 		this(0, 0, 0, 0, background);
 		this.widthDimension = width;
 		this.heightDimension = height;
 	}
 	
 	public ElementStyledContainer(int x, int y, int width, int height) {
-		this(x, y, width, height, TexturedBackground.STYLED_CONTAINER);
+		this(x, y, width, height, ScalableTexture.STYLED_CONTAINER);
 	}
 	
 	public ElementStyledContainer(int width, int height) {
@@ -37,7 +37,7 @@ public class ElementStyledContainer extends ElementContainer{
 	}
 	
 	public ElementStyledContainer(LayoutDimension width, LayoutDimension height) {
-		this(width, height, TexturedBackground.STYLED_CONTAINER);
+		this(width, height, ScalableTexture.STYLED_CONTAINER);
 	}
 	
 	public ElementStyledContainer() {

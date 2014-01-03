@@ -2,9 +2,9 @@ package nl.besuikerd.core.gui.element;
 
 import net.minecraft.client.gui.GuiButton;
 import nl.besuikerd.core.BLogger;
+import nl.besuikerd.core.gui.styler.ElementStylerText;
+import nl.besuikerd.core.gui.styler.IElementStyler;
 import nl.besuikerd.core.gui.texture.ElementState;
-import nl.besuikerd.core.gui.texture.ElementStylerText;
-import nl.besuikerd.core.gui.texture.IElementStyler;
 import nl.besuikerd.core.gui.texture.IStateFulBackground;
 import nl.besuikerd.core.gui.texture.StateFulBackground;
 import nl.besuikerd.core.utils.Tuple;

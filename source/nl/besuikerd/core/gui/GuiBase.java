@@ -17,9 +17,6 @@ import org.lwjgl.opengl.GL11;
 
 public class GuiBase extends GuiContainer{
 	
-	protected TileEntityInventory inventory;
-	protected EntityPlayer player;
-	protected World world;
 	protected ElementRootContainer root;
 	
 	public GuiBase(ContainerBesu container) {
@@ -35,12 +32,6 @@ public class GuiBase extends GuiContainer{
 	}
 
 	private static final ResourceLocation bg = new ResourceLocation("textures/gui/demo_background.png");
-	
-	protected void bindTileEntity(TileEntityInventory entity, EntityPlayer player, World world){
-		this.inventory = entity;
-		this.player = player;
-		this.world = world;
-	}
 
 	/**
 	 * Override this method to attach Elements to the {@link #root} container

@@ -1,4 +1,4 @@
-package nl.besuikerd.core.gui.texture;
+package nl.besuikerd.core.gui.styler;
 
 
 import net.minecraft.client.gui.FontRenderer;

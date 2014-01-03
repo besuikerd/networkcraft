@@ -1,8 +1,8 @@
-package nl.besuikerd.core.gui.texture;
+package nl.besuikerd.core.gui.texture.scalable;
 
 import nl.besuikerd.core.utils.Tuple;
 
-public enum TexturedBackgroundButton implements ITexturedBackground{
+public enum ScalableTextureButton implements IScalableTexture{
 	DISABLED(new Tuple(1, 25, 198, 42), new Tuple(1, 24, 198, 24), new Tuple(199, 25, 199, 42), new Tuple(1, 43, 198, 43), new Tuple(0, 25, 0, 42), new Tuple(0, 24, 0, 24), new Tuple(199, 24, 199, 24), new Tuple(0, 43, 0, 43), new Tuple(199, 43, 199, 43)),
 	NORMAL(new Tuple(2, 46, 197, 60), new Tuple(2, 44, 197, 45), new Tuple(198, 46, 199, 60), new Tuple(2, 61, 197, 63), new Tuple(0, 46, 1, 60), new Tuple(0, 44, 1, 45), new Tuple(198, 44, 199, 45), new Tuple(198, 61, 199, 63), new Tuple(0, 61, 1, 63)),
 	HOVERING(new Tuple(2, 66, 197, 80), new Tuple(2, 64, 197, 65), new Tuple(198, 66, 199, 80), new Tuple(2, 81, 197, 83), new Tuple(0, 66, 1, 80), new Tuple(0, 64, 1, 65), new Tuple(198, 64, 199, 65), new Tuple(198, 81, 199, 83), new Tuple(0, 81, 1, 83)),
@@ -21,7 +21,7 @@ public enum TexturedBackgroundButton implements ITexturedBackground{
 	protected Tuple cornerBR;
 	protected Tuple cornerBL;
 	
-	private TexturedBackgroundButton(Tuple background, Tuple edgeTop, Tuple edgeRight, Tuple edgeBottom, Tuple edgeLeft, Tuple cornerTL, Tuple cornerTR, Tuple cornerBR, Tuple cornerBL) {
+	private ScalableTextureButton(Tuple background, Tuple edgeTop, Tuple edgeRight, Tuple edgeBottom, Tuple edgeLeft, Tuple cornerTL, Tuple cornerTR, Tuple cornerBR, Tuple cornerBL) {
 		this.background = background;
 		this.edgeTop = edgeTop;
 		this.edgeRight = edgeRight;
@@ -34,7 +34,7 @@ public enum TexturedBackgroundButton implements ITexturedBackground{
 	}
 
 	@Override
-	public Tuple background() {
+	public Tuple getTexture() {
 		return background;
 	}
 

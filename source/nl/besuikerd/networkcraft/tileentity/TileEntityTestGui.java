@@ -4,9 +4,12 @@ import nl.besuikerd.core.gui.GuiBase;
 import nl.besuikerd.core.gui.element.ElementButton;
 import nl.besuikerd.core.gui.element.ElementContainer;
 import nl.besuikerd.core.gui.element.ElementInputField;
+import nl.besuikerd.core.gui.element.ElementList;
 import nl.besuikerd.core.gui.element.ElementProgressBar;
 import nl.besuikerd.core.gui.element.ElementRootContainer;
 import nl.besuikerd.core.gui.element.ElementScrollContainer;
+import nl.besuikerd.core.gui.element.adapter.ButtonElementAdapter;
+import nl.besuikerd.core.gui.layout.Alignment;
 import nl.besuikerd.core.gui.layout.HorizontalLayout;
 import nl.besuikerd.core.gui.layout.Orientation;
 import nl.besuikerd.core.gui.layout.VerticalLayout;
@@ -47,7 +50,13 @@ public class TileEntityTestGui extends TileEntityBesu{
 				.add(b)
 				.add(b2)
 			)
-			.add(container)
+			
+			
+//			.add(container)
+			
+			
+			.add(new ElementList(new ButtonElementAdapter("bla", "another", "button", "under", "eachother")).align(Alignment.CENTER))
+			
 			;
 //			.add(new ElementScrollContainer(50, new ElementContainer()
 //				.layout(new HorizontalLayout())

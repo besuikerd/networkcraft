@@ -16,9 +16,10 @@ import nl.besuikerd.core.BLogger;
 import nl.besuikerd.core.gui.layout.Alignment;
 import nl.besuikerd.core.gui.layout.LayoutDimension;
 import nl.besuikerd.core.gui.texture.ElementState;
+import nl.besuikerd.core.gui.texture.IBorderTexture;
 import nl.besuikerd.core.gui.texture.IStateFulBackground;
 import nl.besuikerd.core.gui.texture.ITexture;
-import nl.besuikerd.core.gui.texture.ITexturedBackground;
+import nl.besuikerd.core.gui.texture.scalable.IScalableTexture;
 import nl.besuikerd.core.packet.IProcessData;
 import nl.besuikerd.core.utils.MathUtils;
 import nl.besuikerd.core.utils.Tuple;
@@ -560,6 +561,10 @@ public abstract class Element extends Gui implements IProcessData {
 		//draw bottom right corner
 		drawTexturedModalRect(width - xDiff(cornerBR), height - yDiff(cornerBR), cornerBR.int1(), cornerBR.int2(), xDiff(cornerBR), yDiff(cornerBR));
 	}
+	
+	protected void drawBorderFromTexture(IBorderTexture border){
+		drawBorderFromTextures(border.edgeTop(), border.edgeRight(), border.edgeBottom(), border.edgeLeft(), border.cornerTL(), border.cornerTR(), border.cornerBR(), border.cornerBL());
+	}
 
 	protected void drawBackgroundFromTexture(Tuple bg) {
 		drawBackgroundFromTextures(bg, nullTuple, nullTuple, nullTuple, nullTuple, nullTuple, nullTuple, nullTuple, nullTuple);
@@ -585,12 +590,8 @@ public abstract class Element extends Gui implements IProcessData {
 		drawBorderFromTextures(edgeTop, edgeRight, edgeBottom, edgeLeft, cornerTL, cornerTR, cornerBR, cornerBL);
 	}
 
-	protected void drawBackgroundFromTextures(Tuple bg, Tuple edgeTop, Tuple edgeRight, Tuple edgeBottom, Tuple edgeLeft) {
-		drawBackgroundFromTextures(bg, edgeTop, edgeRight, edgeBottom, edgeLeft, nullTuple, nullTuple, nullTuple, nullTuple);
-	}
-
-	protected void drawBackgroundFromTextures(ITexturedBackground texture) {
-		drawBackgroundFromTextures(texture.background(), texture.edgeTop(), texture.edgeRight(), texture.edgeBottom(), texture.edgeLeft(), texture.cornerTL(), texture.cornerTR(), texture.cornerBR(), texture.cornerBL());
+	protected void drawBackgroundFromTextures(IScalableTexture texture) {
+		drawBackgroundFromTextures(texture.getTexture(), texture.edgeTop(), texture.edgeRight(), texture.edgeBottom(), texture.edgeLeft(), texture.cornerTL(), texture.cornerTR(), texture.cornerBR(), texture.cornerBL());
 	}
 
 	protected void drawStatefulBackgroundFromTextures(IStateFulBackground<ElementState> bg, ElementState state) {

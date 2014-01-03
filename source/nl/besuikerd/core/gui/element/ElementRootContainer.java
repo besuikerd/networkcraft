@@ -4,14 +4,14 @@ import org.lwjgl.input.Mouse;
 
 import nl.besuikerd.core.BLogger;
 import nl.besuikerd.core.gui.layout.LayoutDimension;
-import nl.besuikerd.core.gui.texture.TexturedBackground;
+import nl.besuikerd.core.gui.texture.scalable.ScalableTexture;
 
 public class ElementRootContainer extends ElementStyledContainer{
 	protected Element focusedElement;
 	protected int scrollMovement;
 	
 	public ElementRootContainer() {
-		super(LayoutDimension.WRAP_CONTENT, LayoutDimension.WRAP_CONTENT, TexturedBackground.STYLED_CONTAINER);
+		super(LayoutDimension.WRAP_CONTENT, LayoutDimension.WRAP_CONTENT, ScalableTexture.STYLED_CONTAINER);
 	}
 	
 	public ElementRootContainer(int x, int y, int width, int height) {

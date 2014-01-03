@@ -6,7 +6,7 @@ import nl.besuikerd.core.BLogger;
 import nl.besuikerd.core.gui.layout.Alignment;
 import nl.besuikerd.core.gui.layout.HorizontalLayout;
 import nl.besuikerd.core.gui.layout.LayoutDimension;
-import nl.besuikerd.core.gui.texture.TexturedBackground;
+import nl.besuikerd.core.gui.texture.scalable.ScalableTexture;
 
 import org.lwjgl.input.Keyboard;
 
@@ -25,7 +25,7 @@ public class ElementInputField extends ElementStyledContainer {
 	}
 	
 	public ElementInputField(int width, String text, String regex){
-		super(0,0,width,0, TexturedBackground.CONTAINER);
+		super(0,0,width,0, ScalableTexture.CONTAINER);
 		this.height = fontRenderer.FONT_HEIGHT + 3;
 		this.inputFieldContainer = new ElementContainer(0,0, width - 2 , fontRenderer.FONT_HEIGHT+1).padding(1).paddingBottom(0);
 		this.inputFieldLabel = new ElementInputLabel(0, 0, width - 4, text, regex);

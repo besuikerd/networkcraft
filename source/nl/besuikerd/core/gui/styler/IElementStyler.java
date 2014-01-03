@@ -1,4 +1,4 @@
-package nl.besuikerd.core.gui.texture;
+package nl.besuikerd.core.gui.styler;
 
 import nl.besuikerd.core.gui.element.Element;
 

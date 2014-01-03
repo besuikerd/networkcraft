@@ -69,10 +69,8 @@ public class GuiHandlerBesu implements IGuiHandler{
 					}
 					
 					Gui g = ReflectUtils.newInstance(guiClass, container);
-					if(tile instanceof TileEntityInventory){
-						if(g != null && g instanceof GuiBase){
-							((GuiBase) g).bindTileEntity((TileEntityInventory) tile, player, world);
-						}
+					if(tile instanceof TileEntityInventory && g instanceof GuiTileEntity){
+						((GuiTileEntity) g).bindTileEntity((TileEntityInventory) tile, player, world);
 					}
 					return g;
 				}

@@ -4,12 +4,12 @@ import nl.besuikerd.core.BLogger;
 import nl.besuikerd.core.gui.layout.HorizontalLayout;
 import nl.besuikerd.core.gui.layout.Orientation;
 import nl.besuikerd.core.gui.layout.VerticalLayout;
-import nl.besuikerd.core.gui.texture.ElementStylerTexture;
-import nl.besuikerd.core.gui.texture.ITexturedBackground;
+import nl.besuikerd.core.gui.styler.ElementStylerTexture;
 import nl.besuikerd.core.gui.texture.StateFulBackground;
 import nl.besuikerd.core.gui.texture.Texture;
-import nl.besuikerd.core.gui.texture.TexturedBackground;
-import nl.besuikerd.core.gui.texture.TexturedBackgroundVerticalScroller;
+import nl.besuikerd.core.gui.texture.scalable.IScalableTexture;
+import nl.besuikerd.core.gui.texture.scalable.ScalableTexture;
+import nl.besuikerd.core.gui.texture.scalable.ScalableTextureVerticalScroller;
 import nl.besuikerd.core.utils.MathUtils;
 
 public class ElementScrollBar extends ElementContainer {
@@ -89,7 +89,7 @@ public class ElementScrollBar extends ElementContainer {
 		
 
 		public ElementScrollerContainer(int width, int height) {
-			super(width, height, TexturedBackground.CONTAINER);
+			super(width, height, ScalableTexture.CONTAINER);
 			padding(0); //no padding is fine
 		}
 
@@ -142,7 +142,7 @@ public class ElementScrollBar extends ElementContainer {
 		
 		@Override
 		public void draw(ElementRootContainer root, int mouseX, int mouseY) {
-			ITexturedBackground bg = self.isEnabled() ? isLeftClicked() ? TexturedBackgroundVerticalScroller.ACTIVATED : TexturedBackgroundVerticalScroller.NORMAL : TexturedBackgroundVerticalScroller.DISABLED;
+			IScalableTexture bg = self.isEnabled() ? isLeftClicked() ? ScalableTextureVerticalScroller.ACTIVATED : ScalableTextureVerticalScroller.NORMAL : ScalableTextureVerticalScroller.DISABLED;
 			drawBackgroundFromTextures(bg);
 			super.draw(root, mouseX, mouseY);
 		}

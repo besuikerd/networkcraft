@@ -1,4 +1,4 @@
-package nl.besuikerd.core.gui.texture;
+package nl.besuikerd.core.gui.styler;
 
 import java.util.ArrayList;
 import java.util.List;

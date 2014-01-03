@@ -1,67 +1,73 @@
 package nl.besuikerd.core.gui.texture;
 
+import nl.besuikerd.core.gui.texture.scalable.IScalableTexture;
+import nl.besuikerd.core.gui.texture.scalable.ScalableBackgroundHorizontalScroller;
+import nl.besuikerd.core.gui.texture.scalable.ScalableTextureButton;
+import nl.besuikerd.core.gui.texture.scalable.ScalableTextureSolidButton;
+import nl.besuikerd.core.gui.texture.scalable.ScalableTextureVerticalScroller;
+
 
 public enum StateFulBackground implements IStateFulBackground<ElementState>{
 	BUTTON{
 		@Override
-		public ITexturedBackground backgroundForState(ElementState state) {
+		public IScalableTexture backgroundForState(ElementState state) {
 			switch(state){
 				case DISABLED:
-					return TexturedBackgroundButton.DISABLED;
+					return ScalableTextureButton.DISABLED;
 				case HOVERING:
-					return TexturedBackgroundButton.HOVERING;
+					return ScalableTextureButton.HOVERING;
 				case ACTIVATED:
-					return TexturedBackgroundButton.ACTIVATED;
+					return ScalableTextureButton.ACTIVATED;
 				default:
-					return TexturedBackgroundButton.NORMAL;
+					return ScalableTextureButton.NORMAL;
 			}
 		}
 	},
 	
 	SOLID_BUTTON{
 		@Override
-		public ITexturedBackground backgroundForState(ElementState state) {
+		public IScalableTexture backgroundForState(ElementState state) {
 			switch(state){
 				case DISABLED:
-					return TexturedBackgroundSolidButton.DISABLED;
+					return ScalableTextureSolidButton.DISABLED;
 				case ACTIVATED:
-					return TexturedBackgroundSolidButton.ACTIVATED;
+					return ScalableTextureSolidButton.ACTIVATED;
 				default:
-					return TexturedBackgroundSolidButton.NORMAL;
+					return ScalableTextureSolidButton.NORMAL;
 			}
 		}
 	},
 	
 	SCROLLER_VERTICAL{
 		@Override
-		public ITexturedBackground backgroundForState(ElementState state) {
+		public IScalableTexture backgroundForState(ElementState state) {
 			switch(state){
 				case DISABLED:
-					return TexturedBackgroundVerticalScroller.DISABLED;
+					return ScalableTextureVerticalScroller.DISABLED;
 				case ACTIVATED:
-					return TexturedBackgroundVerticalScroller.ACTIVATED;
+					return ScalableTextureVerticalScroller.ACTIVATED;
 				default:
-					return TexturedBackgroundVerticalScroller.NORMAL;
+					return ScalableTextureVerticalScroller.NORMAL;
 			}
 		}
 	},
 	
 	SCROLLER_HORIZONTAL{
-		public ITexturedBackground backgroundForState(ElementState state) {
+		public IScalableTexture backgroundForState(ElementState state) {
 			switch(state){
 				case DISABLED:
-					return TexturedBackgroundHorizontalScroller.DISABLED;
+					return ScalableBackgroundHorizontalScroller.DISABLED;
 				case ACTIVATED:
-					return TexturedBackgroundHorizontalScroller.ACTIVATED;
+					return ScalableBackgroundHorizontalScroller.ACTIVATED;
 				default:
-					return TexturedBackgroundHorizontalScroller.NORMAL;
+					return ScalableBackgroundHorizontalScroller.NORMAL;
 			}
 		}
 	}
 	;
 
 	@Override
-	public ITexturedBackground backgroundForState(ElementState state) {
+	public IScalableTexture backgroundForState(ElementState state) {
 		throw new UnsupportedOperationException("inner classes should provide an implementation");
 	}
 }

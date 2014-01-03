@@ -2,15 +2,7 @@ package nl.besuikerd.core.gui.texture;
 
 import nl.besuikerd.core.utils.Tuple;
 
-/**
- * scalable background texture
- * @author Besuikerd
- *
- */
-public interface ITexturedBackground {
-	
-	public Tuple background();
-	
+public interface IBorderTexture {
 	public Tuple edgeTop();
 	public Tuple edgeRight();
 	public Tuple edgeBottom();

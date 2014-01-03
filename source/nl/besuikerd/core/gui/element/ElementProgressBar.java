@@ -1,6 +1,6 @@
 package nl.besuikerd.core.gui.element;
 
-import nl.besuikerd.core.gui.texture.TexturedBackground;
+import nl.besuikerd.core.gui.texture.scalable.ScalableTexture;
 
 public class ElementProgressBar extends ElementStyledContainer{
 
@@ -8,7 +8,7 @@ public class ElementProgressBar extends ElementStyledContainer{
 	private int color = 0xFFFF0000;
 
 	public ElementProgressBar(int width, int height) {
-		super(width, height, TexturedBackground.CONTAINER);
+		super(width, height, ScalableTexture.CONTAINER);
 	}
 	
 	public ElementProgressBar(int width, int height, int color){
