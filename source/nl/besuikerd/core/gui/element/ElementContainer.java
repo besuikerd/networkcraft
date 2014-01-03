@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.lwjgl.input.Keyboard;
 
+import nl.besuikerd.core.BLogger;
 import nl.besuikerd.core.gui.layout.DefaultLayout;
 import nl.besuikerd.core.gui.layout.Layout;
 import nl.besuikerd.core.gui.layout.LayoutDimension;
@@ -143,6 +144,7 @@ public class ElementContainer extends Element{
 				}
 			}
 		}
+		
 		return consumeKeyboardInput;
 	}
 	

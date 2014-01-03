@@ -22,7 +22,7 @@ public class ElementProgressBar extends ElementStyledContainer{
 		drawRect(absX() + 2, absY() + 2, absX()+(int)((width-4)*progress), absY()+height-2, color);
 	}
 	
-	public ElementProgressBar addProgress(Double d){
+	public ElementProgressBar addProgress(double d){
 		progress+=d;
 		return this;
 	}

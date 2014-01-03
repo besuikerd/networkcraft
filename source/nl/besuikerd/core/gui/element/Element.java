@@ -55,8 +55,8 @@ public abstract class Element extends Gui implements IProcessData {
 	 * delay for double presses
 	 */
 	public static final long THRESHOLD_DOUBLE_PRESS = 200l;
-	
-	public static final long THRESHOLD_INITIAL_KEY_TYPED = 1000l;
+
+	public static final long THRESHOLD_INITIAL_KEY_TYPED = 600l;
 	public static final long THRESHOLD_NEXT_KEY_TYPED = 100l;
 
 	public static final Map<Integer, Integer> mouseMap = Collections.unmodifiableMap(new HashMap<Integer, Integer>() {
@@ -119,12 +119,12 @@ public abstract class Element extends Gui implements IProcessData {
 	 * last character typed
 	 */
 	protected char lastChar;
-	
+
 	/**
 	 * last code typed;
 	 */
-	protected int lastCode;
-	
+	protected int lastCode = -1;
+
 	/**
 	 * time when the next character should be typed
 	 */
@@ -164,7 +164,8 @@ public abstract class Element extends Gui implements IProcessData {
 	 * the super constructor to enable keyboard input to delegate correctly
 	 */
 	public void update(ElementRootContainer root) {
-		if(lastChar != 0 && nextChar < System.currentTimeMillis()){
+		if (lastCode != -1 && nextChar < System.currentTimeMillis()) {
+			BLogger.debug("class: %s, code = %d", getClass().toString(), lastCode);
 			keyTyped(root, lastChar, lastCode);
 			nextChar = System.currentTimeMillis() + THRESHOLD_NEXT_KEY_TYPED;
 		}
@@ -204,11 +205,11 @@ public abstract class Element extends Gui implements IProcessData {
 		return false;
 	}
 
-	protected boolean keyTyped(ElementContainer root, char key, int code) {
+	protected boolean keyTyped(ElementRootContainer root, char key, int code) {
 		return false;
 	}
 
-	protected void keyReleased(ElementContainer root, int code) {
+	protected void keyReleased(ElementRootContainer root, int code) {
 	}
 
 	public boolean handleKeyboardInput(ElementRootContainer root) {
@@ -216,18 +217,16 @@ public abstract class Element extends Gui implements IProcessData {
 		char key = Keyboard.getEventCharacter();
 		int code = Keyboard.getEventKey();
 		if (Keyboard.getEventKeyState()) {
-			
+			BLogger.debug("key code %d pressed", code);
 			consume = keyPressed(root, key, code) || consume;
-			if(key != 0){
-				consume = keyTyped(root, key, code) || consume;
-				this.lastChar = key;
-				this.lastCode = code;
-				this.nextChar = System.currentTimeMillis() + THRESHOLD_INITIAL_KEY_TYPED;
-			}
+			consume = keyTyped(root, key, code) || consume;
+			this.lastChar = key;
+			this.lastCode = code;
+			this.nextChar = System.currentTimeMillis() + THRESHOLD_INITIAL_KEY_TYPED;
 		} else {
 			keyReleased(root, Keyboard.getEventKey());
-
-			if(lastCode == code){
+			if (lastCode == code) {
+				this.lastCode = -1;
 				this.lastChar = 0;
 			}
 		}
@@ -279,7 +278,8 @@ public abstract class Element extends Gui implements IProcessData {
 	}
 
 	protected void onFocus(ElementRootContainer root) {
-
+		//TODO quick fix for bug when focus is lost while holding a key
+		this.lastCode = -1;
 	}
 
 	/**
@@ -290,6 +290,9 @@ public abstract class Element extends Gui implements IProcessData {
 	 * @return whether this element allows focus to be released
 	 */
 	protected boolean onReleaseFocus(ElementRootContainer root) {
+		this.lastCode = -1;
+		BLogger.debug("releasefocus: %s, lastCode %d", getClass().toString(), lastCode);
+		
 		return true;
 	}
 
@@ -334,10 +337,10 @@ public abstract class Element extends Gui implements IProcessData {
 						consumeMouseInput = onPressed(root, mouseX, mouseY, buttonFlag) || consumeMouseInput;
 
 						//handle double clicks
-						long oldTime = lastClicks.get(buttonFlag);
+						long lastClicked = lastClicks.get(buttonFlag);
 						long currentTime = System.currentTimeMillis();
 						lastClicks.put(buttonFlag, currentTime);
-						if (currentTime - oldTime < THRESHOLD_DOUBLE_PRESS) {
+						if (currentTime - lastClicked < THRESHOLD_DOUBLE_PRESS) {
 							consumeMouseInput = onDoublePressed(root, mouseX, mouseY, buttonFlag) || consumeMouseInput;
 						}
 

@@ -2,20 +2,18 @@ package nl.besuikerd.core.gui.element;
 
 import java.util.regex.Pattern;
 
+import nl.besuikerd.core.BLogger;
+import nl.besuikerd.core.gui.layout.Alignment;
 import nl.besuikerd.core.gui.layout.HorizontalLayout;
 import nl.besuikerd.core.gui.texture.TexturedBackground;
 
 import org.lwjgl.input.Keyboard;
 
-public class ElementInputField extends ElementContainer {
+public class ElementInputField extends ElementStyledContainer {
 
-	protected ElementContainer inputFieldBackgroundContainer;
 	protected ElementContainer inputFieldContainer;
 	protected ElementViewport viewPort;
 	protected ElementInputLabel inputFieldLabel;
-	protected boolean hasFocus;
-	protected boolean releaseTypeFocus;
-	protected boolean forceTypeFocus;
 
 	public ElementInputField(int width, String text) {
 		this(width, text, "");
@@ -26,31 +24,19 @@ public class ElementInputField extends ElementContainer {
 	}
 	
 	public ElementInputField(int width, String text, String regex){
-		this.layout = new HorizontalLayout();
-		this.inputFieldBackgroundContainer = new ElementStyledContainer(width, fontRenderer.FONT_HEIGHT + 4, TexturedBackground.CONTAINER);
-		this.inputFieldContainer = new ElementContainer(0,0,width, fontRenderer.FONT_HEIGHT + 4);
-		this.inputFieldLabel = new ElementInputLabel(2, 2, width, text, regex);
+		super(0,0,width,0, TexturedBackground.CONTAINER);
+		this.height = fontRenderer.FONT_HEIGHT + 3;
+		this.inputFieldContainer = new ElementContainer(0,0, width - 2 , fontRenderer.FONT_HEIGHT+1).padding(1).paddingBottom(0);
+		this.inputFieldLabel = new ElementInputLabel(0, 0, width - 4, text, regex);
 		inputFieldContainer.add(inputFieldLabel);
-		this.viewPort = new ElementViewport(fontRenderer.FONT_HEIGHT + 4,  inputFieldContainer);
-		inputFieldBackgroundContainer.add(viewPort);
-		add(inputFieldBackgroundContainer);
-	}
-
-	
-	public Element setFocus(boolean focus){
-		if(focus){
-			forceTypeFocus = true;
-		}else{
-			releaseTypeFocus = true;
-		}
-		return this;
+		this.viewPort = new ElementViewport(fontRenderer.FONT_HEIGHT,  inputFieldContainer);
+		add(viewPort);
 	}
 	
 	@Override
 	protected boolean onPressed(ElementRootContainer root, int x, int y, int which) {
 		super.onPressed(root, x, y, which);
-		forceTypeFocus = true;
-		return inputFieldLabel.placeCursor(x, y);
+		return inputFieldLabel.onPressed(root, x, y, which);
 	}
 
 	private class ElementInputLabel extends Element {
@@ -58,26 +44,21 @@ public class ElementInputField extends ElementContainer {
 		public static final int COLOR_DISABLED = 0xFF404040;
 		public static final int COLOR_UNFOCUSSED = 0xFFF0F0F0;
 		public static final long FLICKER_TIME = 800L;
-		public static final long THRESHHOLD_KEY_DOWN = 100L;
 
 		protected StringBuilder textBuilder;
 		protected String acceptedChars = "";
 		
-		protected long oldTime;
+		protected long oldTime = 0;
 		protected boolean blockInput = false;		
 		protected int color = 0xFFFFFFFF;
-		protected int maxWidth = 0;
 		protected int cursorOffset = 0;
 		protected int hideOffset = 1;
 		protected int widthDiff = 0;
 
-		protected int pressedKey = -1;
-		protected char lastChar;
-
 		public ElementInputLabel(int x, int y, int width, String text){
-			super(x, y, 0, 0);
+			super(x, y, width, 0);
 			this.textBuilder = new StringBuilder();
-			this.height = fontRenderer.FONT_HEIGHT + 2;
+			this.height = fontRenderer.FONT_HEIGHT;
 			textBuilder.append(text);
 		}
 		
@@ -93,29 +74,20 @@ public class ElementInputField extends ElementContainer {
 			this(x, y, width, text);
 			this.acceptedChars = acceptedChars;
 		}
-
-		@Override
-		public boolean handleKeyboardInput() {
-			if (Keyboard.getEventKeyState()) {
-				oldTime = System.currentTimeMillis() + 3 * THRESHHOLD_KEY_DOWN;
-				pressedKey = Keyboard.getEventKey();
-				lastChar = Keyboard.getEventCharacter();
-			} else {
-				pressedKey = -1;
-			}
-			return super.handleKeyboardInput();
-		}
 		
-		public boolean placeCursor(int x, int y){
-			if(this.isEnabled()){
+		@Override
+		protected boolean onPressed(ElementRootContainer root, int x, int y, int which) {
+			super.onPressed(root, x, y, which);
+			if(isEnabled()){
 				int i = 0;
 				int previous = Integer.MAX_VALUE;
 				int current = Integer.MAX_VALUE;
 				//TODO needs to be finetuned after viewport is implemented right!
-				if(!hasFocus){
+				if(!isFocused()){
 					widthDiff = 0;
+					root.requestFocus(this);
 				}
-				while((current = fontRenderer.getStringWidth(textBuilder.substring(0,textBuilder.length()-i))+1) > x + widthDiff){
+				while((current = fontRenderer.getStringWidth(textBuilder.substring(0,textBuilder.length()-i))) > x + widthDiff){
 					previous = current;
 					i++;
 					if(i>=textBuilder.length()){
@@ -123,7 +95,7 @@ public class ElementInputField extends ElementContainer {
 						break;
 					}
 				}
-				if(Math.abs((current-x))>=Math.abs((previous-x))){
+				if(Math.abs((current-x-widthDiff))>=Math.abs((previous-x-widthDiff))){
 					i--;
 				}
 				cursorOffset = textBuilder.length()-i;
@@ -131,17 +103,28 @@ public class ElementInputField extends ElementContainer {
 			}
 			return false;
 		}
+		
+		@Override
+		protected boolean onReleaseFocus(ElementRootContainer root) {
+			BLogger.debug("releasefocus");
+			cursorOffset = textBuilder.length();
+			widthDiff = fontRenderer.getStringWidth(textBuilder.toString())-width;
+			if(widthDiff < 0){
+				widthDiff = 0;
+			}
+			return super.onReleaseFocus(root);
+		}
 
 		@Override
-		protected boolean keyTyped(char key, int code, ElementContainer root) {
-			if ((!this.isEnabled() && code != Keyboard.KEY_RETURN) || !hasFocus) {
+		protected boolean keyTyped(ElementRootContainer root, char key, int code) {
+			if ((!isEnabled() && code != Keyboard.KEY_RETURN) || !isFocused()) {
 				return false;
 			}
-			if (Character.isLetterOrDigit(key) || (acceptedChars != "" && Pattern.matches(acceptedChars, Character.toString(key)))) {
-				if (!blockInput || fontRenderer.getStringWidth(textBuilder.toString() + key) + 2 < maxWidth) {
+			if (key != 0 && (Character.isLetterOrDigit(key) || (acceptedChars != "" && Pattern.matches(acceptedChars, Character.toString(key))))) {
+				if (!blockInput || fontRenderer.getStringWidth(textBuilder.toString() + key) + 2 < width) {
 					textBuilder.insert(cursorOffset, key);
 					cursorOffset++;
-					if(cursorOffset == textBuilder.length() && fontRenderer.getStringWidth(textBuilder.toString())>widthDiff+maxWidth){
+					if(fontRenderer.getStringWidth(textBuilder.substring(0,cursorOffset)+"|") - 2>widthDiff+width){
 						widthDiff += fontRenderer.getStringWidth(Character.toString(key));
 					}
 				}
@@ -178,14 +161,14 @@ public class ElementInputField extends ElementContainer {
 				case Keyboard.KEY_RIGHT:
 					if (cursorOffset < textBuilder.length()) {
 						cursorOffset++;
-						if(fontRenderer.getStringWidth(textBuilder.substring(0,cursorOffset))>widthDiff+maxWidth){
+						if(fontRenderer.getStringWidth(textBuilder.substring(0,cursorOffset)+"|") - 2>widthDiff+width){
 							widthDiff += fontRenderer.getStringWidth(Character.toString(textBuilder.charAt(cursorOffset - 1)));
 						}
 					}
 					break;
 				case Keyboard.KEY_END:
 					cursorOffset = textBuilder.length();
-					widthDiff = fontRenderer.getStringWidth(textBuilder.toString())-maxWidth;
+					widthDiff = fontRenderer.getStringWidth(textBuilder.toString()+"|") - 2 -width;
 					if(widthDiff < 0){
 						widthDiff = 0;
 					}
@@ -196,7 +179,8 @@ public class ElementInputField extends ElementContainer {
 					break;
 				case Keyboard.KEY_TAB:
 				case Keyboard.KEY_RETURN:
-					releaseTypeFocus = true;
+					BLogger.debug("enter");
+					root.releaseFocus(this);
 					break;
 				default:
 					return false;
@@ -206,58 +190,32 @@ public class ElementInputField extends ElementContainer {
 		}
 		
 		@Override
-		public void update(ElementRootContainer) {
-			super.update(parent, root);
-			if(forceTypeFocus || (root.getTypeFocus() == null && this.isEnabled() && !releaseTypeFocus)){
-				root.setTypeFocus(this);
-				forceTypeFocus = false;
-			}
-			if(this == root.getTypeFocus()){
-				hasFocus = true;
-				if(releaseTypeFocus){
-					root.setTypeFocus(null);
-					cursorOffset = textBuilder.length();
-					widthDiff = fontRenderer.getStringWidth(textBuilder.toString())-maxWidth;
-					if(widthDiff < 0){
-						widthDiff = 0;
-					}
-					hasFocus = false;
-				}
-			}else{
-				hasFocus = false;
-			}
-			releaseTypeFocus = false;
-			
-			if (pressedKey != -1 && System.currentTimeMillis() - THRESHHOLD_KEY_DOWN > oldTime) {
+		public void update(ElementRootContainer root) {
+			super.update(root);
+			if(lastCode != -1){
 				oldTime = System.currentTimeMillis();
-				this.keyTyped(lastChar, pressedKey, root);
 			}
-		}
-		
-		@Override
-		public void dimension(ElementRootContainer root) {
-			super.dimension(root);
-			this.maxWidth = parent.width - 2;
 		}
 
 		@Override
-		public void draw(ElementContainer parent, int mouseX, int mouseY, ElementContainer root) {
-			if (this.isEnabled() && hasFocus) {
+		public void draw(ElementRootContainer root, int mouseX, int mouseY) {
+			super.draw(root, mouseX, mouseY);
+			if (this.isEnabled() && isFocused()) {
 				if (System.currentTimeMillis() - FLICKER_TIME > oldTime) {
 					if (System.currentTimeMillis() - 2 * FLICKER_TIME > oldTime) {
 						oldTime = System.currentTimeMillis();
 					}
 				} else {
-					fontRenderer.drawString("|", parent.absX() - widthDiff + fontRenderer.getStringWidth(textBuilder.substring(0, cursorOffset)) + 1, absY() + ((height - fontRenderer.FONT_HEIGHT) / 2), 0xFF000000);
+					fontRenderer.drawString("|", absX() - widthDiff + fontRenderer.getStringWidth(textBuilder.substring(0, cursorOffset))-1, absY(), 0xFF000000);
 				}
-			}else if(fontRenderer.getStringWidth(textBuilder.toString()) > maxWidth){
-				while(fontRenderer.getStringWidth(textBuilder.substring(0,textBuilder.length()-hideOffset-1)+"...") > maxWidth){
+			}else if(fontRenderer.getStringWidth(textBuilder.toString()) > width){
+				while(fontRenderer.getStringWidth(textBuilder.substring(0,textBuilder.length()-hideOffset-1)+"...") > width){
 					hideOffset++;
 				}
-				fontRenderer.drawString(textBuilder.substring(0,textBuilder.length()-hideOffset-1)+"...", parent.absX() + 2, absY() + ((height - fontRenderer.FONT_HEIGHT) / 2), this.isEnabled() ?  COLOR_UNFOCUSSED : COLOR_DISABLED);
+				fontRenderer.drawString(textBuilder.substring(0,textBuilder.length()-hideOffset-1)+"...", absX(), absY() + ((height - fontRenderer.FONT_HEIGHT) / 2), this.isEnabled() ?  COLOR_UNFOCUSSED : COLOR_DISABLED);
 				return;
 			}
-			fontRenderer.drawString(textBuilder.toString(), parent.absX() - widthDiff + 2 , absY() + ((height - fontRenderer.FONT_HEIGHT) / 2), this.isEnabled() ? hasFocus ? color : COLOR_UNFOCUSSED : COLOR_DISABLED);
+			fontRenderer.drawString(textBuilder.toString(), absX() - widthDiff , absY(), this.isEnabled() ? isFocused() ? color : COLOR_UNFOCUSSED : COLOR_DISABLED);
 		}
 	}
 

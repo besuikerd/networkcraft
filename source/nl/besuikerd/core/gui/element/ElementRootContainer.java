@@ -68,5 +68,17 @@ public class ElementRootContainer extends ElementStyledContainer{
 		return true; //root element always consumes mouse input
 	}
 	
-	
+	@Override
+	public boolean handleKeyboardInput(ElementRootContainer root) {
+		boolean consumeKeyboardInput = false;
+		
+		if(focusedElement != null){
+			consumeKeyboardInput = focusedElement.handleKeyboardInput(root);
+		}
+		if(!consumeKeyboardInput){
+			consumeKeyboardInput = super.handleKeyboardInput(root);
+		}
+		
+		return consumeKeyboardInput;
+	}
 }

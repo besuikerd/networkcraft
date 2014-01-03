@@ -81,6 +81,12 @@ public class ElementViewport extends Element {
 		this.root.scrollMovement = root.scrollMovement; //copy scroll movement from real root
 		return container.handleMouseInput(this.root, mouseX - xOffset, mouseY - yOffset);
 	}
+	
+	@Override
+	public void update(ElementRootContainer root) {
+		super.update(root);
+		container.update(root);
+	}
 
 	@Override
 	public void draw(ElementRootContainer root, int mouseX, int mouseY) {

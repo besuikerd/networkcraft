@@ -26,7 +26,7 @@ public class TileEntityTestGui extends TileEntityBesu{
 			
 			.add(new ElementButton(70, 30, "testButton"){
 				@Override
-				protected boolean keyTyped(ElementContainer root, char key, int code) {
+				protected boolean keyTyped(ElementRootContainer root, char key, int code) {
 					BLogger.debug("key typed: %d:%c", code, key);
 					return true;
 				}
@@ -38,7 +38,7 @@ public class TileEntityTestGui extends TileEntityBesu{
 				}
 				
 				@Override
-				protected void keyReleased(ElementContainer root, int code) {
+				protected void keyReleased(ElementRootContainer root, int code) {
 					BLogger.debug("key released: %d:%d", code, (int) Keyboard.getEventCharacter());
 					super.keyReleased(root, code);
 				}
