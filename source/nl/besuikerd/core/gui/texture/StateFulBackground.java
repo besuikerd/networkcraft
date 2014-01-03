@@ -30,8 +30,34 @@ public enum StateFulBackground implements IStateFulBackground<ElementState>{
 					return TexturedBackgroundSolidButton.NORMAL;
 			}
 		}
-	}
+	},
 	
+	SCROLLER_VERTICAL{
+		@Override
+		public ITexturedBackground backgroundForState(ElementState state) {
+			switch(state){
+				case DISABLED:
+					return TexturedBackgroundVerticalScroller.DISABLED;
+				case ACTIVATED:
+					return TexturedBackgroundVerticalScroller.ACTIVATED;
+				default:
+					return TexturedBackgroundVerticalScroller.NORMAL;
+			}
+		}
+	},
+	
+	SCROLLER_HORIZONTAL{
+		public ITexturedBackground backgroundForState(ElementState state) {
+			switch(state){
+				case DISABLED:
+					return TexturedBackgroundHorizontalScroller.DISABLED;
+				case ACTIVATED:
+					return TexturedBackgroundHorizontalScroller.ACTIVATED;
+				default:
+					return TexturedBackgroundHorizontalScroller.NORMAL;
+			}
+		}
+	}
 	;
 
 	@Override

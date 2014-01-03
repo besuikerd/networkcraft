@@ -3,6 +3,7 @@ package nl.besuikerd.core.gui.element;
 import nl.besuikerd.core.gui.layout.LayoutDimension;
 import nl.besuikerd.core.gui.texture.ITexturedBackground;
 import nl.besuikerd.core.gui.texture.TexturedBackground;
+import nl.besuikerd.core.utils.TupleUtils;
 
 public class ElementStyledContainer extends ElementContainer{
 
@@ -11,10 +12,10 @@ public class ElementStyledContainer extends ElementContainer{
 	public ElementStyledContainer(int x, int y, int width, int height, ITexturedBackground background) {
 		super(x, y, width, height);
 		this.background = background;
-		paddingTop = background.edgeTop().int4();
-		paddingRight = background.edgeRight().int3();
-		paddingBottom = background.edgeBottom().int4();
-		paddingLeft = background.edgeLeft().int3();
+		paddingTop = TupleUtils.yDiff(background.edgeTop());
+		paddingRight = TupleUtils.xDiff(background.edgeRight());
+		paddingBottom = TupleUtils.yDiff(background.edgeBottom());
+		paddingLeft = TupleUtils.xDiff(background.edgeLeft());
 	}
 	
 	public ElementStyledContainer(int width, int height, ITexturedBackground background) {

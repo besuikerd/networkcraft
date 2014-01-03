@@ -425,12 +425,24 @@ public abstract class Element extends Gui implements IProcessData {
 		return MathUtils.inRange2D(x, absX(), absX() + width, y, absY(), absY() + height);
 	}
 
-	public void setWidth(int width) {
+	public Element width(int width) {
 		this.width = width;
+		return this;
 	}
 
-	public void setHeight(int height) {
+	public Element height(int height) {
 		this.height = height;
+		return this;
+	}
+	
+	public Element widthDimension(LayoutDimension dimension){
+		this.widthDimension = dimension;
+		return this;
+	}
+	
+	public Element heightDimension(LayoutDimension dimension){
+		this.heightDimension = dimension;
+		return this;
 	}
 
 	public void setX(int x) {

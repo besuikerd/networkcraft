@@ -19,8 +19,6 @@ public class HorizontalLayout implements Layout{
 	protected int marginX;
 	protected int marginY;
 	
-	private boolean init;
-	
 	public HorizontalLayout(int marginX, int marginY) {
 		this.marginX = marginX;
 		this.marginY = marginY;
@@ -45,6 +43,7 @@ public class HorizontalLayout implements Layout{
 	public void init(ElementContainer parent, ElementContainer root) {
 		xOffset = parent.getPaddingLeft();
 		yOffset = parent.getPaddingTop();
+		maxHeight = 0;
 	}
 	
 	@Override

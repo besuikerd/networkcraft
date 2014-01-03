@@ -53,6 +53,16 @@ public class ElementContainer extends Element{
 		elements.clear();
 	}
 	
+	public ElementContainer remove(Element e){
+		elements.remove(e);
+		return this;
+	}
+	
+	public ElementContainer remove(int index){
+		elements.remove(index);
+		return this;
+	}
+	
 	public int getElementCount(){
 		return elements.size();
 	}
@@ -65,22 +75,21 @@ public class ElementContainer extends Element{
 		//render last element to first element
 		for(int i = elements.size() - 1;  i >= 0 ; i--){
 			Element e = elements.get(i);
-			
-			e.dx = absX();
-			e.dy = absY();
-			
 			e.draw(root, mouseX, mouseY);
 		}
 	}
 	
 	@Override
 	public void dimension(ElementRootContainer root) {
-		
 		layout.init(this, root);
 		
 		//dimension elements
 		for(int i = 0 ; i < elements.size() ; i++){
 			Element e = elements.get(i);
+			
+			e.dx = absX();
+			e.dy = absY();
+			
 			//increment relative coordinates
 			e.dimension(root);
 		}

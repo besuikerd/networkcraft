@@ -4,6 +4,7 @@ import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
+import nl.besuikerd.core.BLogger;
 import nl.besuikerd.core.gui.element.ElementContainer;
 import nl.besuikerd.core.gui.element.ElementRootContainer;
 import nl.besuikerd.core.gui.layout.VerticalLayout;
@@ -30,6 +31,7 @@ public class GuiBase extends GuiContainer{
 		root.dimension(root);
 		xSize = root.getWidth();
 		ySize = root.getHeight();
+		root.dimension(root);
 	}
 
 	private static final ResourceLocation bg = new ResourceLocation("textures/gui/demo_background.png");
@@ -40,11 +42,6 @@ public class GuiBase extends GuiContainer{
 		this.world = world;
 	}
 
-	@Override
-	public void initGui() {
-		super.initGui();
-	}
-	
 	/**
 	 * Override this method to attach Elements to the {@link #root} container
 	 */
@@ -97,6 +94,8 @@ public class GuiBase extends GuiContainer{
 		//center the root container
 		root.setX((width - root.getWidth()) / 2);
 		root.setY((height - root.getHeight()) / 2);
+		
+		root.dimension(root);
 		
 		mc.getTextureManager().bindTexture(root.getTextures());//TODO move this to a proper location
 		GL11.glColor4f(1f, 1f, 1f, 1f);
