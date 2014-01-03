@@ -5,6 +5,7 @@ import java.util.regex.Pattern;
 import nl.besuikerd.core.BLogger;
 import nl.besuikerd.core.gui.layout.Alignment;
 import nl.besuikerd.core.gui.layout.HorizontalLayout;
+import nl.besuikerd.core.gui.layout.LayoutDimension;
 import nl.besuikerd.core.gui.texture.TexturedBackground;
 
 import org.lwjgl.input.Keyboard;
@@ -29,7 +30,8 @@ public class ElementInputField extends ElementStyledContainer {
 		this.inputFieldContainer = new ElementContainer(0,0, width - 2 , fontRenderer.FONT_HEIGHT+1).padding(1).paddingBottom(0);
 		this.inputFieldLabel = new ElementInputLabel(0, 0, width - 4, text, regex);
 		inputFieldContainer.add(inputFieldLabel);
-		this.viewPort = new ElementViewport(fontRenderer.FONT_HEIGHT,  inputFieldContainer);
+		this.viewPort = new ElementViewport(0, fontRenderer.FONT_HEIGHT, inputFieldContainer);
+		viewPort.heightDimension = LayoutDimension.WRAP_CONTENT;
 		add(viewPort);
 	}
 	

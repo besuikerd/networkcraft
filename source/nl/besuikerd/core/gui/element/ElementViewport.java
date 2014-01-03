@@ -15,6 +15,8 @@ import static org.lwjgl.opengl.GL11.glEnable;
 import static org.lwjgl.opengl.GL11.glStencilFunc;
 import static org.lwjgl.opengl.GL11.glStencilMask;
 import static org.lwjgl.opengl.GL11.glStencilOp;
+import nl.besuikerd.core.BLogger;
+import nl.besuikerd.core.gui.layout.LayoutDimension;
 
 /**
  * Element that can contain a container. the container is only visible within
@@ -30,7 +32,7 @@ public class ElementViewport extends Element {
 	/**
 	 * container that is visible within this viewport
 	 */
-	protected ElementContainer container;
+	protected Element element;
 	
 	/**
 	 * root delegate
@@ -46,29 +48,37 @@ public class ElementViewport extends Element {
 	 * y-offset for container within viewport; can also be negative
 	 */
 	protected int yOffset;
+	
+	
 
-	public ElementViewport(int height, ElementContainer container) {
-		super(0, height);
+	public ElementViewport(int width, int height, Element element) {
+		super(width, height);
 		root = new ElementRootContainer(0, height);
-		root.add(container);
-		this.container = container;
+		root.add(element);
+		this.element = element;
 	}
 
 	@Override
 	public void dimension(ElementRootContainer root) {
 		super.dimension(root);
 		//move container to the correct spot within the viewport
-		container.dx = absX();
-		container.dy = absY();
-		container.x = xOffset;
-		container.y = yOffset;
+		element.dx = absX();
+		element.dy = absY();
+		element.x = xOffset;
+		element.y = yOffset;
 
-		//layout container and fix dimensions
-		container.dimension(root);
-		this.width = container.width;
+		//layout element and fix dimensions
+		element.dimension(root);
+		
+		if(widthDimension == LayoutDimension.WRAP_CONTENT){
+			this.width = element.width;
+		}
+		if(heightDimension == LayoutDimension.WRAP_CONTENT){
+			this.height = element.height;
+		}
 
 		//limit root delegate within bounds of the real root
-		this.root.width = Math.min(container.width, root.width - root.paddingLeft - root.paddingRight);
+		this.root.width = Math.min(element.width, root.width - root.paddingLeft - root.paddingRight);
 		this.root.height = Math.min(height, root.height - root.paddingTop - root.paddingBottom);
 		this.root.dx = Math.max(absX(), root.absX() + root.paddingLeft);
 		this.root.dy = Math.max(absY(), root.absY() + root.paddingTop);
@@ -79,13 +89,13 @@ public class ElementViewport extends Element {
 		super.handleMouseInput(root, mouseX, mouseY);
 		this.root.focusedElement = root.focusedElement; //copy focus from real root
 		this.root.scrollMovement = root.scrollMovement; //copy scroll movement from real root
-		return container.handleMouseInput(this.root, mouseX - xOffset, mouseY - yOffset);
+		return element.handleMouseInput(this.root, mouseX - xOffset, mouseY - yOffset);
 	}
 	
 	@Override
 	public void update(ElementRootContainer root) {
 		super.update(root);
-		container.update(root);
+		element.update(root);
 	}
 
 	@Override
@@ -104,7 +114,7 @@ public class ElementViewport extends Element {
 		glStencilFunc(GL_EQUAL, 0x1, 0xff);
 		glColorMask(true, true, true, true); //restore color mask
 		glDepthMask(true); //restore depth mask
-		container.draw(this.root, mouseX, mouseY);
+		element.draw(this.root, mouseX, mouseY);
 		glDisable(GL_STENCIL_TEST);
 	}
 }
