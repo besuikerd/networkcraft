@@ -56,8 +56,22 @@ public class ElementScrollContainer extends ElementContainer{
 		this(dimension, orientation, new ElementContainer().layout(orientation == Orientation.VERTICAL ? new VerticalLayout() : new HorizontalLayout()));
 	}
 	
+	public ElementScrollContainer(int height, ElementContainer container){
+		this(height, Orientation.VERTICAL, container);
+	}
+	
+	public ElementScrollContainer(int height){
+		this(height, Orientation.VERTICAL);
+	}
+	
 	@Override
 	public void dimension(ElementRootContainer root) {
+		
+		//reset progress to 0 if container is smaller than viewport
+		if(orientation == Orientation.VERTICAL && container.height < height || orientation == Orientation.HORIZONTAL && container.width < width){
+			scrollBar.setProgress(0);
+		}
+		
 		if(orientation == Orientation.VERTICAL) {
 			viewport.yOffset = (int) (-1 * (container.height - this.height) * scrollBar.progress);
 		} else{
@@ -93,9 +107,5 @@ public class ElementScrollContainer extends ElementContainer{
 	@Override
 	public int getElementCount() {
 		return container.getElementCount();
-	}
-	
-	public ElementScrollContainer(int height, ElementContainer container){
-		this(height, Orientation.VERTICAL, container);
 	}
 }

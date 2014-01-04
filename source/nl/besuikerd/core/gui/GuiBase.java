@@ -1,27 +1,26 @@
 package nl.besuikerd.core.gui;
 
 import net.minecraft.client.gui.inventory.GuiContainer;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.World;
-import nl.besuikerd.core.BLogger;
+import nl.besuikerd.core.gui.element.Element;
 import nl.besuikerd.core.gui.element.ElementContainer;
 import nl.besuikerd.core.gui.element.ElementRootContainer;
+import nl.besuikerd.core.gui.event.IEventHandler;
 import nl.besuikerd.core.gui.layout.VerticalLayout;
 import nl.besuikerd.core.inventory.ContainerBesu;
-import nl.besuikerd.core.inventory.TileEntityInventory;
 
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 
-public class GuiBase extends GuiContainer{
+public class GuiBase extends GuiContainer implements IEventHandler{
 	
 	protected ElementRootContainer root;
 	
 	public GuiBase(ContainerBesu container) {
 		super(container);
 		root = new ElementRootContainer();
+		root.setEventHandler(this);
 		root.layout(new VerticalLayout())
 		.padding(5);
 		init();
@@ -93,4 +92,12 @@ public class GuiBase extends GuiContainer{
 		//draw root container
 		root.draw(root, mouseX, mouseY);
 	}
+
+	@Override
+	public void post(String name, Element e, Object... args) {
+		root.onEvent(name, args, root, e);
+		onEvent(name, e, args);
+	}
+	
+	public void onEvent(String name, Element e, Object... args){}
 }

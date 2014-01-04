@@ -89,6 +89,7 @@ public class ElementViewport extends Element {
 		super.handleMouseInput(root, mouseX, mouseY);
 		this.root.focusedElement = root.focusedElement; //copy focus from real root
 		this.root.scrollMovement = root.scrollMovement; //copy scroll movement from real root
+		this.root.eventHandler = root.eventHandler; //copy eventhandler from real root
 		return element.handleMouseInput(this.root, mouseX - xOffset, mouseY - yOffset);
 	}
 	
@@ -96,6 +97,11 @@ public class ElementViewport extends Element {
 	public void update(ElementRootContainer root) {
 		super.update(root);
 		element.update(root);
+	}
+	
+	@Override
+	public void onEvent(String name, Object[] args, ElementRootContainer root, Element e) {
+		element.onEvent(name, args, root, e);
 	}
 
 	@Override

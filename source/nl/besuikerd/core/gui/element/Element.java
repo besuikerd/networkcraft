@@ -4,8 +4,10 @@ import static nl.besuikerd.core.utils.TupleUtils.nullTuple;
 import static nl.besuikerd.core.utils.TupleUtils.xDiff;
 import static nl.besuikerd.core.utils.TupleUtils.yDiff;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import net.minecraft.client.Minecraft;
@@ -13,6 +15,9 @@ import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.util.ResourceLocation;
 import nl.besuikerd.core.BLogger;
+import nl.besuikerd.core.gui.event.IEventAction;
+import nl.besuikerd.core.gui.event.ITrigger;
+import nl.besuikerd.core.gui.event.Trigger;
 import nl.besuikerd.core.gui.layout.Alignment;
 import nl.besuikerd.core.gui.layout.LayoutDimension;
 import nl.besuikerd.core.gui.texture.ElementState;
@@ -21,6 +26,7 @@ import nl.besuikerd.core.gui.texture.IStateFulBackground;
 import nl.besuikerd.core.gui.texture.ITexture;
 import nl.besuikerd.core.gui.texture.scalable.IScalableTexture;
 import nl.besuikerd.core.packet.IProcessData;
+import nl.besuikerd.core.utils.INamed;
 import nl.besuikerd.core.utils.MathUtils;
 import nl.besuikerd.core.utils.Tuple;
 
@@ -130,6 +136,16 @@ public abstract class Element extends Gui implements IProcessData {
 	 * time when the next character should be typed
 	 */
 	protected long nextChar;
+	
+	/**
+	 * actions this element will perform when a given event is triggered
+	 */
+	protected Map<String, List<IEventAction>> actions;
+	
+	/**
+	 * Triggers this element will trigger
+	 */
+	protected Map<ITrigger, String> triggers;
 
 	public Element(int x, int y, int width, int height) {
 		this.mc = Minecraft.getMinecraft();
@@ -142,6 +158,9 @@ public abstract class Element extends Gui implements IProcessData {
 		this.widthDimension = LayoutDimension.ABSOLUTE;
 		this.heightDimension = LayoutDimension.ABSOLUTE;
 
+		this.actions = new HashMap<String, List<IEventAction>>();
+		this.triggers = new HashMap<ITrigger, String>();
+		
 		this.state = ENABLED;
 
 		dx = 0;
@@ -238,6 +257,12 @@ public abstract class Element extends Gui implements IProcessData {
 	 * callback when the element is clicked on
 	 */
 	protected boolean onPressed(ElementRootContainer root, int x, int y, int which) {
+		ITrigger trigger = Trigger.PRESSED;
+		String triggerName = triggers.get(trigger);
+		if(triggerName != null){
+			trigger.trigger(triggerName, root, this, x, y, which);
+			return true;
+		}
 		return false;
 	}
 
@@ -246,6 +271,12 @@ public abstract class Element extends Gui implements IProcessData {
 	 * element
 	 */
 	protected boolean onScrolled(ElementRootContainer root, int x, int y, int amount) {
+		ITrigger trigger = Trigger.SCROLLED;
+		String triggerName = triggers.get(trigger);
+		if(triggerName != null){
+			trigger.trigger(triggerName, root, this, x, y, amount);
+			return true;
+		}
 		return false;
 	}
 
@@ -256,18 +287,34 @@ public abstract class Element extends Gui implements IProcessData {
 	 * @param y
 	 */
 	protected void onReleased(ElementRootContainer root, int x, int y, int which) {
+		ITrigger trigger = Trigger.RELEASED;
+		String triggerName = triggers.get(trigger);
+		if(triggerName != null){
+			trigger.trigger(triggerName, root, this, x, y, which);
+		}
 	}
 
 	/**
 	 * callback when the mouse hovers over this element
 	 */
 	protected void onHover(ElementRootContainer root, int x, int y) {
+		ITrigger trigger = Trigger.HOVER;
+		String triggerName = triggers.get(trigger);
+		if(triggerName != null){
+			trigger.trigger(triggerName, root, this, x, y);
+		}
 	}
 
 	/**
 	 * callback when the mouse clicks twice on this element
 	 */
 	protected boolean onDoublePressed(ElementRootContainer root, int x, int y, int which) {
+		ITrigger trigger = Trigger.DOUBLE_PRESSED;
+		String triggerName = triggers.get(trigger);
+		if(triggerName != null){
+			trigger.trigger(triggerName, root, this, x, y, which);
+			return true;
+		}
 		return false;
 	}
 
@@ -275,10 +322,21 @@ public abstract class Element extends Gui implements IProcessData {
 	 * callback when this element has been clicked on and the mouse is moved
 	 */
 	protected boolean onMove(ElementRootContainer root, int x, int y, int which) {
+		ITrigger trigger = Trigger.MOVE;
+		String triggerName = triggers.get(trigger);
+		if(triggerName != null){
+			trigger.trigger(triggerName, root, this, x, y, which);
+			return true;
+		}
 		return false;
 	}
 
 	protected void onFocus(ElementRootContainer root) {
+		ITrigger trigger = Trigger.FOCUS;
+		String triggerName = triggers.get(trigger);
+		if(triggerName != null){
+			trigger.trigger(triggerName, root, this);
+		}
 		//TODO quick fix for bug when focus is lost while holding a key
 		this.lastCode = -1;
 	}
@@ -291,6 +349,11 @@ public abstract class Element extends Gui implements IProcessData {
 	 * @return whether this element allows focus to be released
 	 */
 	protected boolean onReleaseFocus(ElementRootContainer root) {
+		ITrigger trigger = Trigger.FOCUSLOST;
+		String triggerName = triggers.get(trigger);
+		if(triggerName != null){
+			trigger.trigger(triggerName, root, this);
+		}
 		this.lastCode = -1;
 		BLogger.debug("releasefocus: %s, lastCode %d", getClass().toString(), lastCode);
 		
@@ -406,26 +469,26 @@ public abstract class Element extends Gui implements IProcessData {
 		return this;
 	}
 
-	protected Element toggle(int s, boolean on) {
+	public Element toggle(int s, boolean on) {
 		this.state = on ? state | s : ((Integer.MAX_VALUE - s) & state);
 		return this;
 	}
 
-	protected Element toggle(int s) {
+	public Element toggle(int s) {
 		return toggle(s, !is(s));
 	}
 
-	protected Element toggleOff(int s) {
+	public Element toggleOff(int s) {
 		toggle(s, false);
 		return this;
 	}
 
-	protected Element toggleOn(int s) {
+	public Element toggleOn(int s) {
 		toggle(s, true);
 		return this;
 	}
 
-	protected boolean inRange(int x, int y) {
+	public boolean inRange(int x, int y) {
 		return MathUtils.inRange2D(x, absX(), absX() + width, y, absY(), absY() + height);
 	}
 
@@ -483,6 +546,10 @@ public abstract class Element extends Gui implements IProcessData {
 
 	public Alignment getAlignment() {
 		return alignment;
+	}
+	
+	public ElementContainer getParent() {
+		return parent;
 	}
 
 	public Element align(Alignment alignment) {
@@ -642,4 +709,37 @@ public abstract class Element extends Gui implements IProcessData {
 	public ResourceLocation getTextures() {
 		return textures;
 	}
+	
+	public Element trigger( ITrigger trigger, String name){
+		triggers.put(trigger, name);
+		return this;
+	}
+	
+	public Element trigger(ITrigger trigger, INamed name){
+		return trigger(trigger, name.getName());
+	}
+	
+	public Element action(String name, IEventAction action){
+		List<IEventAction> eventActions = actions.get(name);
+		if(eventActions == null){
+			eventActions = new ArrayList<IEventAction>();
+		}
+		eventActions.add(action);
+		actions.put(name, eventActions);
+		return this;
+	}
+	
+	public Element action(INamed name, IEventAction action){
+		return action(name.getName(), action);
+	}
+	
+	public void onEvent(String name, Object[] args, ElementRootContainer root, Element e){
+		List<IEventAction> eventActions = actions.get(name);
+		if(eventActions != null){
+			for(IEventAction action : eventActions){
+				action.onEvent(name, args, root, e);
+			}
+		}
+	}
+	
 }

@@ -1,5 +1,6 @@
 package nl.besuikerd.core.gui.element.adapter;
 
+import java.util.AbstractList;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -12,7 +13,7 @@ public abstract class BaseElementAdapter<E> implements IElementAdapter{
 	protected Set<InvalidationListener> listeners;
 
 	public BaseElementAdapter(List<E> elements) {
-		this.elements = elements;
+		this.elements = new SynchronizedList(elements);
 		this.listeners = new HashSet<InvalidationListener>();
 	}
 	
@@ -30,26 +31,26 @@ public abstract class BaseElementAdapter<E> implements IElementAdapter{
 		return createElementAt(elements.get(index), index);
 	}
 	
-	public void append(E element){
+	public void add(E element){
 		elements.add(element);
-		notifyInvalidation();
 	}
 	
 	public void remove(E element){
-		if(elements.remove(element)){
-			notifyInvalidation();
-		}
+		elements.remove(element);
 	}
 	
 	public void clear(){
 		elements.clear();
-		notifyInvalidation();
 	}
 	
 	private void notifyInvalidation(){
 		for(InvalidationListener listener : listeners){
 			listener.onInvalidation();
 		}
+	}
+	
+	public List<E> synchronizedList(){
+		return elements;
 	}
 	
 	@Override
@@ -63,4 +64,50 @@ public abstract class BaseElementAdapter<E> implements IElementAdapter{
 	}
 	
 	public abstract Element createElementAt(E data, int index);
+	
+	/**
+	 * notifies all listeners once an element in this list changes
+	 * @author Besuikerd
+	 *
+	 */
+	private class SynchronizedList extends AbstractList<E>{
+
+		protected List<E> delegate;
+		
+		public SynchronizedList(List<E> delegate) {
+			this.delegate = delegate;
+		}
+
+		@Override
+		public E get(int index) {
+			return delegate.get(index);
+		}
+
+		@Override
+		public int size() {
+			return delegate.size();
+		}
+		
+		@Override
+		public void add(int index, E element) {
+			delegate.add(index, element);
+			notifyInvalidation();
+		}
+		
+		
+		@Override
+		public E remove(int index) {
+			E removed = delegate.remove(index);
+			if(removed != null){
+				notifyInvalidation();
+			}
+			return removed;
+		}
+		
+		@Override
+		public void clear() {
+			delegate.clear();
+			notifyInvalidation();
+		}
+	}
 }

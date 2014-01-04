@@ -20,11 +20,23 @@ public class ElementContainer extends Element{
 	protected int paddingLeft;
 	protected List<Element> elements;
 	
+	/**
+	 * used to remove elements from this container. Removals are buffered to prevent ConcurrentModificationExceptions
+	 */
+	protected List<Element> pendingRemovals;
+	
+	/**
+	 * used to add elements to this container. Additions are buffered to prevent ConcurrentModificationExceptions
+	 */
+	protected List<Element> pendingAdditions;
+	
 	protected Layout layout;
 	
 	public ElementContainer(int x, int y, int width, int height) {
 		super(x, y, width, height);
 		this.elements = new ArrayList<Element>();
+		this.pendingRemovals = new ArrayList<Element>();
+		this.pendingAdditions = new ArrayList<Element>();
 		this.layout = new DefaultLayout();
 	}
 	
@@ -45,7 +57,7 @@ public class ElementContainer extends Element{
 	public ElementContainer add(Element e){
 		e.index = elements.size();
 		e.parent = this;
-		this.elements.add(e);
+		pendingAdditions.add(e);
 		e.dx = e.x + this.dx;
 		return this;
 	}
@@ -55,12 +67,12 @@ public class ElementContainer extends Element{
 	}
 	
 	public ElementContainer remove(Element e){
-		elements.remove(e);
+		pendingRemovals.add(e);
 		return this;
 	}
 	
 	public ElementContainer remove(int index){
-		elements.remove(index);
+		pendingRemovals.add(elements.get(index));
 		return this;
 	}
 	
@@ -124,6 +136,18 @@ public class ElementContainer extends Element{
 	@Override
 	public void update(ElementRootContainer root) {
 		super.update(root);
+		
+		for(Element e : pendingRemovals){
+			elements.remove(e);
+		}
+		
+		for(Element e : pendingAdditions){
+			elements.add(e);
+		}
+		
+		pendingRemovals.clear();
+		pendingAdditions.clear();
+		
 		for(Element e : elements){
 			e.update(root);
 		}
@@ -155,6 +179,14 @@ public class ElementContainer extends Element{
 		}
 		
 		return consumeKeyboardInput;
+	}
+	
+	@Override
+	public void onEvent(String name, Object[] args, ElementRootContainer root, Element e) {
+		super.onEvent(name, args, root, e);
+		for(Element el : elements){ //delegate events to children
+			el.onEvent(name, args, root, e);
+		}
 	}
 	
 	public int getPaddingTop() {

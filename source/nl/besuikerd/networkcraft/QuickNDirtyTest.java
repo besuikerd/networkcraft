@@ -11,6 +11,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import net.minecraft.tileentity.TileEntity;
+import nl.besuikerd.core.gui.event.Event;
 import nl.besuikerd.core.utils.BitUtils;
 import nl.besuikerd.core.utils.FunctionalUtils.ABAFunction;
 import nl.besuikerd.core.utils.FunctionalUtils.ABBFunction;

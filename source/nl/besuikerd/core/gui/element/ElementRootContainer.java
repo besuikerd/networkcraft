@@ -3,12 +3,14 @@ package nl.besuikerd.core.gui.element;
 import org.lwjgl.input.Mouse;
 
 import nl.besuikerd.core.BLogger;
+import nl.besuikerd.core.gui.event.IEventHandler;
 import nl.besuikerd.core.gui.layout.LayoutDimension;
 import nl.besuikerd.core.gui.texture.scalable.ScalableTexture;
 
 public class ElementRootContainer extends ElementStyledContainer{
 	protected Element focusedElement;
 	protected int scrollMovement;
+	protected IEventHandler eventHandler;
 	
 	public ElementRootContainer() {
 		super(LayoutDimension.WRAP_CONTENT, LayoutDimension.WRAP_CONTENT, ScalableTexture.STYLED_CONTAINER);
@@ -80,5 +82,13 @@ public class ElementRootContainer extends ElementStyledContainer{
 		}
 		
 		return consumeKeyboardInput;
+	}
+	
+	public void setEventHandler(IEventHandler eventHandler) {
+		this.eventHandler = eventHandler;
+	}
+	
+	public IEventHandler getEventHandler() {
+		return eventHandler;
 	}
 }
