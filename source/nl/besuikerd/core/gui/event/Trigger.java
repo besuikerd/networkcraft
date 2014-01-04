@@ -16,7 +16,9 @@ public enum Trigger implements ITrigger{
 	
 	KEY_PRESSED,
 	KEY_TYPED,
-	KEY_RELEASED
+	KEY_RELEASED,
+	CHECKED,
+	TOGGLED,
 	;
 
 	

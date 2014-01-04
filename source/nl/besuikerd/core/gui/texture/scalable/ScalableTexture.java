@@ -4,7 +4,8 @@ import nl.besuikerd.core.utils.Tuple;
 
 public enum ScalableTexture implements IScalableTexture{
 	STYLED_CONTAINER(new Tuple(72, 0, 95, 23), new Tuple(0, 250, 255, 252), new Tuple(253, 0, 255, 249), new Tuple(0, 253, 255, 255), new Tuple(250, 0, 252, 249), new Tuple(64, 0, 67, 3), new Tuple(68, 0, 71, 3), new Tuple(68, 4, 71, 7), new Tuple(64, 4, 67, 7)),
-	CONTAINER(new Tuple(47, 1, 62, 16), new Tuple(47, 0, 62, 0), new Tuple(63, 1, 63, 16), new Tuple(47, 17, 62, 17), new Tuple(46, 1, 46, 16), new Tuple(46, 0, 46, 0), new Tuple(63, 0, 63, 0), new Tuple(63, 17, 63, 17), new Tuple(46, 17, 46, 17))
+	CONTAINER(new Tuple(47, 1, 62, 16), new Tuple(47, 0, 62, 0), new Tuple(63, 1, 63, 16), new Tuple(47, 17, 62, 17), new Tuple(46, 1, 46, 16), new Tuple(46, 0, 46, 0), new Tuple(63, 0, 63, 0), new Tuple(63, 17, 63, 17), new Tuple(46, 17, 46, 17)),
+	CONTAINER_INVERSE(new Tuple(47, 1, 62, 16), new Tuple(47, 0, 62, 0), new Tuple(63, 1, 63, 16), new Tuple(47, 17, 62, 17), new Tuple(46, 1, 46, 16), new Tuple(46, 0, 46, 0), new Tuple(63, 0, 63, 0), new Tuple(63, 17, 63, 17), new Tuple(46, 17, 46, 17)),
 	;
 	
 	protected Tuple background;

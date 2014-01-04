@@ -80,6 +80,14 @@ public class ElementContainer extends Element{
 		return elements.size();
 	}
 	
+	public int indexOf(Element e){
+		return elements.indexOf(e);
+	}
+	
+	public Element elementAt(int index){
+		return elements.get(index);
+	}
+	
 	@Override
 	public void draw(ElementRootContainer root, int mouseX, int mouseY) {
 		
@@ -89,6 +97,7 @@ public class ElementContainer extends Element{
 		for(int i = elements.size() - 1;  i >= 0 ; i--){
 			Element e = elements.get(i);
 			e.draw(root, mouseX, mouseY);
+			e.style();
 		}
 	}
 	

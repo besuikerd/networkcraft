@@ -20,6 +20,7 @@ import nl.besuikerd.core.gui.event.ITrigger;
 import nl.besuikerd.core.gui.event.Trigger;
 import nl.besuikerd.core.gui.layout.Alignment;
 import nl.besuikerd.core.gui.layout.LayoutDimension;
+import nl.besuikerd.core.gui.styler.IElementStyler;
 import nl.besuikerd.core.gui.texture.ElementState;
 import nl.besuikerd.core.gui.texture.IBorderTexture;
 import nl.besuikerd.core.gui.texture.IStateFulBackground;
@@ -146,7 +147,12 @@ public abstract class Element extends Gui implements IProcessData {
 	 * Triggers this element will trigger
 	 */
 	protected Map<ITrigger, String> triggers;
-
+	
+	/**
+	 * styles the element with a given styler. Can be null
+	 */
+	protected IElementStyler styler;
+	
 	public Element(int x, int y, int width, int height) {
 		this.mc = Minecraft.getMinecraft();
 		this.fontRenderer = mc.fontRenderer;
@@ -177,6 +183,12 @@ public abstract class Element extends Gui implements IProcessData {
 			mc.getTextureManager().bindTexture(textures);
 		}
 	};
+	
+	public void style(){
+		if(styler != null){
+			styler.style(this);
+		}
+	}
 
 	/**
 	 * callback before dimensioning the Element. Enables changing element's
@@ -257,13 +269,7 @@ public abstract class Element extends Gui implements IProcessData {
 	 * callback when the element is clicked on
 	 */
 	protected boolean onPressed(ElementRootContainer root, int x, int y, int which) {
-		ITrigger trigger = Trigger.PRESSED;
-		String triggerName = triggers.get(trigger);
-		if(triggerName != null){
-			trigger.trigger(triggerName, root, this, x, y, which);
-			return true;
-		}
-		return false;
+		return doTrigger(Trigger.PRESSED, root, x, y, which);
 	}
 
 	/**
@@ -271,13 +277,7 @@ public abstract class Element extends Gui implements IProcessData {
 	 * element
 	 */
 	protected boolean onScrolled(ElementRootContainer root, int x, int y, int amount) {
-		ITrigger trigger = Trigger.SCROLLED;
-		String triggerName = triggers.get(trigger);
-		if(triggerName != null){
-			trigger.trigger(triggerName, root, this, x, y, amount);
-			return true;
-		}
-		return false;
+		return doTrigger(Trigger.SCROLLED, root, x, y, amount);
 	}
 
 	/**
@@ -287,56 +287,32 @@ public abstract class Element extends Gui implements IProcessData {
 	 * @param y
 	 */
 	protected void onReleased(ElementRootContainer root, int x, int y, int which) {
-		ITrigger trigger = Trigger.RELEASED;
-		String triggerName = triggers.get(trigger);
-		if(triggerName != null){
-			trigger.trigger(triggerName, root, this, x, y, which);
-		}
+		doTrigger(Trigger.RELEASED, root, x, y, which);
 	}
 
 	/**
 	 * callback when the mouse hovers over this element
 	 */
 	protected void onHover(ElementRootContainer root, int x, int y) {
-		ITrigger trigger = Trigger.HOVER;
-		String triggerName = triggers.get(trigger);
-		if(triggerName != null){
-			trigger.trigger(triggerName, root, this, x, y);
-		}
+		doTrigger(Trigger.HOVER, root, x, y);
 	}
 
 	/**
 	 * callback when the mouse clicks twice on this element
 	 */
 	protected boolean onDoublePressed(ElementRootContainer root, int x, int y, int which) {
-		ITrigger trigger = Trigger.DOUBLE_PRESSED;
-		String triggerName = triggers.get(trigger);
-		if(triggerName != null){
-			trigger.trigger(triggerName, root, this, x, y, which);
-			return true;
-		}
-		return false;
+		return doTrigger(Trigger.DOUBLE_PRESSED, root, x, y, which);
 	}
 
 	/**
 	 * callback when this element has been clicked on and the mouse is moved
 	 */
 	protected boolean onMove(ElementRootContainer root, int x, int y, int which) {
-		ITrigger trigger = Trigger.MOVE;
-		String triggerName = triggers.get(trigger);
-		if(triggerName != null){
-			trigger.trigger(triggerName, root, this, x, y, which);
-			return true;
-		}
-		return false;
+		return doTrigger(Trigger.MOVE, root, x, y, which);
 	}
 
 	protected void onFocus(ElementRootContainer root) {
-		ITrigger trigger = Trigger.FOCUS;
-		String triggerName = triggers.get(trigger);
-		if(triggerName != null){
-			trigger.trigger(triggerName, root, this);
-		}
+		doTrigger(Trigger.FOCUS, root);
 		//TODO quick fix for bug when focus is lost while holding a key
 		this.lastCode = -1;
 	}
@@ -349,15 +325,19 @@ public abstract class Element extends Gui implements IProcessData {
 	 * @return whether this element allows focus to be released
 	 */
 	protected boolean onReleaseFocus(ElementRootContainer root) {
-		ITrigger trigger = Trigger.FOCUSLOST;
-		String triggerName = triggers.get(trigger);
-		if(triggerName != null){
-			trigger.trigger(triggerName, root, this);
-		}
-		this.lastCode = -1;
+		doTrigger(Trigger.FOCUSLOST, root);
 		BLogger.debug("releasefocus: %s, lastCode %d", getClass().toString(), lastCode);
 		
 		return true;
+	}
+	
+	protected boolean doTrigger(ITrigger trigger, ElementRootContainer root, Object... args){
+		String triggerName = triggers.get(trigger);
+		if(triggerName != null){
+			trigger.trigger(triggerName, root, this, args);
+			return true;
+		}
+		return false;
 	}
 
 	/**
@@ -675,7 +655,7 @@ public abstract class Element extends Gui implements IProcessData {
 	}
 
 	protected void drawTextureCentered(ITexture texture) {
-		drawTexture(texture, (width - xDiff(texture.getTexture())) / 2, (height - yDiff(texture.getTexture()) / 2));
+		drawTexture(texture, (width - xDiff(texture.getTexture())) / 2, (height - yDiff(texture.getTexture())) / 2);
 	}
 
 	@Override
@@ -717,6 +697,11 @@ public abstract class Element extends Gui implements IProcessData {
 	
 	public Element trigger(ITrigger trigger, INamed name){
 		return trigger(trigger, name.getName());
+	}
+	
+	public Element styler(IElementStyler styler){
+		this.styler = styler;
+		return this;
 	}
 	
 	public Element action(String name, IEventAction action){

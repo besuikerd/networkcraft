@@ -22,4 +22,9 @@ public class ElementStatefulBackground extends Element{
 		super.draw(root, mouseX, mouseY);
 		drawStatefulBackgroundFromTextures(statefulBackground);
 	}
+	
+	public ElementStatefulBackground background(IStateFulBackground<ElementState> background){
+		this.statefulBackground = background;
+		return this;
+	}
 }

@@ -9,10 +9,13 @@ import nl.besuikerd.core.BLogger;
 import nl.besuikerd.core.gui.GuiBase;
 import nl.besuikerd.core.gui.element.Element;
 import nl.besuikerd.core.gui.element.ElementButton;
+import nl.besuikerd.core.gui.element.ElementCheckbox;
 import nl.besuikerd.core.gui.element.ElementContainer;
 import nl.besuikerd.core.gui.element.ElementInputField;
 import nl.besuikerd.core.gui.element.ElementList;
 import nl.besuikerd.core.gui.element.ElementProgressBar;
+import nl.besuikerd.core.gui.element.ElementRadioButton;
+import nl.besuikerd.core.gui.element.ElementRadioGroup;
 import nl.besuikerd.core.gui.element.ElementRootContainer;
 import nl.besuikerd.core.gui.element.ElementScrollContainer;
 import nl.besuikerd.core.gui.element.adapter.BaseElementAdapter;
@@ -38,11 +41,11 @@ public class TileEntityTestGui extends TileEntityBesu{
 		
 		@Override
 		public void init() {
-			
+					
 			BaseElementAdapter<String> base = new ButtonElementAdapter("bla", "another", "button", "under", "eachother"){
 				@Override
 				public Element createElementAt(String data, int index) {
-					return super.createElementAt(data, index).trigger(Trigger.PRESSED, Event.RESET).action(Event.RESET, EventAction.REMOVE_ELEMENT);
+					return super.createElementAt(data, index).trigger(Trigger.PRESSED, Event.RESET).action(Event.RESET, EventAction.DISABLE);
 				}
 			};
 			ElementList list = new ElementList(base);
@@ -55,8 +58,19 @@ public class TileEntityTestGui extends TileEntityBesu{
 			))
 			
 			.add(new ElementScrollContainer(100).add(list))
+			.add(new ElementCheckbox(true))
+			
+			.add(new ElementRadioGroup(Orientation.VERTICAL).add(
+				new ElementRadioButton(),
+				new ElementRadioButton(),
+				new ElementRadioButton()
+					
+			))
+			
 			
 			;
+			
+			
 //			.add(new ElementScrollContainer(50, new ElementContainer()
 //				.layout(new HorizontalLayout())
 //				.paddingRight(25)
