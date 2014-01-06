@@ -1,0 +1,82 @@
+package com.besuikerd.networkcraft;
+
+import static com.besuikerd.core.utils.FunctionalUtils.foldl;
+import static com.besuikerd.core.utils.FunctionalUtils.foldr;
+import static com.besuikerd.core.utils.FunctionalUtils.functionAny;
+import static com.besuikerd.core.utils.FunctionalUtils.functionApplyFunction;
+import static com.besuikerd.core.utils.FunctionalUtils.map;
+
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
+
+import net.minecraft.tileentity.TileEntity;
+
+import com.besuikerd.core.gui.event.Event;
+import com.besuikerd.core.utils.BitUtils;
+import com.besuikerd.core.utils.ReflectUtils;
+import com.besuikerd.core.utils.FunctionalUtils.ABAFunction;
+import com.besuikerd.core.utils.FunctionalUtils.ABBFunction;
+import com.besuikerd.core.utils.collection.SafeConstrainedMap;
+import com.besuikerd.core.utils.collection.SmallerThanMapConstraint;
+import com.google.common.base.Function;
+
+public class QuickNDirtyTest {
+	
+	public static void main(String[] args) {
+		functionalTest();
+		bitUtilsTest();	
+
+		Map<Object, Integer> m = new HashMap<Object, Integer>();
+		m = SafeConstrainedMap.create(m, new SmallerThanMapConstraint<Object, Integer>(m));
+		m.put(0, 5);
+		m.put(0, 1);
+		m.put(0, 6);
+		System.out.println(m);
+	}
+	
+	public static void recurs(int n){
+		if(n > 0){
+			recurs(n - 1);
+		}
+	}
+	
+	static class Hoi extends TileEntity{
+		public Hoi(int n) {
+			xCoord = n;
+			yCoord = n;
+			zCoord = n;
+		}
+	}
+	
+	private static void functionalTest(){
+		System.out.println(Arrays.toString(map(String.class, new String[]{"this", "should", "be", "uppercased"}, functionApplyFunction("toUpperCase", String.class, String.class))));
+		
+		System.out.println(ReflectUtils.newInstance(String.class, "nieuwe string"));
+		
+		System.out.println(foldl(100, new Integer[]{1,2,3}, new ABAFunction<Integer, Integer>() {
+			@Override
+			public Integer apply(Integer a, Integer b) {
+				return a - b;
+			}
+		}));
+		
+		System.out.println(foldr(100, new Integer[]{1,2,3}, new ABBFunction<Integer, Integer>() {
+			@Override
+			public Integer apply(Integer b, Integer a) {
+				return b - a;
+			}
+		}));
+		
+		System.out.println(foldl(false, new Integer[]{1,2,3}, functionAny(new Function<Integer, Boolean>() {
+			@Override
+			public Boolean apply(Integer input) {
+				return input > 1;
+			}
+		})));
+	}
+
+	private static void bitUtilsTest(){
+		System.out.println(BitUtils.ByteToString(BitUtils.toggleOff(0xff, 5)));
+	}
+}
