@@ -54,11 +54,10 @@ public class ElementContainer extends Element{
 		this(LayoutDimension.WRAP_CONTENT, LayoutDimension.WRAP_CONTENT);
 	}
 
-	public ElementContainer add(Element e){
-		e.index = elements.size();
-		e.parent = this;
-		pendingAdditions.add(e);
-		e.dx = e.x + this.dx;
+	public ElementContainer add(Element... elements){
+		for(Element e : elements){
+			pendingAdditions.add(e);
+		}
 		return this;
 	}
 	
@@ -147,11 +146,15 @@ public class ElementContainer extends Element{
 		super.update(root);
 		
 		for(Element e : pendingRemovals){
+			e.onRemoved(root);
 			elements.remove(e);
 		}
 		
-		for(Element e : pendingAdditions){
+		for(Element e : pendingAdditions){			
 			elements.add(e);
+			e.index = elements.size();
+			e.parent = this;
+			e.onAdded(root);
 		}
 		
 		pendingRemovals.clear();

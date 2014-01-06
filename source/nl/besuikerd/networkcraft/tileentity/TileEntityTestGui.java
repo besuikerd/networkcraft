@@ -15,7 +15,7 @@ import nl.besuikerd.core.gui.element.ElementInputField;
 import nl.besuikerd.core.gui.element.ElementList;
 import nl.besuikerd.core.gui.element.ElementProgressBar;
 import nl.besuikerd.core.gui.element.ElementRadioButton;
-import nl.besuikerd.core.gui.element.ElementRadioGroup;
+import nl.besuikerd.core.gui.element.RadioGroup;
 import nl.besuikerd.core.gui.element.ElementRootContainer;
 import nl.besuikerd.core.gui.element.ElementScrollContainer;
 import nl.besuikerd.core.gui.element.adapter.BaseElementAdapter;
@@ -41,7 +41,7 @@ public class TileEntityTestGui extends TileEntityBesu{
 		
 		@Override
 		public void init() {
-					
+			RadioGroup group = new RadioGroup();
 			BaseElementAdapter<String> base = new ButtonElementAdapter("bla", "another", "button", "under", "eachother"){
 				@Override
 				public Element createElementAt(String data, int index) {
@@ -60,12 +60,11 @@ public class TileEntityTestGui extends TileEntityBesu{
 			.add(new ElementScrollContainer(100).add(list))
 			.add(new ElementCheckbox(true))
 			
-			.add(new ElementRadioGroup(Orientation.VERTICAL).add(
-				new ElementRadioButton(),
-				new ElementRadioButton(),
-				new ElementRadioButton()
-					
-			))
+			.add(
+				new ElementRadioButton(group),
+				new ElementRadioButton(group),
+				new ElementRadioButton(group)	
+			)
 			
 			
 			;

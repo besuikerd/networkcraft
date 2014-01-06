@@ -61,7 +61,7 @@ public class ElementRootContainer extends ElementStyledContainer{
 		
 		boolean consumeMouseInput = false;
 		if(focusedElement != null){
-			consumeMouseInput = focusedElement.handleMouseInput(this, mouseX - focusedElement.absX(), mouseY - focusedElement.absY());
+			consumeMouseInput = focusedElement.handleMouseInput(root, mouseX - focusedElement.absX(), mouseY - focusedElement.absY());
 		}
 		
 		if(!consumeMouseInput){

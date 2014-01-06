@@ -7,10 +7,12 @@ import nl.besuikerd.core.gui.texture.Texture;
 
 public class ElementRadioButton extends Element{
 	protected boolean toggled;
-	protected ElementRadioGroup group;
+	protected RadioGroup group;
 	
-	public ElementRadioButton() {
+	public ElementRadioButton(RadioGroup group) {
 		super(16, 16);
+		group.add(this);
+		this.group = group;
 		this.styler = new ElementStylerTexture(Texture.RADIO_INNER){
 			public void style(Element e) {
 				if(toggled){
@@ -47,5 +49,11 @@ public class ElementRadioButton extends Element{
 	protected void onReleased(ElementRootContainer root, int x, int y, int which) {
 		super.onReleased(root, x, y, which);
 		group.radioSelected(root, this);
+	}
+	
+	@Override
+	protected void onRemoved(ElementRootContainer root) {
+		super.onRemoved(root);
+		group.remove(this);
 	}
 }

@@ -82,7 +82,7 @@ public class ElementScrollContainer extends ElementContainer{
 	}
 	
 	@Override
-	public ElementContainer add(Element e) {
+	public ElementContainer add(Element... e) {
 		container.add(e);
 		return this;
 	}

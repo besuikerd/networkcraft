@@ -65,7 +65,7 @@ public abstract class Element extends Gui implements IProcessData {
 	public static final long THRESHOLD_DOUBLE_PRESS = 200l;
 
 	public static final long THRESHOLD_INITIAL_KEY_TYPED = 600l;
-	public static final long THRESHOLD_NEXT_KEY_TYPED = 100l;
+	public static final long THRESHOLD_NEXT_KEY_TYPED = 70l;
 
 	public static final Map<Integer, Integer> mouseMap = Collections.unmodifiableMap(new HashMap<Integer, Integer>() {
 		{
@@ -94,6 +94,7 @@ public abstract class Element extends Gui implements IProcessData {
 	 * parent container
 	 */
 	protected ElementContainer parent;
+	
 
 	protected LayoutDimension widthDimension;
 	protected LayoutDimension heightDimension;
@@ -178,11 +179,15 @@ public abstract class Element extends Gui implements IProcessData {
 	}
 
 	public void draw(ElementRootContainer root, int mouseX, int mouseY) {
+		bindTexture();
+	};
+	
+	public void bindTexture(){
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 		if (textures != null) {
 			mc.getTextureManager().bindTexture(textures);
 		}
-	};
+	}
 	
 	public void style(){
 		if(styler != null){
@@ -329,6 +334,12 @@ public abstract class Element extends Gui implements IProcessData {
 		BLogger.debug("releasefocus: %s, lastCode %d", getClass().toString(), lastCode);
 		
 		return true;
+	}
+	
+	protected void onAdded(ElementRootContainer root){
+	}
+	
+	protected void onRemoved(ElementRootContainer root){
 	}
 	
 	protected boolean doTrigger(ITrigger trigger, ElementRootContainer root, Object... args){

@@ -3,8 +3,6 @@ package nl.besuikerd.core.gui.element;
 import java.util.regex.Pattern;
 
 import nl.besuikerd.core.BLogger;
-import nl.besuikerd.core.gui.layout.Alignment;
-import nl.besuikerd.core.gui.layout.HorizontalLayout;
 import nl.besuikerd.core.gui.layout.LayoutDimension;
 import nl.besuikerd.core.gui.texture.scalable.ScalableTexture;
 
@@ -31,7 +29,7 @@ public class ElementInputField extends ElementStyledContainer {
 		this.inputFieldLabel = new ElementInputLabel(0, 0, width - 4, text, regex);
 		inputFieldContainer.add(inputFieldLabel);
 		this.viewPort = new ElementViewport(0, fontRenderer.FONT_HEIGHT, inputFieldContainer);
-		viewPort.heightDimension = LayoutDimension.WRAP_CONTENT;
+		viewPort.widthDimension(LayoutDimension.WRAP_CONTENT);
 		add(viewPort);
 	}
 	
@@ -119,6 +117,7 @@ public class ElementInputField extends ElementStyledContainer {
 
 		@Override
 		protected boolean keyTyped(ElementRootContainer root, char key, int code) {
+			super.keyTyped(root, key, code);
 			if ((!isEnabled() && code != Keyboard.KEY_RETURN) || !isFocused()) {
 				return false;
 			}

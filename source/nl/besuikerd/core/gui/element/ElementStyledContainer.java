@@ -1,5 +1,7 @@
 package nl.besuikerd.core.gui.element;
 
+import org.lwjgl.opengl.GL11;
+
 import nl.besuikerd.core.gui.layout.LayoutDimension;
 import nl.besuikerd.core.gui.texture.scalable.IScalableTexture;
 import nl.besuikerd.core.gui.texture.scalable.ScalableTexture;
@@ -46,6 +48,7 @@ public class ElementStyledContainer extends ElementContainer{
 
 	@Override
 	public void draw(ElementRootContainer root, int mouseX, int mouseY) {
+		bindTexture();
 		drawBackgroundFromTextures(background);
 		super.draw(root, mouseX, mouseY);
 	}
