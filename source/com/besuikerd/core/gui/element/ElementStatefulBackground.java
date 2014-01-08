@@ -18,8 +18,8 @@ public class ElementStatefulBackground extends Element{
 	}
 	
 	@Override
-	public void draw(ElementRootContainer root, int mouseX, int mouseY) {
-		super.draw(root, mouseX, mouseY);
+	public void draw(int mouseX, int mouseY) {
+		super.draw(mouseX, mouseY);
 		drawStatefulBackgroundFromTextures(statefulBackground);
 	}
 	

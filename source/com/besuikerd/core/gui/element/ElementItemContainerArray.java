@@ -9,14 +9,22 @@ import net.minecraft.inventory.Slot;
 
 public class ElementItemContainerArray extends ElementContainer{
 	
+	protected int columns;
 	
 	public ElementItemContainerArray(int x, int y, int columns, Collection<? extends Slot> slots) {
-		super(x, y, columns * 18, (int) (Math.ceil(slots.size() / columns) * 18));
+		super(x, y, 0, (int) (Math.ceil(slots.size() / columns) * 18));
+		this.columns = columns;
 		this.layout = new HorizontalLayout();
 		this.heightDimension = LayoutDimension.WRAP_CONTENT;
 		for(Slot slot : slots){
 			add(new ElementItemContainer(slot));
 		}
+	}
+	
+	@Override
+	public void dimension() {
+		super.dimension();
+		this.width = columns * 18 + paddingLeft + paddingRight;
 	}
 	
 	public ElementItemContainerArray(int columns, Collection<? extends Slot> slots) {

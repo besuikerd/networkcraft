@@ -13,16 +13,15 @@ public interface Layout {
 	 * @param mouseX
 	 * @param mouseY
 	 */
-	public void init(ElementContainer container, ElementContainer root);
+	public void init(ElementContainer container);
 	
 	/**
 	 * translate the x and y coordinates of the Element in the given ElementContainer.
-	 * @param container ElementContainer the element is in
 	 * @param e Element that needs to be laid out
 	 * @param index index of the Element in the ElementContainer
 	 * @return
 	 */
-	public boolean layout(ElementContainer container, Element e, int index, ElementContainer root);
+	public boolean layout(Element e, int index);
 	
 	/**
 	 * The dimensions of Elements laid out so far by this Layout
@@ -34,5 +33,5 @@ public interface Layout {
 	 * align an Element relative to the container
 	 * @param e
 	 */
-	public void align(Element e, ElementContainer parent);
+	public void align(Element e);
 }

@@ -14,8 +14,8 @@ public class ElementScrollContainer extends ElementContainer{
 	protected Orientation orientation;
 	
 	@Override
-	protected boolean onScrolled(ElementRootContainer root, int x, int y, int amount) {
-		return scrollBar.onScrolled(root, x, y, amount);
+	protected boolean onScrolled(int x, int y, int amount) {
+		return scrollBar.onScrolled(x, y, amount);
 	}
 	
 	public ElementScrollContainer(int dimension, Orientation orientation, final ElementContainer container) {
@@ -38,7 +38,7 @@ public class ElementScrollContainer extends ElementContainer{
 		this.scrollBar = new ElementScrollBar(11, orientation){
 			
 			@Override
-			public boolean onScrolled(ElementRootContainer root, int x, int y, int amount) {
+			public boolean onScrolled(int x, int y, int amount) {
 				return setProgress(progress + (-0.25 * amount / (orientation == Orientation.VERTICAL ? container.height : container.width) ));
 //					setProgress(progress + (-0.1 * (amount / 120))); //consume input if progress changed
 			}
@@ -65,7 +65,7 @@ public class ElementScrollContainer extends ElementContainer{
 	}
 	
 	@Override
-	public void dimension(ElementRootContainer root) {
+	public void dimension() {
 		
 		//reset progress to 0 if container is smaller than viewport
 		if(orientation == Orientation.VERTICAL && container.height < height || orientation == Orientation.HORIZONTAL && container.width < width){
@@ -77,7 +77,7 @@ public class ElementScrollContainer extends ElementContainer{
 		} else{
 			viewport.xOffset = (int) (-1 * (container.width - this.width) * scrollBar.progress);
 		}
-		super.dimension(root);
+		super.dimension();
 		
 	}
 	

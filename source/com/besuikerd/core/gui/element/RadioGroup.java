@@ -16,7 +16,7 @@ public class RadioGroup{
 	public void radioSelected(ElementRootContainer root, ElementRadioButton radio){
 		int radioIndex = -1;
 		if((radioIndex = buttons.indexOf(radio)) != -1){
-			if(selectedIndex < buttons.size()){
+			if(selectedIndex >= 0 && selectedIndex < buttons.size()){
 				buttons.get(selectedIndex).toggleOff(root);
 			}
 			radio.toggleOn(root);

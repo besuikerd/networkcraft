@@ -1,11 +1,10 @@
 package com.besuikerd.core.gui.texture.scalable;
 
 import com.besuikerd.core.utils.Tuple;
-
 public enum ScalableTextureSolidButton implements IScalableTexture{
-	NORMAL(new Tuple(133, 1, 148, 16), new Tuple(133, 0, 148, 0), new Tuple(149, 1, 149, 16), new Tuple(133, 17, 148, 17), new Tuple(132, 1, 132, 16), new Tuple(132, 0, 132, 0), new Tuple(149, 0, 149, 0), new Tuple(149, 17, 149, 17), new Tuple(132, 17, 132, 17)),
-	ACTIVATED(new Tuple(47, 1, 62, 16), new Tuple(47, 0, 62, 0), new Tuple(63, 1, 63, 16), new Tuple(47, 17, 62, 17), new Tuple(46, 1, 46, 16), new Tuple(46, 0, 46, 0), new Tuple(63, 0, 63, 0), new Tuple(63, 17, 63, 17), new Tuple(46, 17, 46, 17)),
-	DISABLED(new Tuple(151, 1, 166, 16), new Tuple(151, 0, 166, 0), new Tuple(167, 1, 167, 16), new Tuple(151, 17, 166, 17), new Tuple(150, 1, 150, 16), new Tuple(150, 0, 167, 0), new Tuple(167, 0, 167, 0), new Tuple(167, 17, 167, 17), new Tuple(150, 17, 150, 17))
+	NORMAL(ScalableTexture.SLOT_INVERSE),
+	ACTIVATED(ScalableTexture.SLOT),
+	DISABLED(new Tuple(37, 19, 52, 34), new Tuple(37, 18, 52, 18), new Tuple(53, 19, 53, 34), new Tuple(37, 35, 52, 35), new Tuple(36, 19, 36, 34), new Tuple(36, 18, 36, 18), new Tuple(53, 18, 53, 18), new Tuple(53, 35, 53, 35), new Tuple(36, 35, 36, 35))
 	;
 	
 	protected Tuple background;
@@ -30,6 +29,10 @@ public enum ScalableTextureSolidButton implements IScalableTexture{
 		this.cornerTR = cornerTR;
 		this.cornerBR = cornerBR;
 		this.cornerBL = cornerBL;
+	}
+	
+	private ScalableTextureSolidButton(IScalableTexture texture){
+		this(texture.getTexture(), texture.edgeTop(), texture.edgeRight(), texture.edgeBottom(), texture.edgeLeft(), texture.cornerTL(), texture.cornerTR(), texture.cornerBR(), texture.cornerBL());
 	}
 
 	@Override

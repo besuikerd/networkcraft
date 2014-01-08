@@ -18,37 +18,37 @@ public class DefaultLayout implements Layout{
 	private int maxHeight;
 	
 	@Override
-	public void init(ElementContainer container, ElementContainer root) {
+	public void init(ElementContainer container) {
 		this.maxWidth = 0;
 		this.maxHeight = 0;
 	}
 	
 	
 	@Override
-	public boolean layout(ElementContainer container, Element e, int index, ElementContainer root) {
+	public boolean layout(Element e, int index) {
 		//keep element within container bounds and apply padding
 		
-		if(container.getWidthDimension() != LayoutDimension.WRAP_CONTENT){
+		if(e.getParent().getWidthDimension() != LayoutDimension.WRAP_CONTENT){
 			//left bound crossed
-			if(e.getX() < container.getPaddingLeft()){
-				e.setX(container.getPaddingLeft());
+			if(e.getX() < e.getParent().getPaddingLeft()){
+				e.setX(e.getParent().getPaddingLeft());
 			}
 			
 			//right bound crossed
-			if(e.getX() + e.getWidth() + container.getPaddingRight() > container.getWidth()){
-				e.setX(container.getWidth() - (e.getWidth() + container.getPaddingRight()));
+			if(e.getX() + e.getWidth() + e.getParent().getPaddingRight() > e.getParent().getWidth()){
+				e.setX(e.getParent().getWidth() - (e.getWidth() + e.getParent().getPaddingRight()));
 			}
 		}
 		
-		if(container.getHeightDimension() != LayoutDimension.WRAP_CONTENT){
+		if(e.getParent().getHeightDimension() != LayoutDimension.WRAP_CONTENT){
 			//top bound crossed
-			if(e.getY() < container.getPaddingTop()){
-				e.setY(container.getPaddingTop());
+			if(e.getY() < e.getParent().getPaddingTop()){
+				e.setY(e.getParent().getPaddingTop());
 			}
 			
 			//bottom bound crossed
-			if(e.getY() + e.getHeight() + container.getPaddingBottom() > container.getHeight()){
-				e.setY(container.getHeight() - (e.getHeight() + container.getPaddingBottom()));
+			if(e.getY() + e.getHeight() + e.getParent().getPaddingBottom() > e.getParent().getHeight()){
+				e.setY(e.getParent().getHeight() - (e.getHeight() + e.getParent().getPaddingBottom()));
 			}
 		}
 		
@@ -69,27 +69,27 @@ public class DefaultLayout implements Layout{
 	}
 	
 	@Override
-	public void align(Element e, ElementContainer parent) {
+	public void align(Element e) {
 		switch (e.getAlignment()) {
 			case TOP:
-				e.setY(parent.getPaddingTop());
-				e.setX((parent.getWidth() - e.getWidth()) / 2);
+				e.setY(e.getParent().getPaddingTop());
+				e.setX((e.getParent().getWidth() - e.getWidth()) / 2);
 				break;
 			case RIGHT:
-				e.setY((parent.getHeight() - e.getHeight()) / 2);
-				e.setX(parent.getWidth() - parent.getPaddingRight());
+				e.setY((e.getParent().getHeight() - e.getHeight()) / 2);
+				e.setX(e.getParent().getWidth() - e.getParent().getPaddingRight());
 				break;
 			case BOTTOM:
-				e.setY(parent.getHeight() - parent.getPaddingBottom());
-				e.setX((parent.getWidth() - e.getWidth()) / 2);
+				e.setY(e.getParent().getHeight() - e.getParent().getPaddingBottom());
+				e.setX((e.getParent().getWidth() - e.getWidth()) / 2);
 				break;
 			case LEFT:
-				e.setY((parent.getHeight() - e.getHeight()) / 2);
-				e.setX(parent.getPaddingLeft());
+				e.setY((e.getParent().getHeight() - e.getHeight()) / 2);
+				e.setX(e.getParent().getPaddingLeft());
 				break;
 			case CENTER:
-				e.setY((parent.getHeight() - e.getHeight()) / 2);
-				e.setX((parent.getWidth() - e.getWidth()) / 2);
+				e.setY((e.getParent().getHeight() - e.getHeight()) / 2);
+				e.setX((e.getParent().getWidth() - e.getWidth()) / 2);
 				break;
 			default:
 				break;

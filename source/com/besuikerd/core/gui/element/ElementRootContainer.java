@@ -29,14 +29,14 @@ public class ElementRootContainer extends ElementStyledContainer{
 	public boolean requestFocus(Element element){
 		boolean canFocus = true;
 		if(focusedElement != null){
-			canFocus = focusedElement.onReleaseFocus(this);
+			canFocus = focusedElement.onReleaseFocus();
 		}
 		if(canFocus){
 			if(focusedElement != null){
 				focusedElement.toggleOff(Element.FOCUSED);
 			}
 			this.focusedElement = element;
-			element.onFocus(this);
+			element.onFocus();
 			element.toggleOn(Element.FOCUSED);
 		}
 		return canFocus;
@@ -44,7 +44,7 @@ public class ElementRootContainer extends ElementStyledContainer{
 	
 	public void releaseFocus(Element element){
 		if(focusedElement != null && focusedElement.equals(element)){
-			focusedElement.onReleaseFocus(this);
+			focusedElement.onReleaseFocus();
 			focusedElement.toggleOff(Element.FOCUSED);
 			focusedElement = null;
 		}
@@ -55,30 +55,30 @@ public class ElementRootContainer extends ElementStyledContainer{
 	}
 	
 	@Override
-	public boolean handleMouseInput(ElementRootContainer root, int mouseX, int mouseY) {
+	public boolean handleMouseInput(int mouseX, int mouseY) {
 		
 		this.scrollMovement = Mouse.getDWheel();
 		
 		boolean consumeMouseInput = false;
 		if(focusedElement != null){
-			consumeMouseInput = focusedElement.handleMouseInput(root, mouseX - focusedElement.absX(), mouseY - focusedElement.absY());
+			consumeMouseInput = focusedElement.handleMouseInput(mouseX - focusedElement.absX(), mouseY - focusedElement.absY());
 		}
 		
 		if(!consumeMouseInput){
-			super.handleMouseInput(root, mouseX - absX(), mouseY - absY());
+			super.handleMouseInput(mouseX - absX(), mouseY - absY());
 		}
 		return true; //root element always consumes mouse input
 	}
 	
 	@Override
-	public boolean handleKeyboardInput(ElementRootContainer root) {
+	public boolean handleKeyboardInput() {
 		boolean consumeKeyboardInput = false;
 		
 		if(focusedElement != null){
-			consumeKeyboardInput = focusedElement.handleKeyboardInput(root);
+			consumeKeyboardInput = focusedElement.handleKeyboardInput();
 		}
 		if(!consumeKeyboardInput){
-			consumeKeyboardInput = super.handleKeyboardInput(root);
+			consumeKeyboardInput = super.handleKeyboardInput();
 		}
 		
 		return consumeKeyboardInput;
@@ -90,5 +90,10 @@ public class ElementRootContainer extends ElementStyledContainer{
 	
 	public IEventHandler getEventHandler() {
 		return eventHandler;
+	}
+	
+	@Override
+	public ElementRootContainer getRoot() {
+		return this;
 	}
 }

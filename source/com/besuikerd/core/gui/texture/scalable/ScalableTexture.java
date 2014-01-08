@@ -3,9 +3,10 @@ package com.besuikerd.core.gui.texture.scalable;
 import com.besuikerd.core.utils.Tuple;
 
 public enum ScalableTexture implements IScalableTexture{
-	STYLED_CONTAINER(new Tuple(72, 0, 95, 23), new Tuple(0, 250, 255, 252), new Tuple(253, 0, 255, 249), new Tuple(0, 253, 255, 255), new Tuple(250, 0, 252, 249), new Tuple(64, 0, 67, 3), new Tuple(68, 0, 71, 3), new Tuple(68, 4, 71, 7), new Tuple(64, 4, 67, 7)),
-	CONTAINER(new Tuple(47, 1, 62, 16), new Tuple(47, 0, 62, 0), new Tuple(63, 1, 63, 16), new Tuple(47, 17, 62, 17), new Tuple(46, 1, 46, 16), new Tuple(46, 0, 46, 0), new Tuple(63, 0, 63, 0), new Tuple(63, 17, 63, 17), new Tuple(46, 17, 46, 17)),
-	CONTAINER_INVERSE(new Tuple(47, 1, 62, 16), new Tuple(47, 0, 62, 0), new Tuple(63, 1, 63, 16), new Tuple(47, 17, 62, 17), new Tuple(46, 1, 46, 16), new Tuple(46, 0, 46, 0), new Tuple(63, 0, 63, 0), new Tuple(63, 17, 63, 17), new Tuple(46, 17, 46, 17)),
+	STYLED_CONTAINER(new Tuple(232, 6, 249, 23), new Tuple(186, 0, 249, 2), new Tuple(253, 0, 255, 63), new Tuple(186, 3, 249, 5), new Tuple(250, 0, 252, 63), new Tuple(242, 24, 245, 27), new Tuple(246, 24, 249, 27), new Tuple(246, 28, 249, 31), new Tuple(242, 28, 245, 31)),
+	SLOT(new Tuple(55, 1, 70, 16), new Tuple(55, 0, 70, 0), new Tuple(71, 1, 71, 16), new Tuple(55, 17, 70, 17), new Tuple(54, 1, 54, 16), new Tuple(54, 0, 54, 0), new Tuple(71, 0, 71, 0), new Tuple(71, 17, 71, 17), new Tuple(54, 17, 54, 17)),
+	SLOT_INVERSE(new Tuple(37, 1, 52, 16), new Tuple(37, 0, 52, 0), new Tuple(53, 1, 53, 16), new Tuple(37, 17, 52, 17), new Tuple(36, 1, 36, 16), new Tuple(36, 0, 36, 0), new Tuple(53, 0, 53, 0), new Tuple(53, 17, 53, 17), new Tuple(36, 17, 36, 17)),
+	
 	;
 	
 	protected Tuple background;

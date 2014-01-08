@@ -39,18 +39,18 @@ public class VerticalLayout implements Layout {
 	}
 
 	@Override
-	public void init(ElementContainer parent, ElementContainer root) {
+	public void init(ElementContainer parent) {
 		xOffset = parent.getPaddingLeft();
 		yOffset = parent.getPaddingTop();
 		maxWidth = 0;
 	}
 
 	@Override
-	public boolean layout(ElementContainer container, Element e, int index, ElementContainer root) {
+	public boolean layout(Element e, int index) {
 
 		//check if element would fall out of vertical bounds
-		if (container.getHeightDimension() != LayoutDimension.WRAP_CONTENT && yOffset + e.getHeight() > container.getHeight() - container.getPaddingBottom()) {
-			yOffset = container.getPaddingTop();
+		if (e.getParent().getHeightDimension() != LayoutDimension.WRAP_CONTENT && yOffset + e.getHeight() > e.getParent().getHeight() - e.getParent().getPaddingBottom()) {
+			yOffset = e.getParent().getPaddingTop();
 			xOffset += e.getWidth() + marginX;
 			maxWidth = e.getWidth();
 		} else if (e.getWidth() > maxWidth) {
@@ -61,7 +61,7 @@ public class VerticalLayout implements Layout {
 		e.setY(yOffset);
 
 		//increment xOffset
-		yOffset += e.getHeight() + (container.getElementCount() - 1 == index ? 0 : marginY);
+		yOffset += e.getHeight() + (e.getParent().getElementCount() - 1 == index ? 0 : marginY);
 		return true;
 	}
 
@@ -71,14 +71,14 @@ public class VerticalLayout implements Layout {
 	}
 
 	@Override
-	public void align(Element e, ElementContainer parent) {
-		if (xOffset == parent.getPaddingLeft()) { //check if there is only a single column
+	public void align(Element e) {
+		if (xOffset == e.getParent().getPaddingLeft()) { //check if there is only a single column
 			switch (e.getAlignment()) {
 				case RIGHT:
-					e.setX(parent.getWidth() - e.getWidth() - parent.getPaddingRight());
+					e.setX(e.getParent().getWidth() - e.getWidth() - e.getParent().getPaddingRight());
 					break;
 				case CENTER:
-					e.setX((parent.getWidth() - e.getWidth()) / 2);
+					e.setX((e.getParent().getWidth() - e.getWidth()) / 2);
 					break;
 				default:
 					break;

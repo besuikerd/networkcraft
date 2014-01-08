@@ -56,6 +56,8 @@ public class ElementContainer extends Element{
 
 	public ElementContainer add(Element... elements){
 		for(Element e : elements){
+			e.index = this.elements.size();
+			e.parent = this;
 			pendingAdditions.add(e);
 		}
 		return this;
@@ -88,21 +90,21 @@ public class ElementContainer extends Element{
 	}
 	
 	@Override
-	public void draw(ElementRootContainer root, int mouseX, int mouseY) {
+	public void draw(int mouseX, int mouseY) {
 		
-		super.draw(root, mouseX, mouseY);
+		super.draw(mouseX, mouseY);
 		
 		//render last element to first element
 		for(int i = elements.size() - 1;  i >= 0 ; i--){
 			Element e = elements.get(i);
-			e.draw(root, mouseX, mouseY);
+			e.draw(mouseX, mouseY);
 			e.style();
 		}
 	}
 	
 	@Override
-	public void dimension(ElementRootContainer root) {
-		layout.init(this, root);
+	public void dimension() {
+		layout.init(this);
 		
 		//dimension elements
 		for(int i = 0 ; i < elements.size() ; i++){
@@ -112,13 +114,13 @@ public class ElementContainer extends Element{
 			e.dy = absY();
 			
 			//increment relative coordinates
-			e.dimension(root);
+			e.dimension();
 		}
 		
 		//lay out elements
 		for(int i = 0 ; i < elements.size() ; i++){
 			Element e = elements.get(i);
-			layout.layout(this, e, i, root);
+			layout.layout(e, i);
 		}
 		
 		Dimension laidOutDimension = layout.getLaidOutDimension();
@@ -134,44 +136,42 @@ public class ElementContainer extends Element{
 		//align elements
 		for(Element e : elements){
 			if(e.getAlignment() != null){
-				layout.align(e, this);
+				layout.align(e);
 			}
 		}
 		
-		super.dimension(root);
+		super.dimension();
 	}
 	
 	@Override
-	public void update(ElementRootContainer root) {
-		super.update(root);
+	public void update() {
+		super.update();
 		
 		for(Element e : pendingRemovals){
-			e.onRemoved(root);
+			e.onRemoved();
 			elements.remove(e);
 		}
 		
 		for(Element e : pendingAdditions){			
 			elements.add(e);
-			e.index = elements.size();
-			e.parent = this;
-			e.onAdded(root);
+			e.onAdded();
 		}
 		
 		pendingRemovals.clear();
 		pendingAdditions.clear();
 		
 		for(Element e : elements){
-			e.update(root);
+			e.update();
 		}
 	}
 	
 	@Override
-	public boolean handleMouseInput(ElementRootContainer root, int mouseX, int mouseY) {
-		boolean consumeMouseInput = super.handleMouseInput(root, mouseX, mouseY);
+	public boolean handleMouseInput(int mouseX, int mouseY) {
+		boolean consumeMouseInput = super.handleMouseInput(mouseX, mouseY);
 		
 		if(!consumeMouseInput){
 			for(Element e : elements){
-				consumeMouseInput = e.handleMouseInput(root, mouseX - e.x, mouseY - e.y) || consumeMouseInput;
+				consumeMouseInput = e.handleMouseInput(mouseX - e.x, mouseY - e.y) || consumeMouseInput;
 			}
 		}
 		
@@ -179,12 +179,12 @@ public class ElementContainer extends Element{
 	}
 	
 	@Override
-	public boolean handleKeyboardInput(ElementRootContainer root) {
-		boolean consumeKeyboardInput = super.handleKeyboardInput(root);
+	public boolean handleKeyboardInput() {
+		boolean consumeKeyboardInput = super.handleKeyboardInput();
 		
 		if(!consumeKeyboardInput){
 			for(Element e : elements){
-				if((consumeKeyboardInput = e.handleKeyboardInput(root))){
+				if((consumeKeyboardInput = e.handleKeyboardInput())){
 					break;
 				}
 			}
@@ -194,10 +194,10 @@ public class ElementContainer extends Element{
 	}
 	
 	@Override
-	public void onEvent(String name, Object[] args, ElementRootContainer root, Element e) {
-		super.onEvent(name, args, root, e);
+	public void onEvent(String name, Object[] args, Element e) {
+		super.onEvent(name, args, e);
 		for(Element el : elements){ //delegate events to children
-			el.onEvent(name, args, root, e);
+			el.onEvent(name, args, e);
 		}
 	}
 	

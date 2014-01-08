@@ -38,7 +38,7 @@ public class ElementViewport extends Element {
         /**
          * root delegate
          */
-        protected ElementRootContainer root;
+        protected ElementRootContainer rootDelegate;
 
         /**
          * x-offset for container within viewport; can also be negative
@@ -54,14 +54,14 @@ public class ElementViewport extends Element {
 
         public ElementViewport(int width, int height, Element element) {
                 super(width, height);
-                root = new ElementRootContainer(0, height);
-                root.add(element);
+                rootDelegate = new ElementRootContainer(width, height);
+                rootDelegate.add(element);
                 this.element = element;
         }
 
         @Override
-        public void dimension(ElementRootContainer root) {
-                super.dimension(root);
+        public void dimension() {
+                super.dimension();
                 //move container to the correct spot within the viewport
                 element.dx = absX();
                 element.dy = absY();
@@ -69,7 +69,7 @@ public class ElementViewport extends Element {
                 element.y = yOffset;
 
                 //layout element and fix dimensions
-                element.dimension(root);
+                element.dimension();
                 
                 if(widthDimension == LayoutDimension.WRAP_CONTENT){
                         this.width = element.width;
@@ -79,35 +79,35 @@ public class ElementViewport extends Element {
                 }
 
                 //limit root delegate within bounds of the real root
-                this.root.width = Math.min(element.width, root.width - root.paddingLeft - root.paddingRight);
-                this.root.height = Math.min(height, root.height - root.paddingTop - root.paddingBottom);
-                this.root.dx = Math.max(absX(), root.absX() + root.paddingLeft);
-                this.root.dy = Math.max(absY(), root.absY() + root.paddingTop);
+                this.rootDelegate.width = Math.min(width, getRoot().width);
+                this.rootDelegate.height = Math.min(height, getRoot().height);
+                this.rootDelegate.dx = Math.max(absX(), getRoot().absX());
+                this.rootDelegate.dy = Math.max(absY(), getRoot().absY());
         }
 
         @Override
-        protected boolean handleMouseInput(ElementRootContainer root, int mouseX, int mouseY) {
-                super.handleMouseInput(root, mouseX, mouseY);
-                this.root.focusedElement = root.focusedElement; //copy focus from real root
-                this.root.scrollMovement = root.scrollMovement; //copy scroll movement from real root
-                this.root.eventHandler = root.eventHandler; //copy eventhandler from real root
-                return element.handleMouseInput(this.root, mouseX - xOffset, mouseY - yOffset);
+        protected boolean handleMouseInput(int mouseX, int mouseY) {
+                super.handleMouseInput(mouseX, mouseY);
+                this.rootDelegate.focusedElement = getRoot().focusedElement; //copy focus from real root
+                this.rootDelegate.scrollMovement = getRoot().scrollMovement; //copy scroll movement from real root
+                this.rootDelegate.eventHandler = getRoot().eventHandler; //copy eventhandler from real root
+                return element.handleMouseInput(mouseX - xOffset, mouseY - yOffset);
         }
         
         @Override
-        public void update(ElementRootContainer root) {
-                super.update(root);
-                element.update(root);
+        public void update() {
+                super.update();
+                rootDelegate.update();
         }
         
         @Override
-        public void onEvent(String name, Object[] args, ElementRootContainer root, Element e) {
-                element.onEvent(name, args, root, e);
+        public void onEvent(String name, Object[] args, Element e) {
+                rootDelegate.onEvent(name, args, e);
         }
 
         @Override
-        public void draw(ElementRootContainer root, int mouseX, int mouseY) {
-                super.draw(root, mouseX, mouseY);
+        public void draw(int mouseX, int mouseY) {
+                super.draw(mouseX, mouseY);
                 glEnable(GL_STENCIL_TEST);
                 glStencilFunc(GL_ALWAYS, 0x1, 0xff);
                 glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
@@ -116,12 +116,12 @@ public class ElementViewport extends Element {
                 glStencilMask(0xff); // draw to mask
                 glClear(GL_STENCIL_BUFFER_BIT); //clear stencil
                 glColor4f(1, 1, 1, 1);
-                drawRect(Math.max(absX(), root.absX()), Math.max(absY(), root.absY()), Math.min(absX() + width, root.absX() + root.width), Math.min(absY() + height, root.absY() + root.height), 0xffffffff); //draw square mask
+                drawRect(Math.max(absX(), rootDelegate.absX()), Math.max(absY(), rootDelegate.absY()), Math.min(absX() + width, rootDelegate.absX() + rootDelegate.width), Math.min(absY() + height, rootDelegate.absY() + rootDelegate.height), 0xffffffff); //draw square mask
                 glStencilMask(0x0); //don't draw to mask
                 glStencilFunc(GL_EQUAL, 0x1, 0xff);
                 glColorMask(true, true, true, true); //restore color mask
                 glDepthMask(true); //restore depth mask
-                element.draw(this.root, mouseX, mouseY);
+                element.draw(mouseX, mouseY);
                 glDisable(GL_STENCIL_TEST);
         }
 }

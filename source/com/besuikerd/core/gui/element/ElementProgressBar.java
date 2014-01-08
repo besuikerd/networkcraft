@@ -4,11 +4,12 @@ import com.besuikerd.core.gui.texture.scalable.ScalableTexture;
 
 public class ElementProgressBar extends ElementStyledContainer{
 
-	private double progress = 0;
+	protected double progress = 0;
+	protected double max = 1;
 	private int color = 0xFFFF0000;
 
 	public ElementProgressBar(int width, int height) {
-		super(width, height, ScalableTexture.CONTAINER);
+		super(width, height, ScalableTexture.SLOT);
 	}
 	
 	public ElementProgressBar(int width, int height, int color){
@@ -17,8 +18,8 @@ public class ElementProgressBar extends ElementStyledContainer{
 	}
 
 	@Override 
-	public void draw(ElementRootContainer root, int mouseX, int mouseY) {
-		super.draw(root, mouseX, mouseY);
+	public void draw(int mouseX, int mouseY) {
+		super.draw(mouseX, mouseY);
 		drawRect(absX() + 2, absY() + 2, absX()+(int)((width-4)*progress), absY()+height-2, color);
 	}
 	

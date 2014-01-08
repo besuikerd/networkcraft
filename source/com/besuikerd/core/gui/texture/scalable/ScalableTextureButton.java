@@ -3,10 +3,10 @@ package com.besuikerd.core.gui.texture.scalable;
 import com.besuikerd.core.utils.Tuple;
 
 public enum ScalableTextureButton implements IScalableTexture{
-	DISABLED(new Tuple(1, 25, 198, 42), new Tuple(1, 24, 198, 24), new Tuple(199, 25, 199, 42), new Tuple(1, 43, 198, 43), new Tuple(0, 25, 0, 42), new Tuple(0, 24, 0, 24), new Tuple(199, 24, 199, 24), new Tuple(0, 43, 0, 43), new Tuple(199, 43, 199, 43)),
-	NORMAL(new Tuple(2, 46, 197, 60), new Tuple(2, 44, 197, 45), new Tuple(198, 46, 199, 60), new Tuple(2, 61, 197, 63), new Tuple(0, 46, 1, 60), new Tuple(0, 44, 1, 45), new Tuple(198, 44, 199, 45), new Tuple(198, 61, 199, 63), new Tuple(0, 61, 1, 63)),
-	HOVERING(new Tuple(2, 66, 197, 80), new Tuple(2, 64, 197, 65), new Tuple(198, 66, 199, 80), new Tuple(2, 81, 197, 83), new Tuple(0, 66, 1, 80), new Tuple(0, 64, 1, 65), new Tuple(198, 64, 199, 65), new Tuple(198, 81, 199, 83), new Tuple(0, 81, 1, 83)),
-	ACTIVATED(new Tuple(2, 87, 197, 101), new Tuple(2, 84, 197, 86), new Tuple(198, 87, 199, 101), new Tuple(2, 102, 197, 103), new Tuple(0, 87, 1, 101), new Tuple(0, 84, 1, 86), new Tuple(198, 84, 199, 86), new Tuple(198, 102, 199, 103), new Tuple(0, 102, 1, 103));
+	DISABLED(new Tuple(1, 1, 16, 16), new Tuple(1, 0, 16, 0), new Tuple(17, 1, 17, 16), new Tuple(1, 17, 16, 17), new Tuple(0, 1, 0, 16), new Tuple(0, 0, 0, 0), new Tuple(17, 0, 17, 0), new Tuple(17, 17, 17, 17), new Tuple(0, 17, 0, 17)),
+	NORMAL(new Tuple(2, 20, 15, 32), new Tuple(2, 18, 15, 19), new Tuple(16, 20, 17, 32), new Tuple(2, 33, 15, 35), new Tuple(0, 20, 1, 32), new Tuple(0, 18, 1, 19), new Tuple(16, 18, 17, 19), new Tuple(16, 33, 17, 35), new Tuple(0, 33, 1, 35)),
+	HOVERING(new Tuple(20, 2, 33, 14), new Tuple(20, 0, 33, 1), new Tuple(34, 2, 35, 14), new Tuple(20, 15, 33, 17), new Tuple(18, 2, 19, 14), new Tuple(18, 0, 19, 1), new Tuple(34, 0, 35, 1), new Tuple(34, 15, 35, 17), new Tuple(18, 15, 19, 17)),
+	ACTIVATED(new Tuple(20, 21, 33, 33), new Tuple(20, 18, 33, 20), new Tuple(34, 21, 35, 33), new Tuple(20, 34, 33, 35), new Tuple(18, 21, 19, 33), new Tuple(18, 18, 19, 20), new Tuple(34, 18, 35, 20), new Tuple(34, 34, 35, 35), new Tuple(18, 34, 19, 35));
 	;
 	
 	protected Tuple background;

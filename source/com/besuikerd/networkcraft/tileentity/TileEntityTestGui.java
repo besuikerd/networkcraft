@@ -57,7 +57,17 @@ public class TileEntityTestGui extends TileEntityBesu{
 				.add((new ElementButton("-").trigger(Trigger.PRESSED, Event.REMOVE))
 			))
 			
-			.add(new ElementScrollContainer(100).add(list))
+			.add(new ElementScrollContainer(100)
+				.add(new ElementScrollContainer(200)
+					.add(new ElementScrollContainer(400).add(list))
+					
+					
+				)
+			)
+			
+			
+			
+			
 			.add(new ElementCheckbox(true))
 			
 			.add(
@@ -65,6 +75,8 @@ public class TileEntityTestGui extends TileEntityBesu{
 				new ElementRadioButton(group),
 				new ElementRadioButton(group)	
 			)
+			
+			.add(new ElementScrollContainer(100, Orientation.HORIZONTAL))
 			
 			
 			;

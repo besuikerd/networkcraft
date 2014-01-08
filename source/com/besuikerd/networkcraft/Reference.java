@@ -7,6 +7,6 @@ public class Reference {
 	
 	
 	//proxy classes
-	public static final String PROXY_CLIENT = "nl.besuikerd.networkcraft.ClientProxy";
-	public static final String PROXY_SERVER = "nl.besuikerd.networkcraft.CommonProxy";
+	public static final String PROXY_CLIENT = "com.besuikerd.networkcraft.ClientProxy";
+	public static final String PROXY_SERVER = "com.besuikerd.networkcraft.CommonProxy";
 }

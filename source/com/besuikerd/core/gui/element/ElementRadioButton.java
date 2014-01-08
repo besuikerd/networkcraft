@@ -23,8 +23,8 @@ public class ElementRadioButton extends Element{
 	}
 	
 	@Override
-	public void draw(ElementRootContainer root, int mouseX, int mouseY) {
-		super.draw(root, mouseX, mouseY);
+	public void draw(int mouseX, int mouseY) {
+		super.draw(mouseX, mouseY);
 		drawTextureCentered(Texture.RADIO_OUTER);
 	}
 	
@@ -42,18 +42,18 @@ public class ElementRadioButton extends Element{
 	}
 	
 	protected void onToggled(ElementRootContainer root, boolean toggle){
-		doTrigger(Trigger.TOGGLED, root, toggle);
+		doTrigger(Trigger.TOGGLED, toggle);
 	}
 	
 	@Override
-	protected void onReleased(ElementRootContainer root, int x, int y, int which) {
-		super.onReleased(root, x, y, which);
-		group.radioSelected(root, this);
+	protected void onReleased(int x, int y, int which) {
+		super.onReleased(x, y, which);
+		group.radioSelected(getRoot(), this);
 	}
 	
 	@Override
-	protected void onRemoved(ElementRootContainer root) {
-		super.onRemoved(root);
+	protected void onRemoved() {
+		super.onRemoved();
 		group.remove(this);
 	}
 }

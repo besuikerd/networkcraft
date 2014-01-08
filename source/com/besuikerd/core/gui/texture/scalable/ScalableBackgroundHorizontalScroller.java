@@ -3,9 +3,9 @@ package com.besuikerd.core.gui.texture.scalable;
 import com.besuikerd.core.utils.Tuple;
 
 public enum ScalableBackgroundHorizontalScroller implements IScalableTexture{
-	NORMAL(new Tuple(170, 2, 171, 9), new Tuple(170, 0, 180, 1), new Tuple(181, 2, 182, 9), new Tuple(170, 10, 180, 11), new Tuple(168, 2, 169, 9), new Tuple(168, 0, 169, 1), new Tuple(181, 0, 182, 1), new Tuple(181, 10, 182, 11), new Tuple(168, 10, 169, 11)),
-	ACTIVATED(new Tuple(185, 2, 186, 9), new Tuple(185, 0, 195, 1), new Tuple(196, 2, 197, 9), new Tuple(185, 10, 195, 11), new Tuple(183, 2, 184, 9), new Tuple(183, 0, 184, 1), new Tuple(196, 0, 197, 1), new Tuple(196, 10, 197, 11), new Tuple(183, 10, 184, 11)),
-	DISABLED(new Tuple(200, 2, 201, 9), new Tuple(200, 0, 210, 1), new Tuple(211, 2, 212, 9), new Tuple(200, 10, 210, 11), new Tuple(198, 2, 199, 9), new Tuple(198, 0, 199, 1), new Tuple(211, 0, 212, 1), new Tuple(211, 10, 212, 11), new Tuple(197, 10, 198, 11))
+	NORMAL(new Tuple(85, 2, 86, 9), new Tuple(85, 0, 87, 1), new Tuple(87, 2, 88, 9), new Tuple(85, 10, 87, 11), new Tuple(84, 2, 84, 9), new Tuple(84, 0, 84, 1), new Tuple(87, 0, 88, 1), new Tuple(87, 10, 88, 11), new Tuple(84, 10, 84, 11)),
+	ACTIVATED(new Tuple(90, 2, 91, 9), new Tuple(90, 0, 92, 1), new Tuple(92, 2, 93, 9), new Tuple(90, 10, 92, 11), new Tuple(89, 2, 89, 9), new Tuple(89, 0, 89, 1), new Tuple(92, 0, 93, 1), new Tuple(92, 10, 93, 11), new Tuple(89, 10, 89, 11)),
+	DISABLED(new Tuple(95, 2, 96, 9), new Tuple(95, 0, 97, 1), new Tuple(97, 2, 98, 9), new Tuple(95, 10, 97, 11), new Tuple(94, 2, 94, 9), new Tuple(94, 0, 94, 1), new Tuple(97, 0, 98, 1), new Tuple(97, 10, 98, 11), new Tuple(94, 10, 94, 11))
 	;
 	
 	protected Tuple background;

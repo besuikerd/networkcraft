@@ -94,6 +94,7 @@ public abstract class Element extends Gui implements IProcessData {
 	 * parent container
 	 */
 	protected ElementContainer parent;
+	private ElementRootContainer root;
 	
 
 	protected LayoutDimension widthDimension;
@@ -178,7 +179,7 @@ public abstract class Element extends Gui implements IProcessData {
 		this(0, 0, width, height);
 	}
 
-	public void draw(ElementRootContainer root, int mouseX, int mouseY) {
+	public void draw(int mouseX, int mouseY) {
 		bindTexture();
 	};
 	
@@ -187,6 +188,10 @@ public abstract class Element extends Gui implements IProcessData {
 		if (textures != null) {
 			mc.getTextureManager().bindTexture(textures);
 		}
+	}
+	
+	public void bindTexture(String s){
+		
 	}
 	
 	public void style(){
@@ -200,10 +205,9 @@ public abstract class Element extends Gui implements IProcessData {
 	 * properties before rendering them. When you override it, make sure to call
 	 * the super constructor to enable keyboard input to delegate correctly
 	 */
-	public void update(ElementRootContainer root) {
+	public void update() {
 		if (lastCode != -1 && nextChar < System.currentTimeMillis()) {
-			BLogger.debug("class: %s, code = %d", getClass().toString(), lastCode);
-			keyTyped(root, lastChar, lastCode);
+			keyTyped(lastChar, lastCode);
 			nextChar = System.currentTimeMillis() + THRESHOLD_NEXT_KEY_TYPED;
 		}
 	}
@@ -212,7 +216,7 @@ public abstract class Element extends Gui implements IProcessData {
 	 * callback before drawing the Element. Enables the repositioning of
 	 * elements before actually drawing them
 	 */
-	public void dimension(ElementRootContainer root) {
+	public void dimension() {
 	}
 
 	/**
@@ -238,30 +242,29 @@ public abstract class Element extends Gui implements IProcessData {
 	 * 
 	 * @return true if key consumes keyboard input
 	 */
-	protected boolean keyPressed(ElementRootContainer root, char key, int code) {
+	protected boolean keyPressed(char key, int code) {
 		return false;
 	}
 
-	protected boolean keyTyped(ElementRootContainer root, char key, int code) {
+	protected boolean keyTyped(char key, int code) {
 		return false;
 	}
 
-	protected void keyReleased(ElementRootContainer root, int code) {
+	protected void keyReleased(int code) {
 	}
 
-	public boolean handleKeyboardInput(ElementRootContainer root) {
+	public boolean handleKeyboardInput() {
 		boolean consume = false;
 		char key = Keyboard.getEventCharacter();
 		int code = Keyboard.getEventKey();
 		if (Keyboard.getEventKeyState()) {
-			BLogger.debug("key code %d pressed", code);
-			consume = keyPressed(root, key, code) || consume;
-			consume = keyTyped(root, key, code) || consume;
+			consume = keyPressed(key, code) || consume;
+			consume = keyTyped(key, code) || consume;
 			this.lastChar = key;
 			this.lastCode = code;
 			this.nextChar = System.currentTimeMillis() + THRESHOLD_INITIAL_KEY_TYPED;
 		} else {
-			keyReleased(root, Keyboard.getEventKey());
+			keyReleased(Keyboard.getEventKey());
 			if (lastCode == code) {
 				this.lastCode = -1;
 				this.lastChar = 0;
@@ -273,51 +276,50 @@ public abstract class Element extends Gui implements IProcessData {
 	/**
 	 * callback when the element is clicked on
 	 */
-	protected boolean onPressed(ElementRootContainer root, int x, int y, int which) {
-		return doTrigger(Trigger.PRESSED, root, x, y, which);
+	protected boolean onPressed(int x, int y, int which) {
+		return doTrigger(Trigger.PRESSED, x, y, which);
 	}
 
 	/**
 	 * callback when mouse scroll wheel is changed when hovering over this
 	 * element
 	 */
-	protected boolean onScrolled(ElementRootContainer root, int x, int y, int amount) {
-		return doTrigger(Trigger.SCROLLED, root, x, y, amount);
+	protected boolean onScrolled(int x, int y, int amount) {
+		return doTrigger(Trigger.SCROLLED, x, y, amount);
 	}
 
 	/**
 	 * callback when the element is released
-	 * 
 	 * @param x
 	 * @param y
 	 */
-	protected void onReleased(ElementRootContainer root, int x, int y, int which) {
-		doTrigger(Trigger.RELEASED, root, x, y, which);
+	protected void onReleased(int x, int y, int which) {
+		doTrigger(Trigger.RELEASED, x, y, which);
 	}
 
 	/**
 	 * callback when the mouse hovers over this element
 	 */
-	protected void onHover(ElementRootContainer root, int x, int y) {
-		doTrigger(Trigger.HOVER, root, x, y);
+	protected void onHover(int x, int y) {
+		doTrigger(Trigger.HOVER, x, y);
 	}
 
 	/**
 	 * callback when the mouse clicks twice on this element
 	 */
-	protected boolean onDoublePressed(ElementRootContainer root, int x, int y, int which) {
-		return doTrigger(Trigger.DOUBLE_PRESSED, root, x, y, which);
+	protected boolean onDoublePressed(int x, int y, int which) {
+		return doTrigger(Trigger.DOUBLE_PRESSED, x, y, which);
 	}
 
 	/**
 	 * callback when this element has been clicked on and the mouse is moved
 	 */
-	protected boolean onMove(ElementRootContainer root, int x, int y, int which) {
-		return doTrigger(Trigger.MOVE, root, x, y, which);
+	protected boolean onMove(int x, int y, int which) {
+		return doTrigger(Trigger.MOVE, x, y, which);
 	}
 
-	protected void onFocus(ElementRootContainer root) {
-		doTrigger(Trigger.FOCUS, root);
+	protected void onFocus() {
+		doTrigger(Trigger.FOCUS);
 		//TODO quick fix for bug when focus is lost while holding a key
 		this.lastCode = -1;
 	}
@@ -325,24 +327,21 @@ public abstract class Element extends Gui implements IProcessData {
 	/**
 	 * callback before focus is being released
 	 * 
-	 * @param root
-	 *            root container
 	 * @return whether this element allows focus to be released
 	 */
-	protected boolean onReleaseFocus(ElementRootContainer root) {
-		doTrigger(Trigger.FOCUSLOST, root);
-		BLogger.debug("releasefocus: %s, lastCode %d", getClass().toString(), lastCode);
+	protected boolean onReleaseFocus() {
+		doTrigger(Trigger.FOCUSLOST);
 		
 		return true;
 	}
 	
-	protected void onAdded(ElementRootContainer root){
+	protected void onAdded(){
 	}
 	
-	protected void onRemoved(ElementRootContainer root){
+	protected void onRemoved(){
 	}
 	
-	protected boolean doTrigger(ITrigger trigger, ElementRootContainer root, Object... args){
+	protected boolean doTrigger(ITrigger trigger, Object... args){
 		String triggerName = triggers.get(trigger);
 		if(triggerName != null){
 			trigger.trigger(triggerName, root, this, args);
@@ -353,17 +352,15 @@ public abstract class Element extends Gui implements IProcessData {
 
 	/**
 	 * 
-	 * @param parent
-	 *            parent container
-	 * @param root
-	 *            root container
 	 * @param mouseX
 	 *            mouse x coordinate relative to the parent container
 	 * @param mouseY
 	 *            mouse y coordinate relative to the parent container
+	 * @param parent
+	 *            parent container
 	 * @return true to consume mouse input
 	 */
-	protected boolean handleMouseInput(ElementRootContainer root, int mouseX, int mouseY) {
+	protected boolean handleMouseInput(int mouseX, int mouseY) {
 		boolean consumeMouseInput = false; //should mouse input be consumed?
 
 		for (int buttonFlag : BUTTONS) {
@@ -372,14 +369,14 @@ public abstract class Element extends Gui implements IProcessData {
 									 * && xOffsetButtonPress - mouseX != x &&
 									 * yOffsetButtonPress - mouseY != y
 									 */) { //element is moved
-					consumeMouseInput = onMove(root, x + mouseX - xOffsetButtonPress, y + mouseY - yOffsetButtonPress, buttonFlag);
+					consumeMouseInput = onMove(x + mouseX - xOffsetButtonPress, y + mouseY - yOffsetButtonPress, buttonFlag);
 				}
 			} else if (is(buttonFlag)) {
 				toggleOff(buttonFlag);
-				onReleased(root, mouseX, mouseY, buttonFlag);
+				onReleased(mouseX, mouseY, buttonFlag);
 			}
 		}
-		if (MathUtils.inRange2D(absX() + mouseX, root.absX(), root.absX() + root.width, absY() + mouseY, root.absY(), root.absY() + root.height) && MathUtils.inRange2D(mouseX, 0, width, mouseY, 0, height)) { //check if mouse touches the element
+		if (MathUtils.inRange2D(absX() + mouseX, getRoot().absX(), getRoot().absX() + getRoot().width, absY() + mouseY, getRoot().absY(), getRoot().absY() + getRoot().height) && MathUtils.inRange2D(mouseX, 0, width, mouseY, 0, height)) { //check if mouse touches the element
 
 			boolean aButtonIsDown = false; //is a button pressed?
 			for (int buttonFlag : BUTTONS) {
@@ -389,14 +386,14 @@ public abstract class Element extends Gui implements IProcessData {
 						toggleOn(buttonFlag);
 						xOffsetButtonPress = mouseX;
 						yOffsetButtonPress = mouseY;
-						consumeMouseInput = onPressed(root, mouseX, mouseY, buttonFlag) || consumeMouseInput;
+						consumeMouseInput = onPressed(mouseX, mouseY, buttonFlag) || consumeMouseInput;
 
 						//handle double clicks
 						long lastClicked = lastClicks.get(buttonFlag);
 						long currentTime = System.currentTimeMillis();
 						lastClicks.put(buttonFlag, currentTime);
 						if (currentTime - lastClicked < THRESHOLD_DOUBLE_PRESS) {
-							consumeMouseInput = onDoublePressed(root, mouseX, mouseY, buttonFlag) || consumeMouseInput;
+							consumeMouseInput = onDoublePressed(mouseX, mouseY, buttonFlag) || consumeMouseInput;
 						}
 
 						break; //exit looping through buttons; only 1 button press is allowed at a time
@@ -407,12 +404,12 @@ public abstract class Element extends Gui implements IProcessData {
 			//handle hovering
 			if (!aButtonIsDown) {
 				toggleOn(HOVERING);
-				onHover(root, mouseX, mouseY);
+				onHover(mouseX, mouseY);
 			}
 
 			//handle scroll input
-			if (root.scrollMovement != 0) {
-				consumeMouseInput = onScrolled(root, x, y, root.scrollMovement) || consumeMouseInput;
+			if (getRoot().scrollMovement != 0) {
+				consumeMouseInput = onScrolled(x, y, getRoot().scrollMovement) || consumeMouseInput;
 			}
 
 		} else {
@@ -541,6 +538,13 @@ public abstract class Element extends Gui implements IProcessData {
 	
 	public ElementContainer getParent() {
 		return parent;
+	}
+	
+	public ElementRootContainer getRoot() {
+		if(root == null){
+			root = parent.getRoot();
+		}
+		return root;
 	}
 
 	public Element align(Alignment alignment) {
@@ -729,7 +733,7 @@ public abstract class Element extends Gui implements IProcessData {
 		return action(name.getName(), action);
 	}
 	
-	public void onEvent(String name, Object[] args, ElementRootContainer root, Element e){
+	public void onEvent(String name, Object[] args, Element e){
 		List<IEventAction> eventActions = actions.get(name);
 		if(eventActions != null){
 			for(IEventAction action : eventActions){

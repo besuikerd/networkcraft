@@ -23,7 +23,7 @@ public class ElementInputField extends ElementStyledContainer {
 	}
 	
 	public ElementInputField(int width, String text, String regex){
-		super(0,0,width,0, ScalableTexture.CONTAINER);
+		super(0,0,width,0, ScalableTexture.SLOT);
 		this.height = fontRenderer.FONT_HEIGHT + 3;
 		this.inputFieldContainer = new ElementContainer(0,0, width - 2 , fontRenderer.FONT_HEIGHT+1).padding(1).paddingBottom(0);
 		this.inputFieldLabel = new ElementInputLabel(0, 0, width - 4, text, regex);
@@ -34,9 +34,9 @@ public class ElementInputField extends ElementStyledContainer {
 	}
 	
 	@Override
-	protected boolean onPressed(ElementRootContainer root, int x, int y, int which) {
-		super.onPressed(root, x, y, which);
-		return inputFieldLabel.onPressed(root, x, y, which);
+	protected boolean onPressed(int x, int y, int which) {
+		super.onPressed(x, y, which);
+		return inputFieldLabel.onPressed(x, y, which);
 	}
 
 	private class ElementInputLabel extends Element {
@@ -76,8 +76,8 @@ public class ElementInputField extends ElementStyledContainer {
 		}
 		
 		@Override
-		protected boolean onPressed(ElementRootContainer root, int x, int y, int which) {
-			super.onPressed(root, x, y, which);
+		protected boolean onPressed(int x, int y, int which) {
+			super.onPressed(x, y, which);
 			if(isEnabled()){
 				int i = 0;
 				int previous = Integer.MAX_VALUE;
@@ -85,7 +85,7 @@ public class ElementInputField extends ElementStyledContainer {
 				//TODO needs to be finetuned after viewport is implemented right!
 				if(!isFocused()){
 					widthDiff = 0;
-					root.requestFocus(this);
+					getRoot().requestFocus(this);
 				}
 				while((current = fontRenderer.getStringWidth(textBuilder.substring(0,textBuilder.length()-i))) > x + widthDiff){
 					previous = current;
@@ -105,19 +105,19 @@ public class ElementInputField extends ElementStyledContainer {
 		}
 		
 		@Override
-		protected boolean onReleaseFocus(ElementRootContainer root) {
+		protected boolean onReleaseFocus() {
 			BLogger.debug("releasefocus");
 			cursorOffset = textBuilder.length();
 			widthDiff = fontRenderer.getStringWidth(textBuilder.toString())-width;
 			if(widthDiff < 0){
 				widthDiff = 0;
 			}
-			return super.onReleaseFocus(root);
+			return super.onReleaseFocus();
 		}
 
 		@Override
-		protected boolean keyTyped(ElementRootContainer root, char key, int code) {
-			super.keyTyped(root, key, code);
+		protected boolean keyTyped(char key, int code) {
+			super.keyTyped(key, code);
 			if ((!isEnabled() && code != Keyboard.KEY_RETURN) || !isFocused()) {
 				return false;
 			}
@@ -181,7 +181,7 @@ public class ElementInputField extends ElementStyledContainer {
 				case Keyboard.KEY_TAB:
 				case Keyboard.KEY_RETURN:
 					BLogger.debug("enter");
-					root.releaseFocus(this);
+					getRoot().releaseFocus(this);
 					break;
 				default:
 					return false;
@@ -191,16 +191,16 @@ public class ElementInputField extends ElementStyledContainer {
 		}
 		
 		@Override
-		public void update(ElementRootContainer root) {
-			super.update(root);
+		public void update() {
+			super.update();
 			if(lastCode != -1){
 				oldTime = System.currentTimeMillis();
 			}
 		}
 
 		@Override
-		public void draw(ElementRootContainer root, int mouseX, int mouseY) {
-			super.draw(root, mouseX, mouseY);
+		public void draw(int mouseX, int mouseY) {
+			super.draw(mouseX, mouseY);
 			if (this.isEnabled() && isFocused()) {
 				if (System.currentTimeMillis() - FLICKER_TIME > oldTime) {
 					if (System.currentTimeMillis() - 2 * FLICKER_TIME > oldTime) {

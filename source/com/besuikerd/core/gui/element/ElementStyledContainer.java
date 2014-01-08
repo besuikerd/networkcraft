@@ -47,10 +47,10 @@ public class ElementStyledContainer extends ElementContainer{
 	}
 
 	@Override
-	public void draw(ElementRootContainer root, int mouseX, int mouseY) {
+	public void draw(int mouseX, int mouseY) {
 		bindTexture();
 		drawBackgroundFromTextures(background);
-		super.draw(root, mouseX, mouseY);
+		super.draw(mouseX, mouseY);
 	}
 	
 }

@@ -38,15 +38,15 @@ public class ElementScrollBar extends ElementContainer {
                 
                 this.buttonUp = new ElementButton(vertical ? dimension : buttonDimension, vertical ? buttonDimension : dimension, StateFulBackground.SOLID_BUTTON, new ElementStylerTexture(vertical ? Texture.ARROW_UP : Texture.ARROW_LEFT)){
                         @Override
-                        protected boolean onPressed(ElementRootContainer root, int x, int y, int which) {
-                                self.onScrolled(root, x, y, 120);
+                        protected boolean onPressed(int x, int y, int which) {
+                                self.onScrolled(x, y, 120);
                                 return true;
                         }
                 };
                 this.buttonDown = new ElementButton(vertical ? dimension : buttonDimension, vertical ? buttonDimension : dimension, StateFulBackground.SOLID_BUTTON, new ElementStylerTexture(vertical ? Texture.ARROW_DOWN : Texture.ARROW_RIGHT)){
                         @Override
-                        protected boolean onPressed(ElementRootContainer root, int x, int y, int which) {
-                                self.onScrolled(root, x, y, -120);
+                        protected boolean onPressed(int x, int y, int which) {
+                                self.onScrolled(x, y, -120);
                                 return true;
                         }
                 };
@@ -67,12 +67,12 @@ public class ElementScrollBar extends ElementContainer {
         }
         
         @Override
-        public void dimension(ElementRootContainer root) {
-                super.dimension(root);
+        public void dimension() {
+                super.dimension();
         }
 
         @Override
-        public void draw(ElementRootContainer root, int mouseX, int mouseY) {
+        public void draw(int mouseX, int mouseY) {
                 
                 if(orientation == Orientation.VERTICAL){
                         containerScroller.height = parent.getHeight() - buttonUp.getHeight() - buttonDown.getHeight() - parent.paddingTop - parent.paddingBottom;
@@ -82,19 +82,19 @@ public class ElementScrollBar extends ElementContainer {
                         scroller.width = getScrollerSize();
                 }
                 
-                super.draw(root, mouseX, mouseY);
+                super.draw(mouseX, mouseY);
         }
         
                 private class ElementScrollerContainer extends ElementStyledContainer {
                 
 
                 public ElementScrollerContainer(int width, int height) {
-                        super(width, height, ScalableTexture.CONTAINER);
+                        super(width, height, ScalableTexture.SLOT);
                         padding(0); //no padding is fine
                 }
 
                 @Override
-                protected boolean onPressed(ElementRootContainer root, int x, int y, int which) {
+                protected boolean onPressed(int x, int y, int which) {
                         if(self.isEnabled() && !MathUtils.inRange2D(x, scroller.x, scroller.x + scroller.width, y, scroller.y, scroller.y + scroller.height)){ // only do this when scroller isn't in range
                                 
                                 if(orientation == Orientation.VERTICAL){
@@ -113,7 +113,7 @@ public class ElementScrollBar extends ElementContainer {
                 }
 
                 @Override
-                protected boolean onMove(ElementRootContainer root, int x, int y, int which) {
+                protected boolean onMove(int x, int y, int which) {
                         if(self.isEnabled()){
                                 if(orientation == Orientation.VERTICAL){
                                         setProgress((double) y / (parent.height - scroller.height));
@@ -125,13 +125,13 @@ public class ElementScrollBar extends ElementContainer {
                 }
                 
                 @Override
-                public void update(ElementRootContainer root) {
+                public void update() {
                         statefulBackground = orientation == Orientation.VERTICAL ? StateFulBackground.SCROLLER_VERTICAL : StateFulBackground.SCROLLER_HORIZONTAL;
                 }
                 
                 @Override
-                public void dimension(ElementRootContainer root) {
-                        super.dimension(root);
+                public void dimension() {
+                        super.dimension();
                         
                         if(orientation == Orientation.VERTICAL){
                                 this.y = (int) Math.round(progress * (parent.height - height));
@@ -141,10 +141,10 @@ public class ElementScrollBar extends ElementContainer {
                 }
                 
                 @Override
-                public void draw(ElementRootContainer root, int mouseX, int mouseY) {
+                public void draw(int mouseX, int mouseY) {
                         IScalableTexture bg = self.isEnabled() ? isLeftClicked() ? ScalableTextureVerticalScroller.ACTIVATED : ScalableTextureVerticalScroller.NORMAL : ScalableTextureVerticalScroller.DISABLED;
                         drawBackgroundFromTextures(bg);
-                        super.draw(root, mouseX, mouseY);
+                        super.draw(mouseX, mouseY);
                 }
         }
         
@@ -163,7 +163,7 @@ public class ElementScrollBar extends ElementContainer {
         }
         
         @Override
-        public boolean onScrolled(ElementRootContainer root, int x, int y, int amount) {
+        public boolean onScrolled(int x, int y, int amount) {
                 return setProgress(progress + (-0.1d * (amount / 120))); //consume input if progress changed
         }
 }

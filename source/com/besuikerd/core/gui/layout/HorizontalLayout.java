@@ -40,18 +40,18 @@ public class HorizontalLayout implements Layout{
 	}
 	
 	@Override
-	public void init(ElementContainer parent, ElementContainer root) {
+	public void init(ElementContainer parent) {
 		xOffset = parent.getPaddingLeft();
 		yOffset = parent.getPaddingTop();
 		maxHeight = 0;
 	}
 	
 	@Override
-	public boolean layout(ElementContainer container, Element e, int index, ElementContainer root) {
+	public boolean layout(Element e, int index) {
 		
 		//check if element would fall out of horizontal bounds		
-		if(container.getWidthDimension() != LayoutDimension.WRAP_CONTENT && xOffset + e.getWidth() > container.getWidth() - container.getPaddingRight()){
-			xOffset = container.getPaddingLeft();
+		if(e.getParent().getWidthDimension() != LayoutDimension.WRAP_CONTENT && xOffset + e.getWidth() > e.getParent().getWidth() - e.getParent().getPaddingRight()){
+			xOffset = e.getParent().getPaddingLeft();
 			yOffset += e.getHeight() + marginY;
 			maxHeight = e.getHeight();
 		} else if(e.getHeight() > maxHeight){
@@ -63,7 +63,7 @@ public class HorizontalLayout implements Layout{
 		e.setY(yOffset);
 		
 		//increment xOffset
-		xOffset += e.getWidth() + (container.getElementCount() - 1 == index ? 0 : marginX);
+		xOffset += e.getWidth() + (e.getParent().getElementCount() - 1 == index ? 0 : marginX);
 		return true;
 	}
 	
@@ -73,14 +73,14 @@ public class HorizontalLayout implements Layout{
 	}
 	
 	@Override
-	public void align(Element e, ElementContainer parent) {
-		if (yOffset == parent.getPaddingTop()) { //check if there is only a single row
+	public void align(Element e) {
+		if (yOffset == e.getParent().getPaddingTop()) { //check if there is only a single row
 			switch (e.getAlignment()) {
 				case BOTTOM:
-					e.setY(parent.getHeight() - e.getHeight() - parent.getPaddingBottom());
+					e.setY(e.getParent().getHeight() - e.getHeight() - e.getParent().getPaddingBottom());
 					break;
 				case CENTER:
-					e.setY((parent.getHeight() - e.getHeight()) / 2);
+					e.setY((e.getParent().getHeight() - e.getHeight()) / 2);
 					break;
 				default:
 					break;

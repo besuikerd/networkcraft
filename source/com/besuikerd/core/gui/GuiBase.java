@@ -25,10 +25,11 @@ public class GuiBase extends GuiContainer implements IEventHandler{
 		root.layout(new VerticalLayout())
 		.padding(5);
 		init();
-		root.dimension(root);
+		root.dimension();
 		xSize = root.getWidth();
 		ySize = root.getHeight();
-		root.dimension(root);
+		this.guiLeft = (this.width - this.xSize) / 2;
+        this.guiTop = (this.height - this.ySize) / 2;
 	}
 
 	private static final ResourceLocation bg = new ResourceLocation("textures/gui/demo_background.png");
@@ -51,12 +52,12 @@ public class GuiBase extends GuiContainer implements IEventHandler{
         int y = this.height - Mouse.getEventY() * this.height / this.mc.displayHeight - 1;
         
         //delegate mouse input to root container
-        root.handleMouseInput(root, x, y);
+        root.handleMouseInput(x, y);
     }
 	
 	@Override
 	public void handleKeyboardInput() {
-		if(!root.handleKeyboardInput(root) || Keyboard.getEventKey() == Keyboard.KEY_ESCAPE){ //if the root element consumes input, do not let others handle keyboard input
+		if(!root.handleKeyboardInput() || Keyboard.getEventKey() == Keyboard.KEY_ESCAPE){ //if the root element consumes input, do not let others handle keyboard input
 			super.handleKeyboardInput();
 		}
 	}
@@ -73,10 +74,10 @@ public class GuiBase extends GuiContainer implements IEventHandler{
 	@Override
 	protected void drawGuiContainerBackgroundLayer(float f, int mouseX, int mouseY) {
 		//update all elements before rendering
-		root.update(root);
+		root.update();
 		
 		//dimension all elements in the root container
-		root.dimension(root);
+		root.dimension();
 		
 		//recalculate size of the root container
 		xSize = root.getWidth();
@@ -86,17 +87,22 @@ public class GuiBase extends GuiContainer implements IEventHandler{
 		root.setX((width - root.getWidth()) / 2);
 		root.setY((height - root.getHeight()) / 2);
 		
-		root.dimension(root);
+		root.dimension();
+		
+		xSize = root.getWidth();
+		ySize = root.getHeight();
+		this.guiLeft = (this.width - this.xSize) / 2;
+        this.guiTop = (this.height - this.ySize) / 2;
 		
 		mc.getTextureManager().bindTexture(root.getTextures());//TODO move this to a proper location
 		GL11.glColor4f(1f, 1f, 1f, 1f);
 		//draw root container
-		root.draw(root, mouseX, mouseY);
+		root.draw(mouseX, mouseY);
 	}
 
 	@Override
 	public void post(String name, Element e, Object... args) {
-		root.onEvent(name, args, root, e);
+		root.onEvent(name, args, e);
 		onEvent(name, e, args);
 	}
 	

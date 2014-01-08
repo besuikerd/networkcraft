@@ -1,5 +1,7 @@
 package com.besuikerd.core.gui.element;
 
+import com.besuikerd.core.gui.styler.ElementStylerTexture;
+import com.besuikerd.core.gui.texture.scalable.ScalableTexture;
 import com.besuikerd.core.utils.Tuple;
 
 import net.minecraft.inventory.Slot;
@@ -8,7 +10,6 @@ public class ElementItemContainer extends Element{
 
 	protected Slot slot;
 	
-	protected Tuple texContainer = new Tuple(46, 0, 18, 18);
 	
 	public ElementItemContainer(Slot slot, int x, int y) {
 		super(x, y, 18, 18);
@@ -20,13 +21,14 @@ public class ElementItemContainer extends Element{
 	}
 	
 	@Override
-	public void draw(ElementRootContainer root, int mouseX, int mouseY) {
+	public void draw(int mouseX, int mouseY) {
 		
 		//re-align the slot
-		slot.xDisplayPosition = absX() + 1 - root.absX();
-		slot.yDisplayPosition = absY() + 1 - root.absY();
+		slot.xDisplayPosition = absX() - getRoot().absX() + 1;
+		slot.yDisplayPosition = absY() - getRoot().absY() + 1;
 		
-		super.draw(root, mouseX, mouseY);
-		drawTexturedModalRect(0, 0, texContainer.int1(), texContainer.int2(), texContainer.int3(), texContainer.int4());
+		super.draw(mouseX, mouseY);
+
+		drawBackgroundFromTextures(ScalableTexture.SLOT);
 	}
 }

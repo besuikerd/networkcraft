@@ -11,13 +11,13 @@ public class DummyLayout implements Layout{
 	private int maxHeight;
 	
 	@Override
-	public void init(ElementContainer container, ElementContainer root) {
+	public void init(ElementContainer container) {
 		maxWidth = 0;
 		maxHeight = 0;
 	}
 
 	@Override
-	public boolean layout(ElementContainer container, Element e, int index, ElementContainer root) {
+	public boolean layout(Element e, int index) {
 		if(e.getWidth() > maxWidth){
 			maxWidth = e.getWidth();
 		}
@@ -35,7 +35,7 @@ public class DummyLayout implements Layout{
 	}
 
 	@Override
-	public void align(Element e, ElementContainer parent) {
+	public void align(Element e) {
 	}
 	
 }

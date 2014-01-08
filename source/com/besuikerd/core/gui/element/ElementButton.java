@@ -49,10 +49,10 @@ public class ElementButton extends ElementStatefulBackground{
         }
         
         @Override
-        protected boolean onPressed(ElementRootContainer root, int x, int y, int which) {
-                super.onPressed(root, x, y, which);
+        protected boolean onPressed(int x, int y, int which) {
+                super.onPressed(x, y, which);
                 BLogger.debug("onPressed (%d, %d, %d)", x, y, which);
-                root.requestFocus(this);
+                getRoot().requestFocus(this);
                 return true;
         }
 }

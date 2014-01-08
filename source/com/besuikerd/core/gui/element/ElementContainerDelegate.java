@@ -19,36 +19,36 @@ public class ElementContainerDelegate extends Element {
 	}
 
 	@Override
-	public void dimension(ElementRootContainer root) {
+	public void dimension() {
 		container.dx = absX();
 		container.dy = absY();
-		container.dimension(root);
+		container.dimension();
 		this.width = container.width;
 		this.height = container.height;
 	}
 
 	@Override
-	public void draw(ElementRootContainer root, int mouseX, int mouseY) {
-		container.draw(root, mouseX, mouseY);
+	public void draw(int mouseX, int mouseY) {
+		container.draw(mouseX, mouseY);
 	}
 
 	@Override
-	public void update(ElementRootContainer root) {
-		container.update(root);
+	public void update() {
+		container.update();
 	}
 
 	@Override
-	public void onEvent(String name, Object[] args, ElementRootContainer root, Element e) {
-		container.onEvent(name, args, root, e);
+	public void onEvent(String name, Object[] args, Element e) {
+		container.onEvent(name, args, e);
 	}
 
 	@Override
-	protected boolean handleMouseInput(ElementRootContainer root, int mouseX, int mouseY) {
-		return container.handleMouseInput(root, mouseX, mouseY);
+	protected boolean handleMouseInput(int mouseX, int mouseY) {
+		return container.handleMouseInput(mouseX, mouseY);
 	}
 
 	@Override
-	public boolean handleKeyboardInput(ElementRootContainer root) {
-		return container.handleKeyboardInput(root);
+	public boolean handleKeyboardInput() {
+		return container.handleKeyboardInput();
 	}
 }

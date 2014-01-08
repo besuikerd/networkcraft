@@ -3,9 +3,9 @@ package com.besuikerd.core.gui.texture.scalable;
 import com.besuikerd.core.utils.Tuple;
 
 public enum ScalableTextureVerticalScroller implements IScalableTexture{
-	NORMAL(new Tuple(98, 1, 105, 2), new Tuple(98, 0, 105, 1), new Tuple(106, 2, 107, 12), new Tuple(98, 13, 105, 14), new Tuple(96, 2, 97, 12), new Tuple(96, 0, 97, 1), new Tuple(106, 0, 107, 1), new Tuple(106, 13, 107, 14), new Tuple(96, 13, 97, 14)),
-	ACTIVATED(new Tuple(110, 1, 117, 2), new Tuple(110, 0, 117, 1), new Tuple(118, 2, 119, 12), new Tuple(110, 13, 117, 14), new Tuple(108, 2, 109, 12), new Tuple(108, 0, 109, 1), new Tuple(118, 0, 119, 1), new Tuple(118, 13, 119, 14), new Tuple(108, 13, 109, 14)),
-	DISABLED(new Tuple(122, 1, 129, 2), new Tuple(122, 0, 129, 1), new Tuple(130, 2, 131, 12), new Tuple(122, 13, 129, 14), new Tuple(120, 2, 121, 12), new Tuple(120, 0, 121, 1), new Tuple(130, 0, 131, 1), new Tuple(130, 13, 131, 14), new Tuple(120, 13, 121, 14))
+	NORMAL(new Tuple(74, 1, 81, 2), new Tuple(74, 0, 81, 0), new Tuple(82, 1, 83, 3), new Tuple(74, 3, 81, 4), new Tuple(72, 1, 73, 3), new Tuple(72, 0, 73, 0), new Tuple(82, 0, 83, 0), new Tuple(82, 3, 83, 4), new Tuple(72, 3, 73, 4)),
+	ACTIVATED(new Tuple(74, 6, 81, 7), new Tuple(74, 5, 81, 5), new Tuple(82, 6, 83, 8), new Tuple(74, 8, 81, 9), new Tuple(72, 6, 73, 8), new Tuple(72, 5, 73, 5), new Tuple(82, 5, 83, 5), new Tuple(82, 8, 83, 9), new Tuple(72, 8, 73, 9)),
+	DISABLED(new Tuple(74, 11, 81, 12), new Tuple(74, 10, 81, 10), new Tuple(82, 11, 83, 13), new Tuple(74, 13, 81, 14), new Tuple(72, 11, 73, 13), new Tuple(72, 10, 73, 10), new Tuple(82, 10, 83, 10), new Tuple(72, 13, 73, 14), new Tuple(82, 13, 83, 14))
 	;
 	
 	protected Tuple background;

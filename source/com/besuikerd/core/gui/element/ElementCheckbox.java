@@ -23,7 +23,7 @@ public class ElementCheckbox extends Element{
         }
 
         public void onChecked(ElementRootContainer root, boolean checked){
-                doTrigger(Trigger.CHECKED, root, checked);
+                doTrigger(Trigger.CHECKED, checked);
         }
         
         public boolean isChecked() {
@@ -31,15 +31,15 @@ public class ElementCheckbox extends Element{
         }
         
         @Override
-        public void draw(ElementRootContainer root, int mouseX, int mouseY) {
-                drawBackgroundFromTextures(ScalableTexture.CONTAINER_INVERSE);
-                super.draw(root, mouseX, mouseY);
+        public void draw(int mouseX, int mouseY) {
+                drawBackgroundFromTextures(ScalableTexture.SLOT);
+                super.draw(mouseX, mouseY);
         }
         
         @Override
-        protected void onReleased(ElementRootContainer root, int x, int y, int which) {
+        protected void onReleased(int x, int y, int which) {
                 this.checked = !checked;
-                onChecked(root, checked);
-                super.onPressed(root, x, y, which);
+                onChecked(getRoot(), checked);
+                super.onPressed(x, y, which);
         }
 }
