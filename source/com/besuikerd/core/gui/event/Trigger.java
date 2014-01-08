@@ -14,11 +14,30 @@ public enum Trigger implements ITrigger{
 	FOCUS,
 	FOCUSLOST,
 	
+	/**
+	 * element is being updated
+	 */
+	UPDATE,
+	
 	KEY_PRESSED,
 	KEY_TYPED,
 	KEY_RELEASED,
+	
+	/**
+	 * element checked/unchecked
+	 */
 	CHECKED,
+	
+	/**
+	 * element toggled on/off
+	 */
 	TOGGLED,
+	
+	/**
+	 * progress change
+	 */
+	PROGRESS_CHANGED
+	
 	;
 
 	

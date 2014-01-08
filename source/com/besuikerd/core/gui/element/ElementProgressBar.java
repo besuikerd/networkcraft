@@ -1,40 +1,109 @@
 package com.besuikerd.core.gui.element;
 
+import com.besuikerd.core.gui.event.Trigger;
+import com.besuikerd.core.gui.layout.Orientation;
+import com.besuikerd.core.gui.texture.ITexture;
+import com.besuikerd.core.gui.texture.Texture;
 import com.besuikerd.core.gui.texture.scalable.ScalableTexture;
+import com.besuikerd.core.utils.MathUtils;
+import com.besuikerd.core.utils.TupleUtils;
 
-public class ElementProgressBar extends ElementStyledContainer{
+public class ElementProgressBar extends Element{
 
-	protected double progress = 0;
-	protected double max = 1;
-	private int color = 0xFFFF0000;
+	protected int progress;
+	protected int max;
 
-	public ElementProgressBar(int width, int height) {
-		super(width, height, ScalableTexture.SLOT);
+	/**
+	 * background texture behind the progress
+	 */
+	protected ITexture backgroundTexture;
+	
+	/**
+	 * texture that will be rendered as far as the progress is
+	 */
+	protected ITexture progressTexture;
+	
+	/**
+	 * orientation the progress will progress to
+	 */
+	protected Orientation orientation;
+	
+	public ElementProgressBar(ITexture backgroundTexture, ITexture progressTexture, Orientation orientation, int progress, int max) {
+		super(TupleUtils.xDiff(backgroundTexture.getTexture()), TupleUtils.yDiff(backgroundTexture.getTexture()));
+		this.backgroundTexture = backgroundTexture;
+		this.progressTexture = progressTexture;
+		this.orientation = orientation;
+		this.progress = progress;
+		this.max = max;
 	}
 	
-	public ElementProgressBar(int width, int height, int color){
-		this(width, height);
-		this.color = color;
+	public ElementProgressBar(ITexture backgroundTexture, ITexture progressTexture, Orientation orientation) {
+		this(backgroundTexture, progressTexture, orientation, 0, 100);
 	}
-
+	
 	@Override 
 	public void draw(int mouseX, int mouseY) {
 		super.draw(mouseX, mouseY);
-		drawRect(absX() + 2, absY() + 2, absX()+(int)((width-4)*progress), absY()+height-2, color);
+		drawTexture(backgroundTexture);
+		
+		switch(orientation){
+			case HORIZONTAL:
+				drawTexture(progressTexture, 0, 0, (int) Math.min(((double) progress / max) * TupleUtils.xDiff(progressTexture.getTexture()), TupleUtils.xDiff(progressTexture.getTexture())), TupleUtils.yDiff(progressTexture.getTexture()));
+				break;
+			case VERTICAL:
+				drawTexture(progressTexture, 0, (int) ((1 - getProgressPercentage()) * TupleUtils.yDiff(progressTexture.getTexture())) , TupleUtils.xDiff(progressTexture.getTexture()), (int) Math.min(((double) progress / max) * TupleUtils.yDiff(progressTexture.getTexture()), TupleUtils.yDiff(progressTexture.getTexture())), 0, (int) ((1 - getProgressPercentage()) * TupleUtils.yDiff(progressTexture.getTexture())));
+				break;
+		}
+	}
+	
+	public void onProgressChanged(double oldProgress, double oldMax, double newProgress, double newMax){
+		doTrigger(Trigger.PROGRESS_CHANGED, oldProgress, oldMax, newProgress, newMax);
 	}
 	
 	public ElementProgressBar addProgress(double d){
-		progress+=d;
+		progress += d;
 		return this;
 	}
 	
-	public double getProgress() {
+	public int getProgress() {
 		return progress;
 	}
+	
+	public int getMax() {
+		return max;
+	}
+	
+	public double getProgressPercentage(){
+		return (double) progress / max;
+	}
 
-	public ElementProgressBar setProgress(double progress) {
-		this.progress = progress;
+	public ElementProgressBar progress(int progress) {
+		return set(progress, this.max);
+	}
+	
+	public ElementProgressBar progressPercentage(double percentage){
+		return progress((int) percentage * max);
+	}
+	
+	public ElementProgressBar max(int max){
+		return set(this.progress, max);
+	}
+	
+	public ElementProgressBar set(int progress, int max){
+		double oldProgress = this.progress;
+		double oldMax = this.max;
+		this.max = Math.max(0, max);
+		this.progress = MathUtils.align(0, progress, max);
+		
+		onProgressChanged(oldProgress, oldMax, this.progress, this.max);
 		return this;
 	}
 
+	public static ElementProgressBar progressBarArrow(){
+		return new ElementProgressBar(Texture.PROGRESS_ARROW_BG, Texture.PROGRESS_ARROW_FULL, Orientation.HORIZONTAL);
+	}
+	
+	public static ElementProgressBar progressBarBurn(){
+		return new ElementProgressBar(Texture.PROGRESS_BURN_BG, Texture.PROGRESS_BURN_FULL, Orientation.VERTICAL);
+	}
 }

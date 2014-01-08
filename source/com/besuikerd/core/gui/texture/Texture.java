@@ -12,6 +12,14 @@ public enum Texture implements ITexture{
 	
 	RADIO_OUTER(new Tuple(99, 0, 114, 15)),
 	RADIO_INNER(new Tuple(115, 0, 122, 7)),
+	
+	PROGRESS_ARROW_BG(new Tuple(0, 36, 21, 50)),
+	PROGRESS_ARROW_FULL(new Tuple(0, 51, 21, 66)),
+	
+	PROGRESS_BURN_BG(new Tuple(22, 36, 35, 48)),
+	PROGRESS_BURN_FULL(new Tuple(22, 49, 35, 61)),
+	
+	
 	;
 	
 	private Tuple texture;

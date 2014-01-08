@@ -202,14 +202,14 @@ public abstract class Element extends Gui implements IProcessData {
 
 	/**
 	 * callback before dimensioning the Element. Enables changing element's
-	 * properties before rendering them. When you override it, make sure to call
-	 * the super constructor to enable keyboard input to delegate correctly
+	 * properties before rendering them.
 	 */
 	public void update() {
 		if (lastCode != -1 && nextChar < System.currentTimeMillis()) {
 			keyTyped(lastChar, lastCode);
 			nextChar = System.currentTimeMillis() + THRESHOLD_NEXT_KEY_TYPED;
 		}
+		doTrigger(Trigger.UPDATE);
 	}
 
 	/**
@@ -344,7 +344,7 @@ public abstract class Element extends Gui implements IProcessData {
 	protected boolean doTrigger(ITrigger trigger, Object... args){
 		String triggerName = triggers.get(trigger);
 		if(triggerName != null){
-			trigger.trigger(triggerName, root, this, args);
+			trigger.trigger(triggerName, getRoot(), this, args);
 			return true;
 		}
 		return false;
@@ -665,9 +665,22 @@ public abstract class Element extends Gui implements IProcessData {
 		drawStatefulBackgroundFromTextures(bg, state);
 	}
 
-	protected void drawTexture(ITexture texture, int x, int y) {
-		drawTexturedModalRect(x, y, texture.getTexture().int1(), texture.getTexture().int2(), xDiff(texture.getTexture()), yDiff(texture.getTexture()));
+	protected void drawTexture(ITexture texture, int x, int y, int width, int height, int du, int dv){
+		drawTexturedModalRect(x, y, texture.getTexture().int1() + du, texture.getTexture().int2() + dv, width, height);
 	}
+	
+	protected void drawTexture(ITexture texture, int x, int y, int width, int height){
+		drawTexture(texture, x, y, width, height, 0, 0);
+	}
+	
+	protected void drawTexture(ITexture texture, int x, int y) {
+		drawTexture(texture, x, y, xDiff(texture.getTexture()), yDiff(texture.getTexture()));
+	}
+	
+	protected void drawTexture(ITexture texture) {
+		drawTexture(texture, 0, 0);
+	}
+	
 
 	protected void drawTextureCentered(ITexture texture) {
 		drawTexture(texture, (width - xDiff(texture.getTexture())) / 2, (height - yDiff(texture.getTexture())) / 2);
@@ -737,7 +750,7 @@ public abstract class Element extends Gui implements IProcessData {
 		List<IEventAction> eventActions = actions.get(name);
 		if(eventActions != null){
 			for(IEventAction action : eventActions){
-				action.onEvent(name, args, root, e);
+				action.onEvent(name, args, getRoot(), e);
 			}
 		}
 	}

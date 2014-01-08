@@ -65,20 +65,8 @@ public class TileEntityTestGui extends TileEntityBesu{
 				)
 			)
 			
-			
-			
-			
-			.add(new ElementCheckbox(true))
-			
-			.add(
-				new ElementRadioButton(group),
-				new ElementRadioButton(group),
-				new ElementRadioButton(group)	
-			)
-			
-			.add(new ElementScrollContainer(100, Orientation.HORIZONTAL))
-			
-			
+			.add(ElementProgressBar.progressBarBurn().trigger(Trigger.UPDATE, "updateBurn"))
+			.add(ElementProgressBar.progressBarArrow().trigger(Trigger.UPDATE, "updateArrow"))
 			;
 			
 			
@@ -95,8 +83,12 @@ public class TileEntityTestGui extends TileEntityBesu{
 			;
 		}
 		
+		int counter;
+		
 		@Override
 		public void onEvent(String name, Element e, Object... args) {
+			
+			
 			switch(Event.lookup(name)){
 				case ADD:
 					items.add(String.format("add: (%d,%d,%d)", args[0], args[1], args[2]));
@@ -106,6 +98,17 @@ public class TileEntityTestGui extends TileEntityBesu{
 					break;
 				default:
 					break;
+			}
+			
+			if(name.equals("updateBurn")){
+				if(counter++ > 10){
+					ElementProgressBar progressBar = (ElementProgressBar) e;
+					progressBar.progress((progressBar.getProgress() + 1) % progressBar.getMax());
+					counter = 0;
+				}
+			} else if(name.equals("updateArrow")){
+				ElementProgressBar progressBar = (ElementProgressBar) e;
+				progressBar.progress(Math.min(progressBar.getProgress() + 5, progressBar.getMax()) % progressBar.getMax());
 			}
 		}
 	}

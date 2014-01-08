@@ -14,6 +14,7 @@ import net.minecraft.tileentity.TileEntity;
 
 import com.besuikerd.core.gui.event.Event;
 import com.besuikerd.core.utils.BitUtils;
+import com.besuikerd.core.utils.MathUtils;
 import com.besuikerd.core.utils.ReflectUtils;
 import com.besuikerd.core.utils.FunctionalUtils.ABAFunction;
 import com.besuikerd.core.utils.FunctionalUtils.ABBFunction;

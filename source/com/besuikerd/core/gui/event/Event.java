@@ -7,6 +7,7 @@ public enum Event implements INamed{
 	REMOVE("remove"),
 	RESET("reset"),
 	
+	NULL("")
 	;
 	
 	private String name;
@@ -56,6 +57,6 @@ public enum Event implements INamed{
 				return e;
 			}
 		}
-		return null;
+		return NULL;
 	}
 }
