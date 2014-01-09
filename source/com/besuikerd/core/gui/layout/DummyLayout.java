@@ -17,7 +17,7 @@ public class DummyLayout implements Layout{
 	}
 
 	@Override
-	public boolean layout(Element e, int index) {
+	public void layout(Element e, int index) {
 		if(e.getWidth() > maxWidth){
 			maxWidth = e.getWidth();
 		}
@@ -25,15 +25,18 @@ public class DummyLayout implements Layout{
 		if(e.getHeight() > maxHeight){
 			maxHeight = e.getHeight();
 		}
-		
-		return false;
 	}
 
 	@Override
-	public Dimension getLaidOutDimension() {
-		return new Dimension(maxWidth, maxHeight);
+	public int getLaidOutWidth() {
+		return maxWidth;
 	}
-
+	
+	@Override
+	public int getLaidOutHeight() {
+		return maxHeight;
+	}
+	
 	@Override
 	public void align(Element e) {
 	}

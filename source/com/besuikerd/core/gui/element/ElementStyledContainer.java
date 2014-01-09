@@ -14,10 +14,13 @@ public class ElementStyledContainer extends ElementContainer{
 	public ElementStyledContainer(int x, int y, int width, int height, IScalableTexture background) {
 		super(x, y, width, height);
 		this.background = background;
-		paddingTop = TupleUtils.yDiff(background.edgeTop());
-		paddingRight = TupleUtils.xDiff(background.edgeRight());
-		paddingBottom = TupleUtils.yDiff(background.edgeBottom());
-		paddingLeft = TupleUtils.xDiff(background.edgeLeft());
+		
+		int extraPadding = 0;
+		
+		paddingTop = TupleUtils.yDiff(background.edgeTop()) + extraPadding;
+		paddingRight = TupleUtils.xDiff(background.edgeRight()) + extraPadding;
+		paddingBottom = TupleUtils.yDiff(background.edgeBottom()) + extraPadding;
+		paddingLeft = TupleUtils.xDiff(background.edgeLeft()) + extraPadding;
 	}
 	
 	public ElementStyledContainer(int width, int height, IScalableTexture background) {

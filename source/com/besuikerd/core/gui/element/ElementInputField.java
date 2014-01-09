@@ -25,7 +25,8 @@ public class ElementInputField extends ElementStyledContainer {
 	public ElementInputField(int width, String text, String regex){
 		super(0,0,width,0, ScalableTexture.SLOT);
 		this.height = fontRenderer.FONT_HEIGHT + 3;
-		this.inputFieldContainer = new ElementContainer(0,0, width - 2 , fontRenderer.FONT_HEIGHT+1).padding(1).paddingBottom(0);
+		this.inputFieldContainer = new ElementContainer(0,0, width - 2 , fontRenderer.FONT_HEIGHT+1);
+		inputFieldContainer.padding(1).paddingBottom(0);
 		this.inputFieldLabel = new ElementInputLabel(0, 0, width - 4, text, regex);
 		inputFieldContainer.add(inputFieldLabel);
 		this.viewPort = new ElementViewport(0, fontRenderer.FONT_HEIGHT, inputFieldContainer);

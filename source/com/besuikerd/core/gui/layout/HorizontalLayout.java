@@ -41,46 +41,53 @@ public class HorizontalLayout implements Layout{
 	
 	@Override
 	public void init(ElementContainer parent) {
-		xOffset = parent.getPaddingLeft();
-		yOffset = parent.getPaddingTop();
+		xOffset = 0;
+		yOffset = 0;
 		maxHeight = 0;
 	}
 	
 	@Override
-	public boolean layout(Element e, int index) {
+	public void layout(Element e, int index) {
+		
+		int elementWidth = e.getPaddedWidth();
+		int elementHeight = e.getPaddedHeight();
 		
 		//check if element would fall out of horizontal bounds		
-		if(e.getParent().getWidthDimension() != LayoutDimension.WRAP_CONTENT && xOffset + e.getWidth() > e.getParent().getWidth() - e.getParent().getPaddingRight()){
-			xOffset = e.getParent().getPaddingLeft();
-			yOffset += e.getHeight() + marginY;
-			maxHeight = e.getHeight();
-		} else if(e.getHeight() > maxHeight){
-			maxHeight = e.getHeight();
+		if(e.getParent().getWidthDimension() != LayoutDimension.WRAP_CONTENT && xOffset + elementWidth > e.getParent().getWidth()){
+			xOffset = 0;
+			yOffset += maxHeight + marginY;
+			maxHeight = elementHeight;
+		} else if(elementHeight > maxHeight){
+			maxHeight = elementHeight;
 		}
 		
 		//layout element coordinates
-		e.setX(xOffset);
-		e.setY(yOffset);
+		e.x(e.getPaddingLeft() + xOffset);
+		e.y(e.getPaddingTop() + yOffset);
 		
 		//increment xOffset
-		xOffset += e.getWidth() + (e.getParent().getElementCount() - 1 == index ? 0 : marginX);
-		return true;
+		xOffset += elementWidth + (e.getParent().getElementCount() - 1 == index ? 0 : marginX);
 	}
 	
 	@Override
-	public Dimension getLaidOutDimension() {
-		return new Dimension(xOffset, yOffset + maxHeight);
+	public int getLaidOutWidth() {
+		return xOffset;
+	}
+	
+	@Override
+	public int getLaidOutHeight() {
+		return yOffset + maxHeight;
 	}
 	
 	@Override
 	public void align(Element e) {
-		if (yOffset == e.getParent().getPaddingTop()) { //check if there is only a single row
+		if (yOffset == 0) { //check if there is only a single row
 			switch (e.getAlignment()) {
 				case BOTTOM:
-					e.setY(e.getParent().getHeight() - e.getHeight() - e.getParent().getPaddingBottom());
+					e.y(getLaidOutHeight() - e.getPaddedHeight());
 					break;
 				case CENTER:
-					e.setY((e.getParent().getHeight() - e.getHeight()) / 2);
+					e.y((getLaidOutHeight() - e.getPaddedHeight()) / 2);
 					break;
 				default:
 					break;

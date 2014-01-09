@@ -55,7 +55,7 @@ public class ElementViewport extends Element {
         public ElementViewport(int width, int height, Element element) {
                 super(width, height);
                 rootDelegate = new ElementRootContainer(width, height);
-                rootDelegate.add(element);
+                rootDelegate.add(element).padding(0);
                 this.element = element;
         }
 
@@ -72,10 +72,10 @@ public class ElementViewport extends Element {
                 element.dimension();
                 
                 if(widthDimension == LayoutDimension.WRAP_CONTENT){
-                        this.width = element.width;
+                        this.width = element.getPaddedWidth();
                 }
                 if(heightDimension == LayoutDimension.WRAP_CONTENT){
-                        this.height = element.height;
+                        this.height = element.getPaddedHeight();
                 }
 
                 //limit root delegate within bounds of the real root

@@ -21,13 +21,11 @@ public interface Layout {
 	 * @param index index of the Element in the ElementContainer
 	 * @return
 	 */
-	public boolean layout(Element e, int index);
+	public void layout(Element e, int index);
 	
-	/**
-	 * The dimensions of Elements laid out so far by this Layout
-	 * @return The Dimension of Elements laid out so far by this Layout
-	 */
-	public Dimension getLaidOutDimension();
+
+	public int getLaidOutWidth();
+	public int getLaidOutHeight();
 	
 	/**
 	 * align an Element relative to the container

@@ -13,11 +13,6 @@ import com.besuikerd.core.gui.layout.LayoutDimension;
 
 public class ElementContainer extends Element{
 	
-	
-	protected int paddingTop;
-	protected int paddingRight;
-	protected int paddingBottom;
-	protected int paddingLeft;
 	protected List<Element> elements;
 	
 	/**
@@ -109,10 +104,6 @@ public class ElementContainer extends Element{
 		//dimension elements
 		for(int i = 0 ; i < elements.size() ; i++){
 			Element e = elements.get(i);
-			
-			e.dx = absX();
-			e.dy = absY();
-			
 			//increment relative coordinates
 			e.dimension();
 		}
@@ -123,14 +114,12 @@ public class ElementContainer extends Element{
 			layout.layout(e, i);
 		}
 		
-		Dimension laidOutDimension = layout.getLaidOutDimension();
-		
 		if(widthDimension == LayoutDimension.WRAP_CONTENT){
-			this.width = laidOutDimension.width + paddingRight;
+ 			this.width = layout.getLaidOutWidth();
 		}
 		
 		if(heightDimension == LayoutDimension.WRAP_CONTENT){
-			this.height = laidOutDimension.height + paddingBottom;
+			this.height = layout.getLaidOutHeight();
 		}
 		
 		//align elements
@@ -138,6 +127,13 @@ public class ElementContainer extends Element{
 			if(e.getAlignment() != null){
 				layout.align(e);
 			}
+			
+			
+		}
+		
+		for(Element e : elements){
+			e.dx = absX();
+			e.dy = absY();
 		}
 		
 		super.dimension();
@@ -201,57 +197,7 @@ public class ElementContainer extends Element{
 		}
 	}
 	
-	public int getPaddingTop() {
-		return paddingTop;
-	}
 	
-	public int getPaddingRight() {
-		return paddingRight;
-	}
-	
-	public int getPaddingBottom() {
-		return paddingBottom;
-	}
-	
-	public int getPaddingLeft() {
-		return paddingLeft;
-	}
-	
-	public ElementContainer padding(int padding){
-		this.paddingTop = padding;
-		this.paddingRight = padding;
-		this.paddingBottom = padding;
-		this.paddingLeft = padding;
-		return this;
-	}
-	
-	public ElementContainer padding(int top, int right, int bottom, int left){
-		this.paddingTop = top;
-		this.paddingRight = right;
-		this.paddingBottom = bottom;
-		this.paddingLeft = left;
-		return this;
-	}
-	
-	public ElementContainer paddingTop(int padding){
-		this.paddingTop = padding;
-		return this;
-	}
-	
-	public ElementContainer paddingRight(int padding){
-		this.paddingRight = padding;
-		return this;
-	}
-	
-	public ElementContainer paddingBottom(int padding){
-		this.paddingBottom = padding;
-		return this;
-	}
-	
-	public ElementContainer paddingLeft(int padding){
-		this.paddingLeft = padding;
-		return this;
-	}
 	
 	public ElementContainer layout(Layout layout) {
 		this.layout = layout;

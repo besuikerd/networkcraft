@@ -17,6 +17,7 @@ import com.besuikerd.core.gui.element.ElementProgressBar;
 import com.besuikerd.core.gui.element.ElementRadioButton;
 import com.besuikerd.core.gui.element.ElementRootContainer;
 import com.besuikerd.core.gui.element.ElementScrollContainer;
+import com.besuikerd.core.gui.element.ElementStyledContainer;
 import com.besuikerd.core.gui.element.RadioGroup;
 import com.besuikerd.core.gui.element.adapter.BaseElementAdapter;
 import com.besuikerd.core.gui.element.adapter.ButtonElementAdapter;
@@ -26,6 +27,7 @@ import com.besuikerd.core.gui.event.EventHandle;
 import com.besuikerd.core.gui.event.Trigger;
 import com.besuikerd.core.gui.layout.Alignment;
 import com.besuikerd.core.gui.layout.HorizontalLayout;
+import com.besuikerd.core.gui.layout.LayoutDimension;
 import com.besuikerd.core.gui.layout.Orientation;
 import com.besuikerd.core.gui.layout.VerticalLayout;
 import com.besuikerd.core.inventory.ContainerBesu;
@@ -43,10 +45,32 @@ public class TileEntityTestGui extends TileEntityBesu{
 		@Override
 		public void init() {
 			root.add(
-				new ElementButton("Button 1").trigger(Trigger.RELEASED, "pressed"),
-				new ElementButton("Button 2").trigger(Trigger.RELEASED, "a very logical name indeed"),
-				new ElementButton("Button 3").trigger(Trigger.RELEASED, "you don't need to overide the arguments if you don't want to!"),
-				new ElementButton("Button 4").trigger(Trigger.RELEASED, "the most specific method will be chosen")
+//				new ElementButton("Button 1").trigger(Trigger.RELEASED, "pressed"),
+//				new ElementButton("Button 2").trigger(Trigger.RELEASED, "a very logical name indeed"),
+//				new ElementButton("Button 3").trigger(Trigger.RELEASED, "you don't need to overide the arguments if you don't want to!"),
+//				new ElementButton("Button 4").trigger(Trigger.RELEASED, "the most specific method will be chosen"),
+//				
+//				new ElementStyledContainer(LayoutDimension.ABSOLUTE, LayoutDimension.ABSOLUTE).add(
+//					new ElementButton("blabla").align(Alignment.RIGHT)
+//				).width(100).height(50),
+				
+				new ElementStyledContainer().add(
+						new ElementButton("blabla")
+				)
+				
+//				new ElementStyledContainer().add(
+//					new ElementScrollContainer(100, Orientation.HORIZONTAL).add(
+//						new ElementButton(600, 50, "lalalalalalalalalalallaalalalalallalalallalalalla")
+//					)
+//				),
+//				
+//				new ElementScrollContainer(100, Orientation.VERTICAL).add(
+//					new ElementScrollContainer(200, Orientation.VERTICAL).add(
+//						new ElementScrollContainer(400, Orientation.VERTICAL).add(
+//							new ElementButton(100, 1000, "blabalabablalalbalbalbalalbalbalalbablablabl")
+//						)
+//					)
+//				)
 			)
 			;
 		}

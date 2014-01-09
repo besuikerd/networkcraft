@@ -7,6 +7,7 @@ import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 
+import com.besuikerd.core.BLogger;
 import com.besuikerd.core.gui.element.Element;
 import com.besuikerd.core.gui.element.ElementContainer;
 import com.besuikerd.core.gui.element.ElementRootContainer;
@@ -14,6 +15,7 @@ import com.besuikerd.core.gui.event.EventHandler;
 import com.besuikerd.core.gui.event.IEventHandler;
 import com.besuikerd.core.gui.layout.VerticalLayout;
 import com.besuikerd.core.inventory.ContainerBesu;
+import com.besuikerd.core.utils.profiling.BesuProfiler;
 
 public class GuiBase extends GuiContainer implements IEventHandler{
 	
@@ -28,11 +30,18 @@ public class GuiBase extends GuiContainer implements IEventHandler{
 		root.layout(new VerticalLayout())
 		.padding(5);
 		init();
+		
+		//dimension all elements in the root container
 		root.dimension();
+		
+		//recalculate size of the root container
 		xSize = root.getWidth();
 		ySize = root.getHeight();
-		this.guiLeft = (this.width - this.xSize) / 2;
-        this.guiTop = (this.height - this.ySize) / 2;
+
+		//center the root container
+		root.x((width - root.getWidth()) / 2);
+		root.y((height - root.getHeight()) / 2);
+
 	}
 
 	private static final ResourceLocation bg = new ResourceLocation("textures/gui/demo_background.png");
@@ -87,18 +96,12 @@ public class GuiBase extends GuiContainer implements IEventHandler{
 		ySize = root.getHeight();
 
 		//center the root container
-		root.setX((width - root.getWidth()) / 2);
-		root.setY((height - root.getHeight()) / 2);
+		root.x((width - root.getWidth()) / 2);
+		root.y((height - root.getHeight()) / 2);
 		
-		root.dimension();
-		
-		xSize = root.getWidth();
-		ySize = root.getHeight();
 		this.guiLeft = (this.width - this.xSize) / 2;
         this.guiTop = (this.height - this.ySize) / 2;
-		
-		mc.getTextureManager().bindTexture(root.getTextures());//TODO move this to a proper location
-		GL11.glColor4f(1f, 1f, 1f, 1f);
+
 		//draw root container
 		root.draw(mouseX, mouseY);
 	}

@@ -25,71 +25,60 @@ public class DefaultLayout implements Layout{
 	
 	
 	@Override
-	public boolean layout(Element e, int index) {
-		//keep element within container bounds and apply padding
+	public void layout(Element e, int index) {
+		int elementWidth = e.getPaddedWidth();
+		int elementHeight = e.getPaddedHeight();
 		
-		if(e.getParent().getWidthDimension() != LayoutDimension.WRAP_CONTENT){
-			//left bound crossed
-			if(e.getX() < e.getParent().getPaddingLeft()){
-				e.setX(e.getParent().getPaddingLeft());
-			}
-			
-			//right bound crossed
-			if(e.getX() + e.getWidth() + e.getParent().getPaddingRight() > e.getParent().getWidth()){
-				e.setX(e.getParent().getWidth() - (e.getWidth() + e.getParent().getPaddingRight()));
-			}
+		if(e.getParent().getWidthDimension() == LayoutDimension.WRAP_CONTENT){
+			e.x(Math.max(e.getX(), e.getPaddingLeft()));
 		}
 		
-		if(e.getParent().getHeightDimension() != LayoutDimension.WRAP_CONTENT){
-			//top bound crossed
-			if(e.getY() < e.getParent().getPaddingTop()){
-				e.setY(e.getParent().getPaddingTop());
-			}
-			
-			//bottom bound crossed
-			if(e.getY() + e.getHeight() + e.getParent().getPaddingBottom() > e.getParent().getHeight()){
-				e.setY(e.getParent().getHeight() - (e.getHeight() + e.getParent().getPaddingBottom()));
-			}
+		if(e.getParent().getHeightDimension() == LayoutDimension.WRAP_CONTENT){
+			e.y(Math.max(e.getY(), e.getPaddingTop()));
 		}
 		
-		if(e.getX() + e.getWidth() > maxWidth){
-			this.maxWidth = e.getX() + e.getWidth();
+		if(elementWidth > maxWidth){
+			this.maxWidth = elementWidth;
 		}
 		
-		if(e.getY() + e.getHeight() > maxHeight){
-			this.maxHeight = e.getY() + e.getHeight();
+		if(elementHeight > maxHeight){
+			this.maxHeight = elementHeight;
 		}
-		
-		return true;
 	}
 
 	@Override
-	public Dimension getLaidOutDimension() {
-		return new Dimension(maxWidth, maxHeight);
+	public int getLaidOutWidth() {
+		return maxWidth;
+	}
+	
+	@Override
+	public int getLaidOutHeight() {
+		return maxHeight;
 	}
 	
 	@Override
 	public void align(Element e) {
 		switch (e.getAlignment()) {
 			case TOP:
-				e.setY(e.getParent().getPaddingTop());
-				e.setX((e.getParent().getWidth() - e.getWidth()) / 2);
+				e.y(0);
+				e.x((e.getParent().getWidth() - e.getWidth()) / 2);
+				
 				break;
 			case RIGHT:
-				e.setY((e.getParent().getHeight() - e.getHeight()) / 2);
-				e.setX(e.getParent().getWidth() - e.getParent().getPaddingRight());
+				e.y((e.getParent().getHeight() - e.getHeight()) / 2);
+				e.x(e.getParent().getWidth() - e.getPaddedWidth());
 				break;
 			case BOTTOM:
-				e.setY(e.getParent().getHeight() - e.getParent().getPaddingBottom());
-				e.setX((e.getParent().getWidth() - e.getWidth()) / 2);
+				e.y(e.getParent().getHeight() - e.getParent().getPaddingBottom() - e.getPaddingBottom());
+				e.x((e.getParent().getWidth() - e.getWidth()) / 2);
 				break;
 			case LEFT:
-				e.setY((e.getParent().getHeight() - e.getHeight()) / 2);
-				e.setX(e.getParent().getPaddingLeft());
+				e.y((e.getParent().getHeight() - e.getHeight()) / 2);
+				e.x(e.getParent().getPaddingLeft() + e.getPaddingLeft());
 				break;
 			case CENTER:
-				e.setY((e.getParent().getHeight() - e.getHeight()) / 2);
-				e.setX((e.getParent().getWidth() - e.getWidth()) / 2);
+				e.y((e.getParent().getHeight() - e.getHeight()) / 2);
+				e.x((e.getParent().getWidth() - e.getWidth()) / 2);
 				break;
 			default:
 				break;

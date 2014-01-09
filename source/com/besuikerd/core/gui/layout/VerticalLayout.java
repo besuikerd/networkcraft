@@ -2,6 +2,7 @@ package com.besuikerd.core.gui.layout;
 
 import java.awt.Dimension;
 
+import com.besuikerd.core.BLogger;
 import com.besuikerd.core.gui.element.Element;
 import com.besuikerd.core.gui.element.ElementContainer;
 
@@ -40,45 +41,52 @@ public class VerticalLayout implements Layout {
 
 	@Override
 	public void init(ElementContainer parent) {
-		xOffset = parent.getPaddingLeft();
-		yOffset = parent.getPaddingTop();
+		xOffset = 0;
+		yOffset = 0;
 		maxWidth = 0;
 	}
 
 	@Override
-	public boolean layout(Element e, int index) {
+	public void layout(Element e, int index) {
 
+		int elementWidth = e.getPaddedWidth();
+		int elementHeight = e.getPaddedHeight();
+		
 		//check if element would fall out of vertical bounds
-		if (e.getParent().getHeightDimension() != LayoutDimension.WRAP_CONTENT && yOffset + e.getHeight() > e.getParent().getHeight() - e.getParent().getPaddingBottom()) {
+		if (e.getParent().getHeightDimension() != LayoutDimension.WRAP_CONTENT && yOffset + elementHeight > e.getParent().getHeight()) {
 			yOffset = e.getParent().getPaddingTop();
-			xOffset += e.getWidth() + marginX;
+			xOffset += e.getPaddedWidth() + marginX;
 			maxWidth = e.getWidth();
 		} else if (e.getWidth() > maxWidth) {
-			maxWidth = e.getWidth();
+			maxWidth = elementWidth;
 		}
 
-		e.setX(xOffset);
-		e.setY(yOffset);
+		e.x(xOffset);
+		e.y(yOffset);
 
 		//increment xOffset
-		yOffset += e.getHeight() + (e.getParent().getElementCount() - 1 == index ? 0 : marginY);
-		return true;
+		yOffset += elementHeight + (e.getParent().getElementCount() - 1 == index ? 0 : marginY);
 	}
 
 	@Override
-	public Dimension getLaidOutDimension() {
-		return new Dimension(xOffset + maxWidth, yOffset);
+	public int getLaidOutWidth() {
+		return xOffset + maxWidth;
+	}
+	
+	@Override
+	public int getLaidOutHeight() {
+		return yOffset;
 	}
 
 	@Override
 	public void align(Element e) {
-		if (xOffset == e.getParent().getPaddingLeft()) { //check if there is only a single column
+		if (xOffset == 0) { //check if there is only a single column
 			switch (e.getAlignment()) {
 				case RIGHT:
-					e.setX(e.getParent().getWidth() - e.getWidth() - e.getParent().getPaddingRight());
+					e.x(getLaidOutWidth() - e.getPaddedWidth());
 					break;
 				case CENTER:
-					e.setX((e.getParent().getWidth() - e.getWidth()) / 2);
+					e.x((getLaidOutWidth() - e.getPaddedWidth()) / 2);
 					break;
 				default:
 					break;

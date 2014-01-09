@@ -89,6 +89,11 @@ public abstract class Element extends Gui implements IProcessData {
 	protected int y;
 	protected int width;
 	protected int height;
+	
+	protected int paddingTop;
+	protected int paddingRight;
+	protected int paddingBottom;
+	protected int paddingLeft;
 
 	/**
 	 * parent container
@@ -225,7 +230,7 @@ public abstract class Element extends Gui implements IProcessData {
 	 * @return Absolute x coordinate in the screen
 	 */
 	public int absX() {
-		return x + dx;
+		return (parent != null ? parent.getPaddingLeft() : 0) + x + dx;
 	}
 
 	/**
@@ -234,7 +239,7 @@ public abstract class Element extends Gui implements IProcessData {
 	 * @return Absolute y coordinate in the screen
 	 */
 	public int absY() {
-		return y + dy;
+		return (parent != null ? parent.getPaddingTop() : 0) + y + dy;
 	}
 
 	/**
@@ -500,12 +505,14 @@ public abstract class Element extends Gui implements IProcessData {
 		return this;
 	}
 
-	public void setX(int x) {
+	public Element x(int x) {
 		this.x = x;
+		return this;
 	}
 
-	public void setY(int y) {
+	public Element y(int y) {
 		this.y = y;
+		return this;
 	}
 
 	public int getX() {
@@ -519,11 +526,19 @@ public abstract class Element extends Gui implements IProcessData {
 	public int getHeight() {
 		return height;
 	}
+	
+	public int getPaddedHeight(){
+		return paddingTop + height + paddingBottom;
+	}
 
 	public int getWidth() {
 		return width;
 	}
 
+	public int getPaddedWidth(){
+		return paddingLeft + width + paddingRight;
+	}
+	
 	public LayoutDimension getWidthDimension() {
 		return widthDimension;
 	}
@@ -545,6 +560,54 @@ public abstract class Element extends Gui implements IProcessData {
 			root = parent.getRoot();
 		}
 		return root;
+	}
+	
+	public int getPaddingTop() {
+		return paddingTop;
+	}
+	
+	public int getPaddingRight() {
+		return paddingRight;
+	}
+	
+	public int getPaddingBottom() {
+		return paddingBottom;
+	}
+	
+	public int getPaddingLeft() {
+		return paddingLeft;
+	}
+	
+	public Element padding(int padding){
+		return padding(padding, padding, padding, padding);
+	}
+	
+	public Element padding(int top, int right, int bottom, int left){
+		this.paddingTop = top;
+		this.paddingRight = right;
+		this.paddingBottom = bottom;
+		this.paddingLeft = left;
+		return this;
+	}
+	
+	public Element paddingTop(int padding){
+		this.paddingTop = padding;
+		return this;
+	}
+	
+	public Element paddingRight(int padding){
+		this.paddingRight = padding;
+		return this;
+	}
+	
+	public Element paddingBottom(int padding){
+		this.paddingBottom = padding;
+		return this;
+	}
+	
+	public Element paddingLeft(int padding){
+		this.paddingLeft = padding;
+		return this;
 	}
 
 	public Element align(Alignment alignment) {
@@ -576,38 +639,38 @@ public abstract class Element extends Gui implements IProcessData {
 	protected void drawBorderFromTextures(Tuple edgeTop, Tuple edgeRight, Tuple edgeBottom, Tuple edgeLeft, Tuple cornerTL, Tuple cornerTR, Tuple cornerBR, Tuple cornerBL) {
 
 		//draw top edge	
-		int toDraw = width - (xDiff(cornerTL) + xDiff(cornerTR));
+		int toDraw = getPaddedWidth() - (xDiff(cornerTL) + xDiff(cornerTR));
 		while (toDraw > 0) {
 			//actual width being drawn this iteration
 			int drawWidth = toDraw < xDiff(edgeTop) ? toDraw : xDiff(edgeTop);
-			drawTexturedModalRect(width - (toDraw + xDiff(cornerTR)), 0, edgeTop.int1(), edgeTop.int2(), drawWidth, yDiff(edgeTop));
+			drawTexturedModalRect(getPaddedWidth() - (toDraw + xDiff(cornerTR)), 0, edgeTop.int1(), edgeTop.int2(), drawWidth, yDiff(edgeTop));
 			toDraw -= drawWidth;
 		}
 
 		//draw bottom edge
-		toDraw = width - (xDiff(cornerBL) + xDiff(cornerBR));
+		toDraw = getPaddedWidth() - (xDiff(cornerBL) + xDiff(cornerBR));
 		while (toDraw > 0) {
 			//actual width being drawn this iteration
 			int drawWidth = toDraw < xDiff(edgeBottom) ? toDraw : xDiff(edgeBottom);
-			drawTexturedModalRect(width - (toDraw + xDiff(cornerBR)), height - (yDiff(edgeBottom)), edgeBottom.int1(), edgeBottom.int2(), drawWidth, yDiff(edgeBottom));
+			drawTexturedModalRect(getPaddedWidth() - (toDraw + xDiff(cornerBR)), getPaddedHeight() - (yDiff(edgeBottom)), edgeBottom.int1(), edgeBottom.int2(), drawWidth, yDiff(edgeBottom));
 			toDraw -= drawWidth;
 		}
 
 		//draw left edge
-		toDraw = height - (yDiff(cornerTL) + yDiff(cornerBL));
+		toDraw = getPaddedHeight() - (yDiff(cornerTL) + yDiff(cornerBL));
 		while (toDraw > 0) {
 			//actual height being drawn this iteration
 			int drawHeight = toDraw < yDiff(edgeLeft) ? toDraw : yDiff(edgeLeft);
-			drawTexturedModalRect(0, height - (toDraw + yDiff(cornerBL)), edgeLeft.int1(), edgeLeft.int2(), xDiff(edgeLeft), drawHeight);
+			drawTexturedModalRect(0, getPaddedHeight() - (toDraw + yDiff(cornerBL)), edgeLeft.int1(), edgeLeft.int2(), xDiff(edgeLeft), drawHeight);
 			toDraw -= drawHeight;
 		}
 
 		//draw right edge
-		toDraw = height - (yDiff(cornerTR) + yDiff(cornerBR));
+		toDraw = getPaddedHeight() - (yDiff(cornerTR) + yDiff(cornerBR));
 		while (toDraw > 0) {
 			//actual height being drawn this iteration
 			int drawHeight = toDraw < yDiff(edgeRight) ? toDraw : yDiff(edgeRight);
-			drawTexturedModalRect(width - xDiff(edgeRight), height - (toDraw + yDiff(cornerBR)), edgeRight.int1(), edgeRight.int2(), xDiff(edgeRight), drawHeight);
+			drawTexturedModalRect(getPaddedWidth() - xDiff(edgeRight), getPaddedHeight() - (toDraw + yDiff(cornerBR)), edgeRight.int1(), edgeRight.int2(), xDiff(edgeRight), drawHeight);
 			toDraw -= drawHeight;
 		}
 
@@ -615,13 +678,13 @@ public abstract class Element extends Gui implements IProcessData {
 		drawTexturedModalRect(0, 0, cornerTL.int1(), cornerTL.int2(), xDiff(cornerTL), yDiff(cornerTL));
 
 		//draw top right corner
-		drawTexturedModalRect(width - xDiff(cornerTR), 0, cornerTR.int1(), cornerTR.int2(), xDiff(cornerTR), yDiff(cornerTR));
+		drawTexturedModalRect(getPaddedWidth() - xDiff(cornerTR), 0, cornerTR.int1(), cornerTR.int2(), xDiff(cornerTR), yDiff(cornerTR));
 
 		//draw bottom left corner
-		drawTexturedModalRect(0, height - yDiff(cornerBL), cornerBL.int1(), cornerBL.int2(), xDiff(cornerBL), yDiff(cornerBL));
+		drawTexturedModalRect(0, getPaddedHeight() - yDiff(cornerBL), cornerBL.int1(), cornerBL.int2(), xDiff(cornerBL), yDiff(cornerBL));
 
 		//draw bottom right corner
-		drawTexturedModalRect(width - xDiff(cornerBR), height - yDiff(cornerBR), cornerBR.int1(), cornerBR.int2(), xDiff(cornerBR), yDiff(cornerBR));
+		drawTexturedModalRect(getPaddedWidth() - xDiff(cornerBR), getPaddedHeight() - yDiff(cornerBR), cornerBR.int1(), cornerBR.int2(), xDiff(cornerBR), yDiff(cornerBR));
 	}
 	
 	protected void drawBorderFromTexture(IBorderTexture border){
@@ -635,16 +698,16 @@ public abstract class Element extends Gui implements IProcessData {
 	protected void drawBackgroundFromTextures(Tuple bg, Tuple edgeTop, Tuple edgeRight, Tuple edgeBottom, Tuple edgeLeft, Tuple cornerTL, Tuple cornerTR, Tuple cornerBR, Tuple cornerBL) {
 
 		//height to render
-		int toDrawY = height - (yDiff(edgeTop) + yDiff(edgeBottom));
+		int toDrawY = getPaddedHeight() - (yDiff(edgeTop) + yDiff(edgeBottom));
 		//draw a horizontal row
 		while (toDrawY > 0) {
 			//actual height being drawn this iteration
 			int drawHeight = toDrawY < yDiff(bg) ? toDrawY : yDiff(bg);
-			int toDrawX = width - (xDiff(edgeLeft) + xDiff(edgeRight));
+			int toDrawX = getPaddedWidth() - (xDiff(edgeLeft) + xDiff(edgeRight));
 			while (toDrawX > 0) {
 				//actual width being drawn this iteration
 				int drawWidth = toDrawX < xDiff(bg) ? toDrawX : xDiff(bg);
-				drawTexturedModalRect(width - (toDrawX + xDiff(edgeRight)), height - (toDrawY + yDiff(edgeBottom)), bg.int1(), bg.int2(), drawWidth, drawHeight);
+				drawTexturedModalRect(getPaddedWidth() - (toDrawX + xDiff(edgeRight)), getPaddedHeight() - (toDrawY + yDiff(edgeBottom)), bg.int1(), bg.int2(), drawWidth, drawHeight);
 				toDrawX -= drawWidth;
 			}
 			toDrawY -= drawHeight;
