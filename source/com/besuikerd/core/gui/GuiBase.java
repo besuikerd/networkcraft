@@ -10,6 +10,7 @@ import org.lwjgl.opengl.GL11;
 import com.besuikerd.core.gui.element.Element;
 import com.besuikerd.core.gui.element.ElementContainer;
 import com.besuikerd.core.gui.element.ElementRootContainer;
+import com.besuikerd.core.gui.event.EventHandler;
 import com.besuikerd.core.gui.event.IEventHandler;
 import com.besuikerd.core.gui.layout.VerticalLayout;
 import com.besuikerd.core.inventory.ContainerBesu;
@@ -17,10 +18,12 @@ import com.besuikerd.core.inventory.ContainerBesu;
 public class GuiBase extends GuiContainer implements IEventHandler{
 	
 	protected ElementRootContainer root;
+	protected EventHandler eventHandler;
 	
 	public GuiBase(ContainerBesu container) {
 		super(container);
-		root = new ElementRootContainer();
+		this.root = new ElementRootContainer();
+		this.eventHandler = new EventHandler(this);
 		root.setEventHandler(this);
 		root.layout(new VerticalLayout())
 		.padding(5);
@@ -103,8 +106,11 @@ public class GuiBase extends GuiContainer implements IEventHandler{
 	@Override
 	public void post(String name, Element e, Object... args) {
 		root.onEvent(name, args, e);
+		eventHandler.post(name, e, args);
 		onEvent(name, e, args);
 	}
 	
-	public void onEvent(String name, Element e, Object... args){}
+	public void onEvent(String name, Element e, Object... args){
+		
+	}
 }

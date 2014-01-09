@@ -1,39 +1,40 @@
 package com.besuikerd.networkcraft;
 
-import static com.besuikerd.core.utils.FunctionalUtils.foldl;
-import static com.besuikerd.core.utils.FunctionalUtils.foldr;
-import static com.besuikerd.core.utils.FunctionalUtils.functionAny;
-import static com.besuikerd.core.utils.FunctionalUtils.functionApplyFunction;
-import static com.besuikerd.core.utils.FunctionalUtils.map;
+import static com.besuikerd.core.utils.functional.FunctionalUtils.foldl;
+import static com.besuikerd.core.utils.functional.FunctionalUtils.foldr;
+import static com.besuikerd.core.utils.functional.FunctionalUtils.functionAny;
+import static com.besuikerd.core.utils.functional.FunctionalUtils.functionApplyFunction;
+import static com.besuikerd.core.utils.functional.FunctionalUtils.map;
 
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
 import net.minecraft.tileentity.TileEntity;
 
-import com.besuikerd.core.gui.event.Event;
 import com.besuikerd.core.utils.BitUtils;
-import com.besuikerd.core.utils.MathUtils;
 import com.besuikerd.core.utils.ReflectUtils;
-import com.besuikerd.core.utils.FunctionalUtils.ABAFunction;
-import com.besuikerd.core.utils.FunctionalUtils.ABBFunction;
+import com.besuikerd.core.utils.ReflectUtils.Invokable;
+import com.besuikerd.core.utils.collection.ArrayUtils;
 import com.besuikerd.core.utils.collection.SafeConstrainedMap;
 import com.besuikerd.core.utils.collection.SmallerThanMapConstraint;
+import com.besuikerd.core.utils.functional.Predicate;
+import com.besuikerd.core.utils.functional.FunctionalUtils.ABAFunction;
+import com.besuikerd.core.utils.functional.FunctionalUtils.ABBFunction;
 import com.google.common.base.Function;
+
+import cpw.mods.fml.common.Optional.Interface;
 
 public class QuickNDirtyTest {
 	
-	public static void main(String[] args) {
+	public static void main(String[] args) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
 		functionalTest();
 		bitUtilsTest();	
-
-		Map<Object, Integer> m = new HashMap<Object, Integer>();
-		m = SafeConstrainedMap.create(m, new SmallerThanMapConstraint<Object, Integer>(m));
-		m.put(0, 5);
-		m.put(0, 1);
-		m.put(0, 6);
-		System.out.println(m);
+		reflectionTest();
 	}
 	
 	public static void recurs(int n){
@@ -80,4 +81,70 @@ public class QuickNDirtyTest {
 	private static void bitUtilsTest(){
 		System.out.println(BitUtils.ByteToString(BitUtils.toggleOff(0xff, 5)));
 	}
+	
+	private static void reflectionTest() throws IllegalAccessException, IllegalArgumentException, InvocationTargetException{
+		Methodeer m = new Methodeer();
+		
+		Invokable i = ReflectUtils.getBestMatchingAnnotatedMethodInvokable(m, MeFirst.class, new Predicate<MeFirst>() {
+			public boolean eval(MeFirst input) {
+				System.out.println(input);
+				return input.enabled();
+			};
+		}, "a", "b");
+		
+		if(i != null){
+			i.invoke();
+		} else{
+			ReflectUtils.invokePartialMatchingMethod(m, "a", void.class, new Object().toString(), "ello!", "dsas");
+		}
+	}
+	
+	public static class Methodeer{
+		
+		@MeFirst
+		public void a(){
+			System.out.println("no args");
+		}
+		
+		public void a(String s){
+			System.out.printf("string: %s\n", s);
+		}
+		
+		public void a(Object o){
+			System.out.printf("object: %s\n", o);
+		}
+		
+		public void a(String s, Object o){
+			a(s);
+			a(o);
+		}
+		
+		public String a(Object o, String s){
+			System.out.printf("returning: %s\n", s);
+			return s;
+		}
+		
+		
+		public void a(Object o, Object o2){
+			a(o);
+			a(o2);
+		}
+		
+		@MeFirst(enabled = false)
+		public void a(String s, String s2){
+			a(s);
+			a(s2);
+		}
+		
+		public void a(Object o, Object o2, Object o3){
+			a(o);
+			a(o2);
+			a(o3);
+		}
+	}
+	
+	@Retention(RetentionPolicy.RUNTIME)
+	static @interface MeFirst{
+		boolean enabled() default true;
+	} 
 }

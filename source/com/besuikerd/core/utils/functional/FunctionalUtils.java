@@ -1,4 +1,4 @@
-package com.besuikerd.core.utils;
+package com.besuikerd.core.utils.functional;
 
 import java.lang.reflect.Array;
 import java.lang.reflect.InvocationTargetException;

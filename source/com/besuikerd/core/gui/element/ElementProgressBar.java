@@ -1,5 +1,6 @@
 package com.besuikerd.core.gui.element;
 
+import com.besuikerd.core.BLogger;
 import com.besuikerd.core.gui.event.Trigger;
 import com.besuikerd.core.gui.layout.Orientation;
 import com.besuikerd.core.gui.texture.ITexture;
@@ -44,25 +45,24 @@ public class ElementProgressBar extends Element{
 	@Override 
 	public void draw(int mouseX, int mouseY) {
 		super.draw(mouseX, mouseY);
+		
+		//render background
 		drawTexture(backgroundTexture);
 		
+		//render progress texture
 		switch(orientation){
 			case HORIZONTAL:
 				drawTexture(progressTexture, 0, 0, (int) Math.min(((double) progress / max) * TupleUtils.xDiff(progressTexture.getTexture()), TupleUtils.xDiff(progressTexture.getTexture())), TupleUtils.yDiff(progressTexture.getTexture()));
 				break;
 			case VERTICAL:
-				drawTexture(progressTexture, 0, (int) ((1 - getProgressPercentage()) * TupleUtils.yDiff(progressTexture.getTexture())) , TupleUtils.xDiff(progressTexture.getTexture()), (int) Math.min(((double) progress / max) * TupleUtils.yDiff(progressTexture.getTexture()), TupleUtils.yDiff(progressTexture.getTexture())), 0, (int) ((1 - getProgressPercentage()) * TupleUtils.yDiff(progressTexture.getTexture())));
+				double yOffset = (1 - getProgressPercentage()) * TupleUtils.yDiff(progressTexture.getTexture());
+				drawTexture(progressTexture, 0, (int) yOffset , TupleUtils.xDiff(progressTexture.getTexture()), (int) Math.min(((double) progress / max) * TupleUtils.yDiff(progressTexture.getTexture()), TupleUtils.yDiff(progressTexture.getTexture())), 0, (int) Math.ceil(yOffset));
 				break;
 		}
 	}
 	
 	public void onProgressChanged(double oldProgress, double oldMax, double newProgress, double newMax){
 		doTrigger(Trigger.PROGRESS_CHANGED, oldProgress, oldMax, newProgress, newMax);
-	}
-	
-	public ElementProgressBar addProgress(double d){
-		progress += d;
-		return this;
 	}
 	
 	public int getProgress() {
@@ -87,6 +87,22 @@ public class ElementProgressBar extends Element{
 	
 	public ElementProgressBar max(int max){
 		return set(this.progress, max);
+	}
+	
+	public ElementProgressBar increment(int i){
+		return progress(this.progress + i);
+	}
+	
+	public ElementProgressBar increment(){
+		return increment(1);
+	}
+	
+	public ElementProgressBar decrement(){
+		return increment(-1);
+	}
+	
+	public ElementProgressBar reset(){
+		return progress(0);
 	}
 	
 	public ElementProgressBar set(int progress, int max){

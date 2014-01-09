@@ -22,6 +22,7 @@ import com.besuikerd.core.gui.element.adapter.BaseElementAdapter;
 import com.besuikerd.core.gui.element.adapter.ButtonElementAdapter;
 import com.besuikerd.core.gui.event.Event;
 import com.besuikerd.core.gui.event.EventAction;
+import com.besuikerd.core.gui.event.EventHandle;
 import com.besuikerd.core.gui.event.Trigger;
 import com.besuikerd.core.gui.layout.Alignment;
 import com.besuikerd.core.gui.layout.HorizontalLayout;
@@ -41,75 +42,52 @@ public class TileEntityTestGui extends TileEntityBesu{
 		
 		@Override
 		public void init() {
-			RadioGroup group = new RadioGroup();
-			BaseElementAdapter<String> base = new ButtonElementAdapter("bla", "another", "button", "under", "eachother"){
-				@Override
-				public Element createElementAt(String data, int index) {
-					return super.createElementAt(data, index).trigger(Trigger.PRESSED, Event.RESET).action(Event.RESET, EventAction.DISABLE);
-				}
-			};
-			ElementList list = new ElementList(base);
-			items = base.synchronizedList();
-			
-			root
-			.add(new ElementContainer().layout(new HorizontalLayout())
-				.add(new ElementButton("+").trigger(Trigger.PRESSED, Event.ADD))
-				.add((new ElementButton("-").trigger(Trigger.PRESSED, Event.REMOVE))
-			))
-			
-			.add(new ElementScrollContainer(100)
-				.add(new ElementScrollContainer(200)
-					.add(new ElementScrollContainer(400).add(list))
-					
-					
-				)
+			root.add(
+				new ElementButton("Button 1").trigger(Trigger.RELEASED, "pressed"),
+				new ElementButton("Button 2").trigger(Trigger.RELEASED, "a very logical name indeed"),
+				new ElementButton("Button 3").trigger(Trigger.RELEASED, "you don't need to overide the arguments if you don't want to!"),
+				new ElementButton("Button 4").trigger(Trigger.RELEASED, "the most specific method will be chosen")
 			)
-			
-			.add(ElementProgressBar.progressBarBurn().trigger(Trigger.UPDATE, "updateBurn"))
-			.add(ElementProgressBar.progressBarArrow().trigger(Trigger.UPDATE, "updateArrow"))
-			;
-			
-			
-//			.add(new ElementScrollContainer(50, new ElementContainer()
-//				.layout(new HorizontalLayout())
-//				.paddingRight(25)
-//				.add(new ElementScrollContainer(200, new ElementContainer()
-//					.layout(new HorizontalLayout())
-					
-//					
-//				))
-//			))
-//			
 			;
 		}
 		
-		int counter;
+		public void pressed(ElementButton e){ //no need to add @EventHandle annotation if you bind the trigger to a method name
+			BLogger.debug("pressed called!");
+		}
 		
-		@Override
-		public void onEvent(String name, Element e, Object... args) {
-			
-			
-			switch(Event.lookup(name)){
-				case ADD:
-					items.add(String.format("add: (%d,%d,%d)", args[0], args[1], args[2]));
-					break;
-				case REMOVE:
-					items.remove(items.size() - 1);
-					break;
-				default:
-					break;
-			}
-			
-			if(name.equals("updateBurn")){
-				if(counter++ > 10){
-					ElementProgressBar progressBar = (ElementProgressBar) e;
-					progressBar.progress((progressBar.getProgress() + 1) % progressBar.getMax());
-					counter = 0;
-				}
-			} else if(name.equals("updateArrow")){
-				ElementProgressBar progressBar = (ElementProgressBar) e;
-				progressBar.progress(Math.min(progressBar.getProgress() + 5, progressBar.getMax()) % progressBar.getMax());
-			}
+		@EventHandle("a very logical name indeed")
+		public void thisMethodHasNoLogicalNameWhatsoever(ElementButton e){ //add @EventHandle annotation to bind a method with a different name
+			BLogger.debug("unlogically named method was called!");
+		}
+		
+		@EventHandle("you don't need to overide the arguments if you don't want to!")
+		public void aLessSpecificMethod(){
+			BLogger.debug("a less specific method is called!");
+		}
+		
+		@EventHandle("the most specific method will be chosen")
+		public void mostSpecificMethod(){
+			BLogger.debug("i will be ignored"); //there is a method with more (matching) arguments
+		}
+		
+		@EventHandle("the most specific method will be chosen")
+		public void mostSpecificMethod(Element e){
+			BLogger.debug("i will be ignored"); //there is a method with more (matching) arguments
+		}
+		
+		@EventHandle("the most specific method will be chosen")
+		public void mostSpecificMethod(Element e, int mouseX, int mouseY, int which){
+			BLogger.debug("i will be ignored"); //Element is less specific than ElementButton
+		}
+		
+		@EventHandle("the most specific method will be chosen")
+		public void mostSpecificMethod(ElementProgressBar e, int mouseX, int mouseY, int which){
+			BLogger.debug("i will be ignored"); //ElementProgressBar is not a superclass of ElementButton
+		}
+		
+		@EventHandle("the most specific method will be chosen")
+		public void mostSpecificMethod(ElementButton e, int mouseX, int mouseY, int which){
+			BLogger.debug("i will be called!"); //most specific and matching arguments
 		}
 	}
 }
