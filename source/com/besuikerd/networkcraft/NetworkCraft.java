@@ -57,7 +57,7 @@ public class NetworkCraft{
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent e){
 		//initialize logger
-		BLogger.init();
+		BLogger.init(true);
 		
 		//setup configuration
 		Configuration cfg = new Configuration(e.getSuggestedConfigurationFile());
@@ -90,7 +90,6 @@ public class NetworkCraft{
 		
 		//register gui handlers
 		NetworkRegistry.instance().registerGuiHandler(instance, GuiHandlerBesu.getInstance());
-		BLogger.debug(proxy);
 		proxy.registerRenderers();
 		proxy.registerGuis(GuiHandlerBesu.getInstance());
 	}

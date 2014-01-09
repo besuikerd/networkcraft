@@ -50,14 +50,21 @@ public class ReflectUtils {
 		return null;
 	}
 	
-	
 	public static void invoke(Object obj, String name, Object... params){
 		try {
 			Method m = obj.getClass().getDeclaredMethod(name);
 			m.setAccessible(true);
 			m.invoke(obj, params);
-		} catch (Exception e) {
-			BLogger.error("reflection failed for %s: %s", obj.getClass().getName(), e.toString());
+		} catch (NoSuchMethodException e) {
+			throw new RuntimeException(e);
+		} catch (SecurityException e) {
+			throw new RuntimeException(e);
+		} catch (IllegalAccessException e) {
+			throw new RuntimeException(e);
+		} catch (IllegalArgumentException e) {
+			throw new RuntimeException(e);
+		} catch (InvocationTargetException e) {
+			throw new RuntimeException(e);
 		}
 	}
 	
@@ -82,19 +89,16 @@ public class ReflectUtils {
 				}
 				break;
 			}
-		//} catch (NoSuchMethodException e) {
-			//BLogger.error("No constructor exists with correct parameters for %s, does a constructor exist with the following parameters? %s", cls.getName(), Arrays.toString(map(String.class, map(Class.class, params, functionGetClass), functionApplyFunction("getName", Class.class, String.class))));
 		} catch (SecurityException e) {
-			BLogger.error("Not allowed to instantiate constructor, security issues");
-			e.printStackTrace();
+			throw new RuntimeException(e);
 		} catch (InstantiationException e) {
-			e.printStackTrace();
+			throw new RuntimeException(e);
 		} catch (IllegalAccessException e) {
-			e.printStackTrace();
+			throw new RuntimeException(e);
 		} catch (IllegalArgumentException e) {
-			e.printStackTrace();
+			throw new RuntimeException(e);
 		} catch (InvocationTargetException e) {
-			e.printStackTrace();
+			throw new RuntimeException(e);
 		}
 		return instance;
 	}
@@ -109,6 +113,14 @@ public class ReflectUtils {
 		return result;
 	}
 	
+	/**
+	 * find the method in Object o that matches the given function name and (partially) matches the given arguments. The best match (if any) will be returned
+	 * @param o
+	 * @param methods
+	 * @param returnType
+	 * @param args
+	 * @return
+	 */
 	public static Method findPartialMatchingMethod(final Object o, Set<Method> methods, Class<?> returnType, final Object... args){
 		Method bestMethod = null;
 		for(Method m : methods){
@@ -158,13 +170,7 @@ public class ReflectUtils {
 		return bestMethod;
 	}
 	
-	/**
-	 * find the method in Object o that matches the given function name and (partially) matches the given arguments. The best match (if any) will be returned
-	 * @param o
-	 * @param functionName
-	 * @param args
-	 * @return
-	 */
+	
 	public static Method findPartialMatchingMethod(final Object o, String functionName, Class<?> returnType, final Object... args){
 		return findPartialMatchingMethod(o, getMatchingMethods(o, functionName), returnType, args);
 	}
@@ -204,7 +210,6 @@ public class ReflectUtils {
 				methods.add(m);
 			}
 		}
-		System.out.printf("methods: %s\n", methods);
 		return methods;
 	}
 	

@@ -17,11 +17,11 @@ public class BLogger {
 	
 	private static final Logger logger = Logger.getLogger("Besuikerd");
 	
-	public static void init(){
+	private static boolean debugMode = false;
+	
+	public static void init(boolean debugMode){
 		logger.setParent(FMLLog.getLogger());
-		if(NetworkCraft.DEBUG_MODE){
-			info("DEBUG_MODE is enabled. More debug messages will be printed");
-		}
+		setDebugMode(debugMode);
 		ClientLogger.init();
 		ServerLogger.init();
 	}
@@ -59,14 +59,23 @@ public class BLogger {
 	}
 	
 	public static void debug(Object msg, Object... params){
-		if(NetworkCraft.DEBUG_MODE){
+		if(debugMode){
 			info(msg, params);
 		}
 	}
 	
 	public static void debug(String msg){
-		if(NetworkCraft.DEBUG_MODE){
+		if(debugMode){
 			info(msg);
 		}
+	}
+	
+	public static void setDebugMode(boolean enabled){
+		if(!debugMode && enabled){
+			info("Debug mode is enabled. More debug messages will be printed");
+		} else if(debugMode && !enabled){
+			info("Debug mode is disabled. Less debug messages will be printed");
+		}
+		debugMode = enabled;
 	}
 }
