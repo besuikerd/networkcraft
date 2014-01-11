@@ -10,6 +10,8 @@ public class SlotBesu extends Slot {
 	public SlotBesu(InventoryBesu inventory, int slotIndex, int xDisplay, int yDisplay){
 		super(inventory, slotIndex, xDisplay, yDisplay);
 		this.inventory = inventory;
+		this.xDisplayPosition = -1000;
+		this.yDisplayPosition = -1000;
 	}
 	
 	public SlotBesu(InventoryBesu inventory, int slotIndex){

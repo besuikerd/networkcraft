@@ -63,8 +63,6 @@ public class ElementViewport extends Element {
         public void dimension() {
                 super.dimension();
                 //move container to the correct spot within the viewport
-                element.dx = absX();
-                element.dy = absY();
                 element.x = xOffset;
                 element.y = yOffset;
 
@@ -107,21 +105,23 @@ public class ElementViewport extends Element {
 
         @Override
         public void draw(int mouseX, int mouseY) {
-                super.draw(mouseX, mouseY);
-                glEnable(GL_STENCIL_TEST);
-                glStencilFunc(GL_ALWAYS, 0x1, 0xff);
-                glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
-                glColorMask(false, false, false, false); //no color mask
-                glDepthMask(false); //no depth mask
-                glStencilMask(0xff); // draw to mask
-                glClear(GL_STENCIL_BUFFER_BIT); //clear stencil
-                glColor4f(1, 1, 1, 1);
-                drawRect(Math.max(absX(), rootDelegate.absX()), Math.max(absY(), rootDelegate.absY()), Math.min(absX() + width, rootDelegate.absX() + rootDelegate.width), Math.min(absY() + height, rootDelegate.absY() + rootDelegate.height), 0xffffffff); //draw square mask
-                glStencilMask(0x0); //don't draw to mask
-                glStencilFunc(GL_EQUAL, 0x1, 0xff);
-                glColorMask(true, true, true, true); //restore color mask
-                glDepthMask(true); //restore depth mask
-                element.draw(mouseX, mouseY);
-                glDisable(GL_STENCIL_TEST);
+        	element.dx = absX();
+            element.dy = absY();
+            super.draw(mouseX, mouseY);
+            glEnable(GL_STENCIL_TEST);
+            glStencilFunc(GL_ALWAYS, 0x1, 0xff);
+            glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
+            glColorMask(false, false, false, false); //no color mask
+            glDepthMask(false); //no depth mask
+            glStencilMask(0xff); // draw to mask
+            glClear(GL_STENCIL_BUFFER_BIT); //clear stencil
+            glColor4f(1, 1, 1, 1);
+            drawRect(Math.max(absX(), rootDelegate.absX()), Math.max(absY(), rootDelegate.absY()), Math.min(absX() + width, rootDelegate.absX() + rootDelegate.width), Math.min(absY() + height, rootDelegate.absY() + rootDelegate.height), 0xffffffff); //draw square mask
+            glStencilMask(0x0); //don't draw to mask
+            glStencilFunc(GL_EQUAL, 0x1, 0xff);
+            glColorMask(true, true, true, true); //restore color mask
+            glDepthMask(true); //restore depth mask
+            element.draw(mouseX, mouseY);
+            glDisable(GL_STENCIL_TEST);
         }
 }

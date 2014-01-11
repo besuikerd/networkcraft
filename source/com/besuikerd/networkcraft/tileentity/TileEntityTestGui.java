@@ -55,22 +55,23 @@ public class TileEntityTestGui extends TileEntityBesu{
 //				).width(100).height(50),
 				
 				new ElementStyledContainer().add(
-						new ElementButton("blabla")
+						new ElementButton("blabla")		
 				)
 				
-//				new ElementStyledContainer().add(
-//					new ElementScrollContainer(100, Orientation.HORIZONTAL).add(
-//						new ElementButton(600, 50, "lalalalalalalalalalallaalalalalallalalallalalalla")
-//					)
-//				),
-//				
-//				new ElementScrollContainer(100, Orientation.VERTICAL).add(
-//					new ElementScrollContainer(200, Orientation.VERTICAL).add(
-//						new ElementScrollContainer(400, Orientation.VERTICAL).add(
-//							new ElementButton(100, 1000, "blabalabablalalbalbalbalalbalbalalbablablabl")
-//						)
-//					)
-//				)
+				,
+				new ElementStyledContainer().add(
+					new ElementScrollContainer(100, Orientation.HORIZONTAL).add(
+						new ElementButton(600, 50, "lalalalalalalalalalallaalalalalallalalallalalalla")
+					)
+				),
+				
+				new ElementScrollContainer(100, Orientation.VERTICAL).add(
+					new ElementScrollContainer(200, Orientation.VERTICAL).add(
+						new ElementScrollContainer(400, Orientation.VERTICAL).add(
+							new ElementButton(100, 1000, "blabalabablalalbalbalbalalbalbalalbablablabl").trigger(Trigger.RELEASED, "pressed")
+						)
+					)
+				)
 			)
 			;
 		}

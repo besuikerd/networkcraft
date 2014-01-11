@@ -87,6 +87,11 @@ public class ElementContainer extends Element{
 	@Override
 	public void draw(int mouseX, int mouseY) {
 		
+		for(Element e : elements){
+			e.dx = absX();
+			e.dy = absY();
+		}
+		
 		super.draw(mouseX, mouseY);
 		
 		//render last element to first element
@@ -95,6 +100,8 @@ public class ElementContainer extends Element{
 			e.draw(mouseX, mouseY);
 			e.style();
 		}
+		
+		
 	}
 	
 	@Override
@@ -131,10 +138,7 @@ public class ElementContainer extends Element{
 			
 		}
 		
-		for(Element e : elements){
-			e.dx = absX();
-			e.dy = absY();
-		}
+		
 		
 		super.dimension();
 	}
@@ -165,12 +169,10 @@ public class ElementContainer extends Element{
 	public boolean handleMouseInput(int mouseX, int mouseY) {
 		boolean consumeMouseInput = super.handleMouseInput(mouseX, mouseY);
 		
-		if(!consumeMouseInput){
-			for(Element e : elements){
-				consumeMouseInput = e.handleMouseInput(mouseX - e.x, mouseY - e.y) || consumeMouseInput;
-			}
+		for(int i = 0 ; i < elements.size() && !consumeMouseInput ; i++){
+			Element e = elements.get(i);
+			consumeMouseInput = e.handleMouseInput(mouseX - e.x - getPaddingLeft(), mouseY - e.y - getPaddingTop()) || consumeMouseInput;
 		}
-		
 		return consumeMouseInput;
 	}
 	

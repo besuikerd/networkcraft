@@ -30,18 +30,6 @@ public class GuiBase extends GuiContainer implements IEventHandler{
 		root.layout(new VerticalLayout())
 		.padding(5);
 		init();
-		
-		//dimension all elements in the root container
-		root.dimension();
-		
-		//recalculate size of the root container
-		xSize = root.getWidth();
-		ySize = root.getHeight();
-
-		//center the root container
-		root.x((width - root.getWidth()) / 2);
-		root.y((height - root.getHeight()) / 2);
-
 	}
 
 	private static final ResourceLocation bg = new ResourceLocation("textures/gui/demo_background.png");
@@ -82,9 +70,30 @@ public class GuiBase extends GuiContainer implements IEventHandler{
 	public boolean doesGuiPauseGame() {
 		return false;
 	}
-
+	
 	@Override
-	protected void drawGuiContainerBackgroundLayer(float f, int mouseX, int mouseY) {
+	public void initGui() {
+		
+		root.update();
+		
+		//dimension all elements in the root container
+		root.dimension();
+		
+		
+		//recalculate size of the root container
+		xSize = root.getWidth();
+		ySize = root.getHeight();
+
+		//center the root container
+		root.x((width - root.getWidth()) / 2);
+		root.y((height - root.getHeight()) / 2);
+		
+		super.initGui();
+		return;
+	}
+	
+	@Override
+	public void drawScreen(int par1, int par2, float par3) {
 		//update all elements before rendering
 		root.update();
 		
@@ -101,9 +110,15 @@ public class GuiBase extends GuiContainer implements IEventHandler{
 		
 		this.guiLeft = (this.width - this.xSize) / 2;
         this.guiTop = (this.height - this.ySize) / 2;
+		super.drawScreen(par1, par2, par3);
+	}
 
+	@Override
+	protected void drawGuiContainerBackgroundLayer(float f, int mouseX, int mouseY) {
 		//draw root container
 		root.draw(mouseX, mouseY);
+		
+		return;
 	}
 
 	@Override

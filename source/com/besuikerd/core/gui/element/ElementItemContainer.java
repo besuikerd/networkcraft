@@ -14,8 +14,6 @@ public class ElementItemContainer extends Element{
 	public ElementItemContainer(Slot slot, int x, int y) {
 		super(x, y, 18, 18);
 		this.slot = slot;
-		this.slot.xDisplayPosition = Integer.MIN_VALUE;
-		this.slot.yDisplayPosition = Integer.MIN_VALUE;
 	}
 	
 	public ElementItemContainer(Slot slot){
