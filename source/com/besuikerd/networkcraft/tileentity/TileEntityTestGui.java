@@ -38,10 +38,6 @@ public class TileEntityTestGui extends TileEntityBesu{
 		
 		private List<String> items;
 		
-		public Gui(ContainerBesu container) {
-			super(container);
-		}
-		
 		@Override
 		public void init() {
 			root.add(

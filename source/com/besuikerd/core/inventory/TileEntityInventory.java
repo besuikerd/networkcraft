@@ -10,10 +10,15 @@ import net.minecraft.nbt.NBTTagCompound;
 
 public class TileEntityInventory extends TileEntityBesu implements ISidedInventory{
 	
-	protected InventoryBesu inventory;
+	protected Inventory inventory;
 	
 	public TileEntityInventory() {
-		inventory = new InventoryBesu();
+		inventory = new Inventory();
+		initInventory();
+	}
+	
+	protected void initInventory(){
+		
 	}
 	
 	@Override
@@ -107,6 +112,10 @@ public class TileEntityInventory extends TileEntityBesu implements ISidedInvento
 	public void writeToNBT(NBTTagCompound tag) {
 		super.writeToNBT(tag);
 		NBTUtils.writeProcessData(inventory, tag, "items");
+	}
+	
+	public Inventory getInventory() {
+		return inventory;
 	}
 
 }

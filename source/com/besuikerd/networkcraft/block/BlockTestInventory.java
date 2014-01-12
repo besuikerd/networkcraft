@@ -2,16 +2,16 @@ package com.besuikerd.networkcraft.block;
 
 import java.util.Random;
 
-import com.besuikerd.core.gui.GuiId;
-import com.besuikerd.networkcraft.NetworkCraft;
-import com.besuikerd.networkcraft.tileentity.TileEntityTestInventory;
-
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
+
+import com.besuikerd.networkcraft.GuiEntry;
+import com.besuikerd.networkcraft.NetworkCraft;
+import com.besuikerd.networkcraft.tileentity.TileEntityTestInventory;
 
 public class BlockTestInventory extends BlockDevice{
 
@@ -48,7 +48,7 @@ public class BlockTestInventory extends BlockDevice{
 	@Override
 	public boolean onBlockActivated(World world, int x, int y, int z,
 			EntityPlayer player, int unknown, float aX, float aY, float aZ) {
-		player.openGui(NetworkCraft.instance, GuiId.INVENTORYTEST.getNumber(), world, x, y, z);
+		player.openGui(NetworkCraft.instance, NetworkCraft.GUI_HANDLER.fromEntry(GuiEntry.TESTINVENTORY), world, x, y, z);
 		return true;
 	}
 }

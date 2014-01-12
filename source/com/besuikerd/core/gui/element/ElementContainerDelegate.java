@@ -28,8 +28,8 @@ public class ElementContainerDelegate extends Element {
 	}
 
 	@Override
-	public void draw(int mouseX, int mouseY) {
-		container.draw(mouseX, mouseY);
+	public void draw() {
+		container.draw();
 	}
 
 	@Override

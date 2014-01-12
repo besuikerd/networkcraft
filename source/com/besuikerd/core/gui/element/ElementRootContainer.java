@@ -24,8 +24,6 @@ public class ElementRootContainer extends ElementStyledContainer{
 		this(0, 0, width, height);
 	}
 
-
-
 	public boolean requestFocus(Element element){
 		boolean canFocus = true;
 		if(focusedElement != null){

@@ -1,111 +1,92 @@
 package com.besuikerd.core.gui;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import net.minecraft.client.gui.Gui;
+import net.minecraft.client.gui.inventory.GuiContainer;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.Container;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.World;
+
+import com.besuikerd.core.BLogger;
 import com.besuikerd.core.inventory.ContainerBesu;
 import com.besuikerd.core.inventory.TileEntityInventory;
 import com.besuikerd.core.utils.INumbered;
 import com.besuikerd.core.utils.ReflectUtils;
 
-import net.minecraft.client.gui.Gui;
-import net.minecraft.client.gui.inventory.GuiContainer;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.world.World;
 import cpw.mods.fml.common.network.IGuiHandler;
 
 public class GuiHandlerBesu implements IGuiHandler{
-	public static final int HANDLER_LIMIT = 256;
 	
 	private static GuiHandlerBesu instance = null;
 	
+	private Map<Integer, IGuiEntry> entries;
+	private Map<String, Integer> nameMapping;
 	
-	private Class<? extends Gui>[] registryClient;
-	private Class<? extends ContainerBesu>[] registryServer;
+	private int counter;
 	
-	private GuiHandlerBesu(){
-		this.registryClient = new Class[HANDLER_LIMIT];
-		this.registryServer = new Class[HANDLER_LIMIT];
-	}
-	
-	public static GuiHandlerBesu getInstance(){
-		if(instance == null){
-			instance = new GuiHandlerBesu();
-		}
-		return instance;
+	public GuiHandlerBesu(){
+		this.entries = new HashMap<Integer, IGuiEntry>();
+		this.nameMapping = new HashMap<String, Integer>();
 	}
 	
 	@Override
 	public Object getServerGuiElement(int id, EntityPlayer player, World world,
 			int x, int y, int z) {
-		TileEntity entity = null;
+		Container c = null;
+		IGuiEntry entry = entries.get(id);
 		
-		//id should be valid and a TileEntity must exist in the given coords
-		if(id >= 0 && id < registryServer.length && world.blockExists(x, y, z) && (entity = world.getBlockTileEntity(x, y, z)) != null){
-			Class<? extends ContainerBesu> clsContainer = this.registryServer[id];
-			if(clsContainer != null){
-				ContainerBesu container = ReflectUtils.newInstance(clsContainer);
-				if(entity instanceof TileEntityInventory){
-					container.bindEntity((TileEntityInventory) entity, player);	
-				}
-				return container;
+		if(entry != null){
+			if(entry.getContainerClass() != null){
+				c = ReflectUtils.newInstance(entry.getContainerClass());
+			}
+			if(entry.getBinder() != null){
+				entry.getBinder().bind(null, c, player, world, x, y, z);
 			}
 		}
-		return null;
+		return c;
 	}
 	
 	@Override
 	public Object getClientGuiElement(int id, EntityPlayer player, World world,
 			int x, int y, int z) {
-		TileEntity tile = null;
-		
-		//id should be valid and a TileEntity must exist in the given coords
-		if(id >= 0 && id < registryClient.length && world.blockExists(x, y, z) && (tile = world.getBlockTileEntity(x, y, z)) != null){
-			Class<? extends Gui> guiClass = this.registryClient[id];
-			Class<? extends ContainerBesu> containerClass = this.registryServer[id];
-			if(guiClass != null && containerClass != null){
-				if(GuiContainer.class.isAssignableFrom(guiClass)){
-					ContainerBesu container = ReflectUtils.newInstance(containerClass);
-					
-					if(tile instanceof TileEntityInventory){
-						container.bindEntity((TileEntityInventory) tile, player);
-					}
-					
-					Gui g = ReflectUtils.newInstance(guiClass, container);
-					if(tile instanceof TileEntityInventory && g instanceof GuiTileEntity){
-						((GuiTileEntity) g).bindTileEntity((TileEntityInventory) tile, player, world);
-					}
-					return g;
-				}
+		IGuiEntry entry = entries.get(id);
+		GuiBase g = null;
+		Container c = null;
+		if(entry != null && entry.getGuiClass() != null){
+			if(entry.getContainerClass() != null){
+				c = ReflectUtils.newInstance(entry.getContainerClass());
+			}
+			g = ReflectUtils.newInstance(entry.getGuiClass());
+			
+			if(entry.getBinder() != null){
+				entry.getBinder().bind(g, c, player, world, x, y, z);
 			}
 		}
-		return null;
+		BLogger.debug(g);
+		return g == null ? null : g instanceof GuiBaseInventory ? new GuiContainerBesu(c, (GuiBaseInventory)g) : new GuiScreenBesu(g);
 	}
 	
-	public static void registerGui(int id, Class<? extends Gui> gui, Class<? extends ContainerBesu> containerClass){
-		instance.registryClient[id] = gui;
-		instance.registryServer[id] = containerClass;
+	public int fromName(String name){
+		Integer i = nameMapping.get(name);
+		return i == null ? -1 : i;
 	}
 	
-	public static void registerGui(int id, Class<? extends Gui> gui){
-		registerGui(id, gui, ContainerBesu.class);
+	public int fromEntry(IGuiEntry entry){
+		return fromName(entry.getName());
 	}
 	
-	public static void registerGui(INumbered number, Class<? extends Gui> gui, Class<? extends ContainerBesu> containerClass){
-		registerGui(number.getNumber(), gui, containerClass);
+	public int addGui(IGuiEntry entry){
+		nameMapping.put(entry.getName(), counter);
+		entries.put(counter, entry);
+		return counter++;
 	}
 	
-	public static void registerGui(INumbered number, Class<? extends Gui> gui){
-		registerGui(number.getNumber(), gui);
-	}
-	
-	public static void registerGuiForServer(int id, Class<? extends ContainerBesu> containerClass){
-		instance.registryServer[id] = containerClass;
-	}
-	
-	public static void registerGuiForServer(INumbered number, Class<? extends ContainerBesu> containerClass){
-		registerGuiForServer(number.getNumber(), containerClass);
-	}
-	
-	public static void registerGuiForServer(INumbered number){
-		registerGuiForServer(number, ContainerBesu.class);
+	public void addGuis(IGuiEntry... entries){
+		for(IGuiEntry entry : entries){
+			addGui(entry);
+		}
 	}
 }

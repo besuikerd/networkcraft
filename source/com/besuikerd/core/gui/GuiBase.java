@@ -1,35 +1,35 @@
 package com.besuikerd.core.gui;
 
+import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.inventory.GuiContainer;
+import net.minecraft.inventory.Container;
 import net.minecraft.util.ResourceLocation;
 
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
-import org.lwjgl.opengl.GL11;
 
-import com.besuikerd.core.BLogger;
 import com.besuikerd.core.gui.element.Element;
 import com.besuikerd.core.gui.element.ElementContainer;
 import com.besuikerd.core.gui.element.ElementRootContainer;
 import com.besuikerd.core.gui.event.EventHandler;
 import com.besuikerd.core.gui.event.IEventHandler;
 import com.besuikerd.core.gui.layout.VerticalLayout;
-import com.besuikerd.core.inventory.ContainerBesu;
-import com.besuikerd.core.utils.profiling.BesuProfiler;
 
-public class GuiBase extends GuiContainer implements IEventHandler{
+public class GuiBase implements IEventHandler{
 	
 	protected ElementRootContainer root;
 	protected EventHandler eventHandler;
 	
-	public GuiBase(ContainerBesu container) {
-		super(container);
+	public GuiBase() {
 		this.root = new ElementRootContainer();
-		this.eventHandler = new EventHandler(this);
 		root.setEventHandler(this);
+		this.eventHandler = new EventHandler(this);
 		root.layout(new VerticalLayout())
 		.padding(5);
-		init();
+	}
+	
+	public void bindEventHandler(Object o){
+		eventHandler.setHandlerObject(o);
 	}
 
 	private static final ResourceLocation bg = new ResourceLocation("textures/gui/demo_background.png");
@@ -39,86 +39,35 @@ public class GuiBase extends GuiContainer implements IEventHandler{
 	 */
 	public void init(){}
 	
-	@Override
-	protected void keyTyped(char key, int code) {
-		super.keyTyped(key, code);
-	}
-	
-	@Override
-	public void handleMouseInput() {
-		super.handleMouseInput();
-		
-        int x = Mouse.getEventX() * this.width / this.mc.displayWidth;
-        int y = this.height - Mouse.getEventY() * this.height / this.mc.displayHeight - 1;
-        
-        //delegate mouse input to root container
-        root.handleMouseInput(x, y);
-    }
-	
-	@Override
-	public void handleKeyboardInput() {
-		if(!root.handleKeyboardInput() || Keyboard.getEventKey() == Keyboard.KEY_ESCAPE){ //if the root element consumes input, do not let others handle keyboard input
-			super.handleKeyboardInput();
-		}
+	public void handleMouseInput(int mouseX, int mouseY){
+		root.handleMouseInput(mouseX, mouseY);
 	}
 	
 	public ElementContainer getRoot() {
 		return root;
 	}
 	
-	@Override
-	public boolean doesGuiPauseGame() {
-		return false;
+	public boolean handleKeyboardInput(){
+		return root.handleKeyboardInput() && Keyboard.getEventKey() != Keyboard.KEY_ESCAPE; //if the root element consumes input, do not let others handle keyboard input
+		
 	}
 	
-	@Override
-	public void initGui() {
-		
-		root.update();
-		
-		//dimension all elements in the root container
-		root.dimension();
-		
-		
-		//recalculate size of the root container
-		xSize = root.getWidth();
-		ySize = root.getHeight();
-
-		//center the root container
-		root.x((width - root.getWidth()) / 2);
-		root.y((height - root.getHeight()) / 2);
-		
-		super.initGui();
-		return;
-	}
-	
-	@Override
-	public void drawScreen(int par1, int par2, float par3) {
+	public void dimension(GuiScreen gui){
 		//update all elements before rendering
 		root.update();
 		
 		//dimension all elements in the root container
 		root.dimension();
-		
-		//recalculate size of the root container
-		xSize = root.getWidth();
-		ySize = root.getHeight();
-
-		//center the root container
-		root.x((width - root.getWidth()) / 2);
-		root.y((height - root.getHeight()) / 2);
-		
-		this.guiLeft = (this.width - this.xSize) / 2;
-        this.guiTop = (this.height - this.ySize) / 2;
-		super.drawScreen(par1, par2, par3);
 	}
-
-	@Override
-	protected void drawGuiContainerBackgroundLayer(float f, int mouseX, int mouseY) {
-		//draw root container
-		root.draw(mouseX, mouseY);
-		
-		return;
+	
+	public void center(GuiScreen gui){
+		//center the root container
+		root.x((gui.width - root.getWidth()) / 2);
+		root.y((gui.height - root.getHeight()) / 2);
+	}
+	
+	public void draw(){
+		root.draw();
 	}
 
 	@Override

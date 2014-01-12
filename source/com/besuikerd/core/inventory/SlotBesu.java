@@ -5,32 +5,17 @@ import net.minecraft.item.ItemStack;
 
 public class SlotBesu extends Slot {
 	
-	protected InventoryBesu inventory;
+	protected Inventory inventory;
 	
-	public SlotBesu(InventoryBesu inventory, int slotIndex, int xDisplay, int yDisplay){
+	public SlotBesu(Inventory inventory, int slotIndex, int xDisplay, int yDisplay){
 		super(inventory, slotIndex, xDisplay, yDisplay);
 		this.inventory = inventory;
 		this.xDisplayPosition = -1000;
 		this.yDisplayPosition = -1000;
 	}
 	
-	public SlotBesu(InventoryBesu inventory, int slotIndex){
+	public SlotBesu(Inventory inventory, int slotIndex){
 		this(inventory, slotIndex, 0, 0);
-	}
-	
-	/**
-	 * attempt to add the contents of the other stack to this slot
-	 * @param other
-	 * @return amount of items added to this stack
-	 */
-	public int merge(ItemStack other){
-		ItemStack stack = getStack();
-		if(stack.isItemEqual(other)){
-			int itemsMergable = stack.getMaxStackSize() - stack.stackSize;
-			stack.stackSize += itemsMergable;
-			return itemsMergable;
-		}
-		return 0;
 	}
 
 	@Override

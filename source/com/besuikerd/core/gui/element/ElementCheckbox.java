@@ -31,9 +31,9 @@ public class ElementCheckbox extends Element{
         }
         
         @Override
-        public void draw(int mouseX, int mouseY) {
+        public void draw() {
                 drawBackgroundFromTextures(ScalableTexture.SLOT);
-                super.draw(mouseX, mouseY);
+                super.draw();
         }
         
         @Override

@@ -72,7 +72,7 @@ public class ElementScrollBar extends ElementContainer {
         }
 
         @Override
-        public void draw(int mouseX, int mouseY) {
+        public void draw() {
                 
                 if(orientation == Orientation.VERTICAL){
                         containerScroller.height = parent.getHeight() - buttonUp.getHeight() - buttonDown.getHeight() - parent.paddingTop - parent.paddingBottom;
@@ -82,7 +82,7 @@ public class ElementScrollBar extends ElementContainer {
                         scroller.width = getScrollerSize();
                 }
                 
-                super.draw(mouseX, mouseY);
+                super.draw();
         }
         
                 private class ElementScrollerContainer extends ElementStyledContainer {
@@ -141,10 +141,10 @@ public class ElementScrollBar extends ElementContainer {
                 }
                 
                 @Override
-                public void draw(int mouseX, int mouseY) {
+                public void draw() {
                         IScalableTexture bg = self.isEnabled() ? isLeftClicked() ? ScalableTextureVerticalScroller.ACTIVATED : ScalableTextureVerticalScroller.NORMAL : ScalableTextureVerticalScroller.DISABLED;
                         drawBackgroundFromTextures(bg);
-                        super.draw(mouseX, mouseY);
+                        super.draw();
                 }
         }
         

@@ -68,24 +68,28 @@ public class ReflectUtils {
 		}
 	}
 	
-	public static <E> E newInstance(Class<E> cls, Object... params){
+	public static <E> E newInstance(Class<E> cls, Object... args){
+		return newInstance(cls, map(Class.class, args, functionGetClass), args);
+	}
+	
+	public static <E> E newInstance(Class<E> cls, Class<?>[] parameters, Object... args){
 		E instance = null;
-		Class[] classes = map(Class.class, params, functionGetClass);
-		
 		try {
 			
 			for(Constructor<?> c : cls.getDeclaredConstructors()){
 				
-				boolean matchingConstructor = c.getParameterTypes().length == classes.length;
+				boolean matchingConstructor = c.getParameterTypes().length == parameters.length;
 				Class<?>[] tClasses = c.getParameterTypes();
-				for(int i = 0 ; i < tClasses.length && i < classes.length && matchingConstructor ; i++){
+				for(int i = 0 ; i < tClasses.length && i < parameters.length && matchingConstructor ; i++){
 					Class<?> tClass = tClasses[i];
-					if(!tClass.isAssignableFrom(classes[i])){
+					if(!tClass.isAssignableFrom(parameters[i])){
 						matchingConstructor = false;
 					}
 				}
 				if(matchingConstructor){
-					instance = (E) c.newInstance(params);
+					instance = (E) c.newInstance(args);
+				} else{
+					throw new RuntimeException(String.format("No matching constructor found with the following params: %s", Arrays.toString(parameters)));
 				}
 				break;
 			}

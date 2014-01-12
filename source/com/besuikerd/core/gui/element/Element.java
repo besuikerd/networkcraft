@@ -184,7 +184,7 @@ public abstract class Element extends Gui implements IProcessData {
 		this(0, 0, width, height);
 	}
 
-	public void draw(int mouseX, int mouseY) {
+	public void draw() {
 		bindTexture();
 	};
 	

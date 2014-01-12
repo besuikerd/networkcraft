@@ -1,5 +1,10 @@
 package com.besuikerd.core.inventory;
 
+import java.util.Iterator;
+import java.util.List;
+
+import com.besuikerd.core.BLogger;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.Slot;
@@ -16,6 +21,8 @@ import net.minecraft.item.ItemStack;
  */
 public class ContainerBesu extends Container {
 
+	protected Inventory inventory;
+	
 	/**
 	 * binds the given TileEntity to this container, from which it will extract
 	 * information regarding inventory slots
@@ -23,10 +30,22 @@ public class ContainerBesu extends Container {
 	 * @param tile
 	 * @param player
 	 */
-	public void bindEntity(TileEntityInventory tile, EntityPlayer player) {
-		for (int i = 0; i < tile.inventory.stacks.size(); i++) {
-			InventoryStackBesu stack = tile.inventory.stacks.get(i);
-			addSlotToContainer(new SlotBesu(tile.inventory, i));
+	public void bindInventory(Inventory inventory, EntityPlayer player) {
+		this.inventory = inventory;
+		
+		int counter = 0;
+		int playerCounterInv = 9;
+		int playerCounterHotbar = 0;
+		for(InventoryGroup group : inventory.getGroups()){
+			for(InventoryStack stack : group.getStacks()){
+				if(group.getName().equals(InventoryGroup.PLAYER_INVENTORY)){
+					addSlotToContainer(new Slot(player.inventory, playerCounterInv++, 0, 0));
+				} else if(group.getName().equals(InventoryGroup.PLAYER_HOTBAR)){
+					addSlotToContainer(new Slot(player.inventory, playerCounterHotbar++, 0, 0));
+				} else {
+					addSlotToContainer(new SlotBesu(inventory, counter++));
+				}
+			}
 		}
 	}
 
@@ -65,11 +84,24 @@ public class ContainerBesu extends Container {
 	 * @return
 	 */
 	protected boolean tryMerge(ItemStack stack, int slotIndex) {
-		return mergeItemStack(stack, 0, inventorySlots.size(), false);
+		boolean merged = false;
+		InventoryStack invStack = inventory.getInventoryStackAt(slotIndex);
+		
+		Iterator<String> iterator = invStack.getGroup().getShiftGroups().iterator();
+		BLogger.debug(invStack.getGroup().getShiftGroups());
+		while(!merged && iterator.hasNext()){
+			InventoryGroup group = inventory.getGroup(iterator.next());
+			merged = mergeItemStack(stack, group.getSlotOffset(), group.getSlotOffset() + group.getSize(), group.getShiftStart() == StartPosition.END);
+		}
+		return merged;
 	}
 
 	@Override
 	public boolean canInteractWith(EntityPlayer entityplayer) {
 		return true;
+	}
+
+	public Inventory inventory(){
+		return inventory;
 	}
 }

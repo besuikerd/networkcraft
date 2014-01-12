@@ -85,19 +85,19 @@ public class ElementContainer extends Element{
 	}
 	
 	@Override
-	public void draw(int mouseX, int mouseY) {
+	public void draw() {
 		
 		for(Element e : elements){
 			e.dx = absX();
 			e.dy = absY();
 		}
 		
-		super.draw(mouseX, mouseY);
+		super.draw();
 		
 		//render last element to first element
 		for(int i = elements.size() - 1;  i >= 0 ; i--){
 			Element e = elements.get(i);
-			e.draw(mouseX, mouseY);
+			e.draw();
 			e.style();
 		}
 		

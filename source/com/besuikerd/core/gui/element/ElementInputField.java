@@ -200,8 +200,8 @@ public class ElementInputField extends ElementStyledContainer {
 		}
 
 		@Override
-		public void draw(int mouseX, int mouseY) {
-			super.draw(mouseX, mouseY);
+		public void draw() {
+			super.draw();
 			if (this.isEnabled() && isFocused()) {
 				if (System.currentTimeMillis() - FLICKER_TIME > oldTime) {
 					if (System.currentTimeMillis() - 2 * FLICKER_TIME > oldTime) {

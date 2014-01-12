@@ -104,10 +104,10 @@ public class ElementViewport extends Element {
         }
 
         @Override
-        public void draw(int mouseX, int mouseY) {
+        public void draw() {
         	element.dx = absX();
             element.dy = absY();
-            super.draw(mouseX, mouseY);
+            super.draw();
             glEnable(GL_STENCIL_TEST);
             glStencilFunc(GL_ALWAYS, 0x1, 0xff);
             glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
@@ -121,7 +121,7 @@ public class ElementViewport extends Element {
             glStencilFunc(GL_EQUAL, 0x1, 0xff);
             glColorMask(true, true, true, true); //restore color mask
             glDepthMask(true); //restore depth mask
-            element.draw(mouseX, mouseY);
+            element.draw();
             glDisable(GL_STENCIL_TEST);
         }
 }

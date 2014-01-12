@@ -47,6 +47,7 @@ public class NetworkCraft{
 	public static Block blockInventory;
 	public static Block blockGui;
 	
+	public static final GuiHandlerBesu GUI_HANDLER = new GuiHandlerBesu();
 	
 	@Instance()
 	public static NetworkCraft instance;
@@ -89,9 +90,9 @@ public class NetworkCraft{
 	public void load(FMLInitializationEvent e){
 		
 		//register gui handlers
-		NetworkRegistry.instance().registerGuiHandler(instance, GuiHandlerBesu.getInstance());
+		NetworkRegistry.instance().registerGuiHandler(instance, GUI_HANDLER);
 		proxy.registerRenderers();
-		proxy.registerGuis(GuiHandlerBesu.getInstance());
+		proxy.registerGuis(GUI_HANDLER);
 	}
 	
 	@EventHandler

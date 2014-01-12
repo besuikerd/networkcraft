@@ -33,4 +33,11 @@ public class EventHandler implements IEventHandler{
 		}
 	}
 
+	public void setHandlerObject(Object handlerObject) {
+		this.handlerObject = handlerObject;
+	}
+	
+	public Object getHandlerObject() {
+		return handlerObject;
+	}
 }

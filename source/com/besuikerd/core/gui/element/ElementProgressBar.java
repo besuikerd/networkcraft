@@ -43,8 +43,8 @@ public class ElementProgressBar extends Element{
 	}
 	
 	@Override 
-	public void draw(int mouseX, int mouseY) {
-		super.draw(mouseX, mouseY);
+	public void draw() {
+		super.draw();
 		
 		//render background
 		drawTexture(backgroundTexture);

@@ -27,7 +27,7 @@ public class BLogger {
 	}
 	
 	public static void log(Level level, Object msg, Object... params){
-		logger.log(level, String.format("%s|%s", FMLCommonHandler.instance().getEffectiveSide(), String.format(msg.toString(), params)));
+		logger.log(level, String.format("%s|%s", FMLCommonHandler.instance().getEffectiveSide(), msg == null ? "null" : String.format(msg.toString(), params)));
 	}
 	
 	public static void log(Level level, Object msg){
