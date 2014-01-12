@@ -5,6 +5,7 @@ import com.besuikerd.networkcraft.NCIconRegister;
 import com.besuikerd.networkcraft.graph.INetworkNode;
 import com.besuikerd.networkcraft.graph.TileEntityEndPoint;
 
+import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Icon;
@@ -25,9 +26,9 @@ public class BlockEndPoint extends BlockDevice{
 	}
 	
 	@Override
-	public void registerIcons(NCIconRegister reg) {
+	public void registerIcons(IconRegister reg) {
 		super.registerIcons(reg);
-		this.icon_ep = reg.registerIcon("device_ep");
+		this.icon_ep = reg.registerIcon("networkcraft:device_ep");
 	}
 	
 	public Icon getIcon(int side, int meta) {

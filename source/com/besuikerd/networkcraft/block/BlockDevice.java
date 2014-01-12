@@ -1,11 +1,11 @@
 package com.besuikerd.networkcraft.block;
 
+import net.minecraft.block.Block;
+import net.minecraft.client.renderer.texture.IconRegister;
+import net.minecraft.util.Icon;
+
 import com.besuikerd.core.block.BlockContainerBesu;
 import com.besuikerd.core.block.MaterialBesu;
-import com.besuikerd.networkcraft.NCIconRegister;
-
-import net.minecraft.block.Block;
-import net.minecraft.util.Icon;
 
 public abstract class BlockDevice extends BlockContainerBesu{
 	
@@ -23,7 +23,7 @@ public abstract class BlockDevice extends BlockContainerBesu{
 	}
 	
 	@Override
-	public void registerIcons(NCIconRegister reg) {
-		icon_device = reg.registerIcon("device");
+	public void registerIcons(IconRegister reg) {
+		icon_device = reg.registerIcon("networkcraft:device");
 	}	
 }

@@ -1,14 +1,14 @@
 package com.besuikerd.networkcraft.block;
 
-import com.besuikerd.core.ServerLogger;
-import com.besuikerd.networkcraft.NCIconRegister;
-import com.besuikerd.networkcraft.graph.IMasterNode;
-import com.besuikerd.networkcraft.graph.TileEntityMasterNode;
-
+import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Icon;
 import net.minecraft.world.World;
+
+import com.besuikerd.core.ServerLogger;
+import com.besuikerd.networkcraft.graph.IMasterNode;
+import com.besuikerd.networkcraft.graph.TileEntityMasterNode;
 
 public class BlockMasterNode extends BlockDevice{
 
@@ -25,9 +25,9 @@ public class BlockMasterNode extends BlockDevice{
 	}
 	
 	@Override
-	public void registerIcons(NCIconRegister reg) {
+	public void registerIcons(IconRegister reg) {
 		super.registerIcons(reg);
-		this.icon_m = reg.registerIcon("device_m");
+		this.icon_m = reg.registerIcon("networkcraft:device_m");
 	}
 	
 	@Override

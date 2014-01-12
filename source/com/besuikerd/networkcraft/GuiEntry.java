@@ -7,8 +7,8 @@ import com.besuikerd.core.gui.GuiBinder;
 import com.besuikerd.core.gui.IGuiBinder;
 import com.besuikerd.core.gui.IGuiEntry;
 import com.besuikerd.core.inventory.ContainerBesu;
-import com.besuikerd.networkcraft.tileentity.TileEntityTestGui;
-import com.besuikerd.networkcraft.tileentity.TileEntityTestInventory;
+import com.besuikerd.test.TileEntityTestGui;
+import com.besuikerd.test.TileEntityTestInventory;
 
 public enum GuiEntry implements IGuiEntry{
 	

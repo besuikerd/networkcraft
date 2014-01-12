@@ -1,12 +1,12 @@
 package com.besuikerd.networkcraft.block;
 
-import com.besuikerd.core.BlockSide;
-import com.besuikerd.networkcraft.NCIconRegister;
-
+import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Icon;
 import net.minecraft.world.World;
+
+import com.besuikerd.core.BlockSide;
 
 public class BlockRouter extends BlockDevice{
 	
@@ -20,12 +20,11 @@ public class BlockRouter extends BlockDevice{
 	}
 	
 	@Override
-	public void registerIcons(NCIconRegister reg) {
+	public void registerIcons(IconRegister reg) {
 		super.registerIcons(reg);
-		icon_router_top = reg.registerIcon("router_top");
-		icon_router_bottom = reg.registerIcon("router_bottom");
-		
-		icon_router_front = reg.registerIcon("router_front");
+		icon_router_top = reg.registerIcon("networkcraft:router_top");
+		icon_router_bottom = reg.registerIcon("networkcraft:router_bottom");
+		icon_router_front = reg.registerIcon("networkcraft:router_front");
 	}
 	
 

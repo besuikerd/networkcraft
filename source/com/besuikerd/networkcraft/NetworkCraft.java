@@ -1,5 +1,8 @@
 package com.besuikerd.networkcraft;
 
+import net.minecraft.block.Block;
+import net.minecraftforge.common.Configuration;
+
 import com.besuikerd.core.BLogger;
 import com.besuikerd.core.gui.GuiHandlerBesu;
 import com.besuikerd.core.packet.PacketBesu;
@@ -7,16 +10,10 @@ import com.besuikerd.core.packet.PacketHandlerBesu;
 import com.besuikerd.networkcraft.block.BlockCable;
 import com.besuikerd.networkcraft.block.BlockEndPoint;
 import com.besuikerd.networkcraft.block.BlockMasterNode;
-import com.besuikerd.networkcraft.block.BlockTestGui;
-import com.besuikerd.networkcraft.block.BlockTestInventory;
 import com.besuikerd.networkcraft.graph.TileEntityEndPoint;
 import com.besuikerd.networkcraft.graph.TileEntityMasterNode;
 import com.besuikerd.networkcraft.tileentity.TileEntityCable;
-import com.besuikerd.networkcraft.tileentity.TileEntityTestGui;
-import com.besuikerd.networkcraft.tileentity.TileEntityTestInventory;
 
-import net.minecraft.block.Block;
-import net.minecraftforge.common.Configuration;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.Mod.Instance;
@@ -44,9 +41,6 @@ public class NetworkCraft{
 	public static Block blockMasterNode;
 	public static Block blockEndPoint;
 	
-	public static Block blockInventory;
-	public static Block blockGui;
-	
 	public static final GuiHandlerBesu GUI_HANDLER = new GuiHandlerBesu();
 	
 	@Instance()
@@ -70,19 +64,15 @@ public class NetworkCraft{
 		//register blocks
 		GameRegistry.registerBlock(blockCable, blockCable.getUnlocalizedName());
 		GameRegistry.registerBlock(blockMasterNode, blockMasterNode.getUnlocalizedName());
-		GameRegistry.registerBlock(blockInventory, blockInventory.getUnlocalizedName());
 		GameRegistry.registerBlock(blockEndPoint, blockEndPoint.getUnlocalizedName());
-		GameRegistry.registerBlock(blockGui, blockGui.getUnlocalizedName());
+
 		
 		//register items
 		
 		//register tile entities
 		GameRegistry.registerTileEntity(TileEntityCable.class, "cable");
 		GameRegistry.registerTileEntity(TileEntityMasterNode.class, "masterNode");
-		GameRegistry.registerTileEntity(TileEntityTestInventory.class, "testinventory");
 		GameRegistry.registerTileEntity(TileEntityEndPoint.class, "tileEntityEndPoint");
-		GameRegistry.registerTileEntity(TileEntityTestGui.class, "testGui");
-		
 	}
 	
 	@EventHandler
@@ -102,8 +92,5 @@ public class NetworkCraft{
 		blockCable = new BlockCable(NCConfig.block_cable);
 		blockMasterNode = new BlockMasterNode(NCConfig.block_masterNode);
 		blockEndPoint = new BlockEndPoint(NCConfig.block_endPoint);
-		
-		blockInventory = new BlockTestInventory(NCConfig.block_inventory);
-		blockGui = new BlockTestGui(NCConfig.block_gui);
 	}
 }

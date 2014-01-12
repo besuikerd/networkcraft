@@ -2,16 +2,8 @@ package com.besuikerd.networkcraft.block;
 
 import java.util.List;
 
-import com.besuikerd.core.BlockSide;
-import com.besuikerd.core.ServerLogger;
-import com.besuikerd.core.block.BlockConnecting;
-import com.besuikerd.core.block.MaterialBesu;
-import com.besuikerd.core.tileentity.TileEntityConnecting;
-import com.besuikerd.networkcraft.NCIconRegister;
-import com.besuikerd.networkcraft.graph.INetworkNode;
-import com.besuikerd.networkcraft.tileentity.TileEntityCable;
-
 import net.minecraft.block.Block;
+import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -20,6 +12,15 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
+
+import com.besuikerd.core.BlockSide;
+import com.besuikerd.core.ServerLogger;
+import com.besuikerd.core.block.BlockConnecting;
+import com.besuikerd.core.block.MaterialBesu;
+import com.besuikerd.core.tileentity.TileEntityConnecting;
+import com.besuikerd.networkcraft.graph.INetworkNode;
+import com.besuikerd.networkcraft.tileentity.TileEntityCable;
+
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -41,8 +42,8 @@ public class BlockCable extends BlockConnecting{
 	}
 	
 	@Override
-	public void registerIcons(NCIconRegister reg) {
-		this.blockIcon = reg.registerIcon("cable");
+	public void registerIcons(IconRegister reg) {
+		this.blockIcon = reg.registerIcon("networkcraft:cable");
 	}
 	
 	public void addCollisionBoxesToList(World world, int x, int y, int z, AxisAlignedBB par5AxisAlignedBB, List par6List, Entity par7Entity)
