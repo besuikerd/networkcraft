@@ -8,7 +8,7 @@ import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 
-public class TileEntityInventory extends TileEntityBesu implements ISidedInventory{
+public abstract class TileEntityInventory extends TileEntityBesu implements ISidedInventory{
 	
 	protected Inventory inventory;
 	

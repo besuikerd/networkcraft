@@ -41,7 +41,7 @@ public class Inventory implements ISidedInventory, IProcessData{
 	
 	public Inventory addGroup(InventoryGroup group){
 		group.slotOffset = stacks.size();
-		stacks.addAll(group.getStacks());
+		addStacks(group.getStacks());
 		groups.put(group.getName(), group);
 		return this;
 	}
@@ -53,9 +53,18 @@ public class Inventory implements ISidedInventory, IProcessData{
 		return this;
 	}
 	
-	public void removeGroup(InventoryGroup group){
-		stacks.removeAll(group.getStacks());
-		groups.remove(group);
+	private void addStacks(Collection<InventoryStack> stacks){
+		for(InventoryStack stack : stacks){
+			addStack(stack);
+		}
+	}
+	
+	private void addStack(InventoryStack stack){
+		stacks.add(stack);
+		for(BlockSide b : stack.getBlockSides()){
+			accessibleSides[b.ordinal()].add(stacks.size() - 1);
+		}
+		
 	}
 	
 	public InventoryGroup getGroup(String name){

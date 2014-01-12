@@ -82,7 +82,6 @@ public class NetworkCraft{
 		GameRegistry.registerTileEntity(TileEntityTestInventory.class, "testinventory");
 		GameRegistry.registerTileEntity(TileEntityEndPoint.class, "tileEntityEndPoint");
 		GameRegistry.registerTileEntity(TileEntityTestGui.class, "testGui");
-
 		
 	}
 	

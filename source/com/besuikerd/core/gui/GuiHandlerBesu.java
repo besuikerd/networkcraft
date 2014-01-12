@@ -3,29 +3,24 @@ package com.besuikerd.core.gui;
 import java.util.HashMap;
 import java.util.Map;
 
-import net.minecraft.client.gui.Gui;
-import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 
 import com.besuikerd.core.BLogger;
-import com.besuikerd.core.inventory.ContainerBesu;
-import com.besuikerd.core.inventory.TileEntityInventory;
-import com.besuikerd.core.utils.INumbered;
 import com.besuikerd.core.utils.ReflectUtils;
 
 import cpw.mods.fml.common.network.IGuiHandler;
 
 public class GuiHandlerBesu implements IGuiHandler{
 	
-	private static GuiHandlerBesu instance = null;
-	
 	private Map<Integer, IGuiEntry> entries;
 	private Map<String, Integer> nameMapping;
 	
 	private int counter;
+	
+	private static Class CLASS_GUISCREEN;
+	private static Class CLASS_GUICONTAINER;
 	
 	public GuiHandlerBesu(){
 		this.entries = new HashMap<Integer, IGuiEntry>();
@@ -66,7 +61,24 @@ public class GuiHandlerBesu implements IGuiHandler{
 			}
 		}
 		BLogger.debug(g);
-		return g == null ? null : g instanceof GuiBaseInventory ? new GuiContainerBesu(c, (GuiBaseInventory)g) : new GuiScreenBesu(g);
+		if(CLASS_GUISCREEN == null){
+			try {
+				CLASS_GUISCREEN = Class.forName("com.besuikerd.core.gui.GuiScreenBesu");
+			} catch (ClassNotFoundException e) {
+				e.printStackTrace();
+			}
+		}
+		
+		if(CLASS_GUICONTAINER == null){
+			try {
+				CLASS_GUICONTAINER = Class.forName("com.besuikerd.core.gui.GuiContainerBesu");
+			} catch (ClassNotFoundException e) {
+				e.printStackTrace();
+			}
+		}
+		
+		
+		return g == null ? null : g instanceof GuiBaseInventory ? ReflectUtils.newInstance(CLASS_GUICONTAINER, new Class[]{Container.class, GuiBaseInventory.class}, c, g) : ReflectUtils.newInstance(CLASS_GUISCREEN, new Class[]{GuiBase.class}, g);
 	}
 	
 	public int fromName(String name){
