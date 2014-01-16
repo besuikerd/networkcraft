@@ -9,25 +9,20 @@ import static com.besuikerd.core.utils.functional.FunctionalUtils.map;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
 
 import net.minecraft.tileentity.TileEntity;
 
 import com.besuikerd.core.utils.BitUtils;
 import com.besuikerd.core.utils.ReflectUtils;
 import com.besuikerd.core.utils.ReflectUtils.Invokable;
-import com.besuikerd.core.utils.collection.ArrayUtils;
-import com.besuikerd.core.utils.collection.SafeConstrainedMap;
-import com.besuikerd.core.utils.collection.SmallerThanMapConstraint;
-import com.besuikerd.core.utils.functional.Predicate;
 import com.besuikerd.core.utils.functional.FunctionalUtils.ABAFunction;
 import com.besuikerd.core.utils.functional.FunctionalUtils.ABBFunction;
+import com.besuikerd.core.utils.functional.Predicate;
+import com.besuikerd.networkcraft.dv.INode;
 import com.google.common.base.Function;
-
-import cpw.mods.fml.common.Optional.Interface;
+import com.google.common.collect.Multimap;
+import com.google.common.collect.TreeMultimap;
 
 public class QuickNDirtyTest {
 	
@@ -35,6 +30,19 @@ public class QuickNDirtyTest {
 		functionalTest();
 		bitUtilsTest();	
 		reflectionTest();
+	}
+	
+	static class Bla{
+		final String x;
+
+		public Bla(String x) {
+			this.x = x;
+		
+		}
+		
+		public String getX() {
+			return x;
+		}
 	}
 	
 	public static void recurs(int n){

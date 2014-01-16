@@ -1,6 +1,7 @@
 package com.besuikerd.networkcraft;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.material.Material;
 import net.minecraftforge.common.Configuration;
 
 import com.besuikerd.core.BLogger;
@@ -10,6 +11,10 @@ import com.besuikerd.core.packet.PacketHandlerBesu;
 import com.besuikerd.networkcraft.block.BlockCable;
 import com.besuikerd.networkcraft.block.BlockEndPoint;
 import com.besuikerd.networkcraft.block.BlockMasterNode;
+import com.besuikerd.networkcraft.dv.BlockDestination;
+import com.besuikerd.networkcraft.dv.BlockNode;
+import com.besuikerd.networkcraft.dv.TileEntityDestination;
+import com.besuikerd.networkcraft.dv.TileEntityNode;
 import com.besuikerd.networkcraft.graph.TileEntityEndPoint;
 import com.besuikerd.networkcraft.graph.TileEntityMasterNode;
 import com.besuikerd.networkcraft.tileentity.TileEntityCable;
@@ -41,6 +46,9 @@ public class NetworkCraft{
 	public static Block blockMasterNode;
 	public static Block blockEndPoint;
 	
+	public static Block blockNode;
+	public static Block blockDestination;
+	
 	public static final GuiHandlerBesu GUI_HANDLER = new GuiHandlerBesu();
 	
 	@Instance()
@@ -66,6 +74,9 @@ public class NetworkCraft{
 		GameRegistry.registerBlock(blockMasterNode, blockMasterNode.getUnlocalizedName());
 		GameRegistry.registerBlock(blockEndPoint, blockEndPoint.getUnlocalizedName());
 
+		GameRegistry.registerBlock(blockNode, "blocknode");
+		GameRegistry.registerBlock(blockDestination, "blockdestination");
+		
 		
 		//register items
 		
@@ -73,6 +84,9 @@ public class NetworkCraft{
 		GameRegistry.registerTileEntity(TileEntityCable.class, "cable");
 		GameRegistry.registerTileEntity(TileEntityMasterNode.class, "masterNode");
 		GameRegistry.registerTileEntity(TileEntityEndPoint.class, "tileEntityEndPoint");
+		
+		GameRegistry.registerTileEntity(TileEntityNode.class, "teNode");
+		GameRegistry.registerTileEntity(TileEntityDestination.class, "toDestination");
 	}
 	
 	@EventHandler
@@ -92,5 +106,8 @@ public class NetworkCraft{
 		blockCable = new BlockCable(NCConfig.block_cable);
 		blockMasterNode = new BlockMasterNode(NCConfig.block_masterNode);
 		blockEndPoint = new BlockEndPoint(NCConfig.block_endPoint);
+		
+		blockNode = new BlockNode(600, Material.grass);
+		blockDestination = new BlockDestination(601, Material.grass);
 	}
 }
