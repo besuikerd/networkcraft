@@ -1,21 +1,23 @@
 package com.besuikerd.networkcraft;
 
-import static com.besuikerd.networkcraft.GuiEntry.TESTGUI;
-import static com.besuikerd.networkcraft.GuiEntry.TESTINVENTORY;
+import com.besuikerd.networkcraft.block.BlockScreen;
+import com.besuikerd.networkcraft.block.Blocks;
+import com.besuikerd.networkcraft.tileentity.TileEntityScreen;
 
-import com.besuikerd.core.BLogger;
-import com.besuikerd.core.gui.GuiHandlerBesu;
+import cpw.mods.fml.common.registry.GameRegistry;
 
 public class CommonProxy {
-	public void registerRenderers(){
-		 
+	public static final String CLS = "com.besuikerd.networkcraft.CommonProxy";
+
+	public void registerBlocks() {
+		GameRegistry.registerBlock(Blocks.SCREEN, "besu.block.Screen");
 	}
-	
-	public void registerGuis(GuiHandlerBesu handler){
-		BLogger.debug("registered guis!!");
-		handler.addGuis(
-			TESTINVENTORY,
-			TESTGUI	
-		);
+
+	public void registerTileEntities() {
+		GameRegistry.registerTileEntity(TileEntityScreen.class, "besu.tile.Screen");
+	}
+
+	public void registerRenderers() {
+
 	}
 }

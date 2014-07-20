@@ -1,16 +1,25 @@
 package com.besuikerd.networkcraft;
 
-import com.besuikerd.core.gui.GuiHandlerBesu;
-import com.besuikerd.networkcraft.render.TileEntitySpecialRendererBlockCable;
-import com.besuikerd.networkcraft.tileentity.TileEntityCable;
+import com.besuikerd.networkcraft.render.ScreenRenderer;
 
-import cpw.mods.fml.client.registry.ClientRegistry;
+import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;
+import cpw.mods.fml.client.registry.RenderingRegistry;
 
 public class ClientProxy extends CommonProxy{
+	public static final String CLS = "com.besuikerd.networkcraft.ClientProxy";
+	
+	private static Renderers renderers;
+	
 	@Override
 	public void registerRenderers() {
-		super.registerRenderers();
-		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityCable.class, new TileEntitySpecialRendererBlockCable());
+		renderers = new Renderers();
 	}
 	
+	public static Renderers renderers(){
+		return renderers;
+	}
+	
+	public class Renderers{
+		public final ISimpleBlockRenderingHandler screen = new ScreenRenderer();
+	}
 }
